@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
 		register_server_return_moduel(GW_CONFIG.module_set[i].stype);
 	}
 
-	//初始化session模块,在接入大量客户端连接的服务采用初始化这个模块
+	//初始化session模块,在接入大量客户端连接的服务采用初始化这个模块 
 	init_session_manager(WEB_SOCKET_IO, JSON_PROTOCAL);
 	//启动服务
 	//start_server("127.0.0.1",8000,TCP_SOCKET_IO,BIN_PROTOCAL);
