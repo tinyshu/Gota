@@ -10,14 +10,6 @@
 #include "../utils/hash_map_int.h"
 //53
 int main(int argc, char** argv) {
-	
-	//struct hash_map_int* map = create_hash_map_int();
-	//int aa = 100;
-	//set_hash_map_int(map, 10, &aa);
-
-	//int bb = 110;
-	//set_hash_map_int(map, 10 + 1024, &aa);
-
 	//初始化log组件
 	init_log();
 	init_session_key_map();
