@@ -1,0 +1,13 @@
+﻿  net_iocp_win.c
+c:\users\tiny\desktop\my_dev_game\moba\game_server_project\src\gate_moduel\net\net_iocp_win.c(612): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\8.1\include\um\winsock2.h(1850): note: see declaration of 'inet_addr'
+c:\users\tiny\desktop\my_dev_game\moba\game_server_project\src\gate_moduel\net\net_iocp_win.c(622): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\8.1\include\um\winsock2.h(1868): note: see declaration of 'inet_ntoa'
+c:\users\tiny\desktop\my_dev_game\moba\game_server_project\src\gate_moduel\net\net_iocp_win.c(689): warning C4013: 'update_timer_list' undefined; assuming extern returning int
+c:\users\tiny\desktop\my_dev_game\moba\game_server_project\src\gate_moduel\net\net_iocp_win.c(728): warning C4020: 'post_accept': too many actual parameters
+c:\users\tiny\desktop\my_dev_game\moba\game_server_project\src\gate_moduel\net\net_iocp_win.c(655): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\8.1\include\um\winsock2.h(1850): note: see declaration of 'inet_addr'
+c:\users\tiny\desktop\my_dev_game\moba\game_server_project\src\gate_moduel\net\net_iocp_win.c(799): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\8.1\include\um\winsock2.h(1868): note: see declaration of 'inet_ntoa'
+  commond_server.vcxproj -> C:\Users\tiny\Desktop\my_dev_game\moba\game_server_project\src\proj.win\..\..\bin\commond_server.exe
+  commond_server.vcxproj -> ..\..\bin\commond_server.pdb (Full PDB)

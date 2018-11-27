@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{18e5252b-c908-477f-8549-3aa2689bd7b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\3rd">
+      <UniqueIdentifier>{f504db05-fd6f-41dc-9b12-98ac7c59b94f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\3rd\crypt">
+      <UniqueIdentifier>{a4f7416b-5c95-4765-b246-78eba5136dc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\3rd\http_parser">
+      <UniqueIdentifier>{063e602f-f94a-41ae-943d-ee570f946aaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\3rd\mjson">
+      <UniqueIdentifier>{7cde05c2-b3eb-46d7-8eb1-2f41b0e89ecb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gate_moduel">
+      <UniqueIdentifier>{65099c8c-49cb-48d9-93ff-e399e53fcd52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gate_moduel\net">
+      <UniqueIdentifier>{3ea32960-8696-4ec4-b863-a9102df523e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gate_moduel\serivces">
+      <UniqueIdentifier>{4a48dd08-8392-4c7e-80fa-95a8049ff04d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gate_moduel\session">
+      <UniqueIdentifier>{8deeb9dd-57cd-44cf-b1dc-1b63bb404cee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{15178e32-2f8e-4ccc-92df-bcfd97b96a4f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\3rd\crypt\base64_encoder.c">
+      <Filter>src\3rd\crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\crypt\sha1.c">
+      <Filter>src\3rd\crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\http_parser\http_parser.c">
+      <Filter>src\3rd\http_parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\mjson\json.c">
+      <Filter>src\3rd\mjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\mjson\json_extends.c">
+      <Filter>src\3rd\mjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gate_moduel\net\net_iocp_win.c">
+      <Filter>src\gate_moduel\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gate_moduel\services\service_gateway.c">
+      <Filter>src\gate_moduel\serivces</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gate_moduel\session\tcp_session.c">
+      <Filter>src\gate_moduel\session</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utils\log.c">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utils\timer_list.c">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\command_server\main.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\command_server\src\command_config.c">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\3rd\crypt\base64_encoder.h">
+      <Filter>src\3rd\crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\crypt\sha1.h">
+      <Filter>src\3rd\crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\http_parser\http_parser.h">
+      <Filter>src\3rd\http_parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\mjson\json.h">
+      <Filter>src\3rd\mjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\mjson\json_extends.h">
+      <Filter>src\3rd\mjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gate_moduel\net\net_io.h">
+      <Filter>src\gate_moduel\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gate_moduel\services\service_gateway.h">
+      <Filter>src\gate_moduel\serivces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gate_moduel\session\tcp_session.h">
+      <Filter>src\gate_moduel\session</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\log.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\timer.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\timer_list.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\command_server\src\command_config.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

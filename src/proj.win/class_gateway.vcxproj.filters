@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{1067f2bc-3d49-4406-9487-405024f6c78e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd">
+      <UniqueIdentifier>{c087d7cf-3d42-41a8-9f3c-601be50372f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\net">
+      <UniqueIdentifier>{559be85c-9e4f-4d12-9a75-4b7630b266da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\crypt">
+      <UniqueIdentifier>{81885c48-853d-4d8a-948c-6140c60778b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\http_parse">
+      <UniqueIdentifier>{69a766d7-358a-455c-a528-900695f4d8f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\mjson">
+      <UniqueIdentifier>{6d26930e-50d2-4591-86be-d972921a1865}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\serssion">
+      <UniqueIdentifier>{c5164ce8-673e-46f8-b8d7-47bcb6841ea4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\service">
+      <UniqueIdentifier>{d4f2eb12-a101-4def-9a40-091d252e98e7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\main.c" />
+    <ClCompile Include="..\3rd\crypt\base64_encoder.c">
+      <Filter>3rd\crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\crypt\sha1.c">
+      <Filter>3rd\crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\http_parser\http_parser.c">
+      <Filter>3rd\http_parse</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\mjson\json.c">
+      <Filter>3rd\mjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\session\tcp_session.c">
+      <Filter>src\serssion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\net\net_iocp_win.c">
+      <Filter>src\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\service_gateway.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\mjson\json_extends.c">
+      <Filter>3rd\mjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\service\table_service.c">
+      <Filter>src\service</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\3rd\crypt\base64_encoder.h">
+      <Filter>3rd\crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\crypt\sha1.h">
+      <Filter>3rd\crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\http_parser\http_parser.h">
+      <Filter>3rd\http_parse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\mjson\json.h">
+      <Filter>3rd\mjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\net\net_io.h">
+      <Filter>src\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\session\tcp_session.h">
+      <Filter>src\serssion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\service_gateway.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\mjson\json_extends.h">
+      <Filter>3rd\mjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\service\table_service.h">
+      <Filter>src\service</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\service\types_service.h">
+      <Filter>src\service</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

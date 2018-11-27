@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{15bab8e0-4fa9-40d8-a50d-3cfad0982e4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\3rd">
+      <UniqueIdentifier>{d58c7afe-c3b6-4f4f-a9e2-d09abd00226d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\3rd\crypt">
+      <UniqueIdentifier>{0bc6d28e-5623-4063-a5e5-a36c11071b30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\3rd\http_parser">
+      <UniqueIdentifier>{f59af161-87d7-458e-8e99-9b4e4f675e3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\3rd\mjson">
+      <UniqueIdentifier>{3a470523-ee28-46e3-938d-5efcb501ad35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gate_moduel">
+      <UniqueIdentifier>{4a1716eb-138e-4ae9-b768-316d287b1d33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gate_moduel\net">
+      <UniqueIdentifier>{cea3968b-6343-43c6-94bf-7bbf01d8141b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gate_moduel\serivces">
+      <UniqueIdentifier>{a20501ba-fbfc-4c5f-a58e-5e3e34d05862}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gate_moduel\session">
+      <UniqueIdentifier>{83435538-2412-4c3b-a50a-0f50da87a2a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{b8a3318e-1673-4f4c-8dc5-2e0de8d08e35}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\gateway_server\main.c" />
+    <ClCompile Include="..\3rd\crypt\base64_encoder.c">
+      <Filter>src\3rd\crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\crypt\sha1.c">
+      <Filter>src\3rd\crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\http_parser\http_parser.c">
+      <Filter>src\3rd\http_parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\mjson\json.c">
+      <Filter>src\3rd\mjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\mjson\json_extends.c">
+      <Filter>src\3rd\mjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gate_moduel\net\net_iocp_win.c">
+      <Filter>src\gate_moduel\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gate_moduel\session\tcp_session.c">
+      <Filter>src\gate_moduel\session</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gate_moduel\services\service_gateway.c">
+      <Filter>src\gate_moduel\serivces</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utils\log.c">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utils\timer_list.c">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gateway_server\src\gw_config.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gateway_server\src\server_session_mgr.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gateway_server\src\from_client.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gateway_server\src\return_server.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utils\hash_map_int.c">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gateway_server\src\session_key_mgr.c">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\3rd\crypt\base64_encoder.h">
+      <Filter>src\3rd\crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\crypt\sha1.h">
+      <Filter>src\3rd\crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\http_parser\http_parser.h">
+      <Filter>src\3rd\http_parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\mjson\json.h">
+      <Filter>src\3rd\mjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\mjson\json_extends.h">
+      <Filter>src\3rd\mjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gate_moduel\net\net_io.h">
+      <Filter>src\gate_moduel\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gate_moduel\session\tcp_session.h">
+      <Filter>src\gate_moduel\session</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gate_moduel\services\service_gateway.h">
+      <Filter>src\gate_moduel\serivces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\log.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\timer.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\timer_list.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gateway_server\src\gw_config.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gateway_server\src\server_session_mgr.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\types_service.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gateway_server\src\from_client.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\protocal_cmd.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gateway_server\src\return_server.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\hash_map_int.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gateway_server\src\session_key_mgr.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

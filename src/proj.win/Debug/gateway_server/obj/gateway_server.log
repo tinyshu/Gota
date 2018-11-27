@@ -1,0 +1,4 @@
+﻿  from_client.c
+c:\users\tiny\desktop\my_dev_game\moba\game_server_project\src\types_service.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
+  gateway_server.vcxproj -> C:\Users\tiny\Desktop\my_dev_game\moba\game_server_project\src\proj.win\..\..\bin\gateway_server.exe
+  gateway_server.vcxproj -> ..\..\bin\gateway_server.pdb (Full PDB)
