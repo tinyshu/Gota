@@ -38,20 +38,22 @@ static int on_json_protocal_data (void* moduel_data, struct session* s, json_t* 
 static void on_connect_lost (void* moduel_data, struct session* s) {
 	int stype = (int)moduel_data;
 	//需要通知后端的服务,有客户端session断开
-	json_t* json = json_new_comand(stype, USER_LOST_CONNECT);
-
 	unsigned int uid = s->uid;
-	json_object_push_number(json, "2", uid);
+	
 	struct session* server_session = get_server_session(stype);
-	if (server_session == NULL) { // gateway与服务所在进程断开了网络连接
-		json_free_value(&json);
+	if (server_session == NULL || uid == 0) { // gateway与服务所在进程断开了网络连接
+		//不是一个client类型的session
 		return;
 	}
+	json_t* json = json_new_comand(stype, USER_LOST_CONNECT);
+	json_object_push_number(json, "2", uid);
+
 	session_json_send(server_session, json);
 	json_free_value(&json);
 
-	//清除hash_map_int里的玩家session
-	clear_session_by_value(s);
+	//清除hash_map_int里的玩家session指针
+	clear_session_by_value(s); 
+	
 }
 
 void register_from_client_moduel(int stype) {

@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
 
 
 	exit_session_key_map();
-
+	destroy_session_mgr();
 	return 0;
 }
 

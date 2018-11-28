@@ -10,11 +10,15 @@
 #include "tcp_session.h"
 #include "../net/net_io.h"
 #include "../../3rd/mjson/json_extends.h"
+#include "../services/service_gateway.h"
+
 #define MAX_SESSION_NUM 6000
 #define my_malloc malloc
 #define my_free free
 
 #define MAX_RECV_BUFFER 8096
+
+extern void on_connect_lost(struct session* s);
 
 struct {
 	struct session* online_session;
@@ -129,7 +133,8 @@ void clear_offline_session() {
 		if (s->removed) {
 			*walk = s->next;
 			s->next = NULL;
-			
+			//通知上层session关闭
+			on_connect_lost(s);
 			if (s->c_sock != 0) {
 				closesocket(s->c_sock);
 			}

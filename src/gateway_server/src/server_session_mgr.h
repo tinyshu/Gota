@@ -17,4 +17,6 @@ void check_server_online(void*);
 void gateway_schedule(void(*on_time)(void* data), void* kdata, int after_sec);
 
 void lost_server_connection(int stype);
+
+void destroy_session_mgr();
 #endif

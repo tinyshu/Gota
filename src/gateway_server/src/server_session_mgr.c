@@ -18,6 +18,10 @@ void init_server_session() {
 	gateway_schedule(check_server_online,NULL,3);
 }
 
+void destroy_session_mgr() {
+	destroy_timer_list(GATEWAY_TIMER_LIST);
+}
+
 struct session* get_server_session(int stype) {
 	if (stype < 0 || stype > STYPE_MAX) {
 		return NULL;

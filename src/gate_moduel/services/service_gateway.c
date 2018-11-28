@@ -3,9 +3,11 @@
 #include <stdlib.h>
 #include "service_gateway.h"
 
+#define MAX_SERVICES 512
+#define my_free free;
+
 struct timer_list* GATEWAY_TIMER_LIST = NULL;
 
-#define MAX_SERVICES 512
 extern void close_session(struct session* s);
 extern void session_send(struct session*s, unsigned char* body, int len);
 
@@ -34,6 +36,13 @@ void init_server_gateway() {
 }
 
 void exit_server_gateway() {
+	//释放内存
+	for (int i = 0; i < MAX_SERVICES; ++i) {
+		struct service_module* moduel = gateway_services.services[i];
+		if (NULL!= moduel) {
+			my_free(moduel);
+		}
+	}
 }
 
 //底层如果发现底层网络连接断开，通知给上层的接口
@@ -41,7 +50,7 @@ void exit_server_gateway() {
 void on_connect_lost(struct session* s) {
 	for (int i = 0; i < MAX_SERVICES;++i) {
 		if (gateway_services.services[i] && gateway_services.services[i]->on_connect_lost != NULL) {
-			gateway_services.services[i]->on_connect_lost(gateway_services.services[i],s);
+			gateway_services.services[i]->on_connect_lost(gateway_services.services[i]->moduel_data,s);
 		}
 	}
 }
@@ -50,7 +59,7 @@ void on_connect_lost(struct session* s) {
 void on_bin_protocal_recv_entry(struct session* s, unsigned char* data, int len) {
 	int stype = ((data[0]) | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
 	if (gateway_services.services[stype] && gateway_services.services[stype]->on_bin_protocal_data) {
-		int ret = gateway_services.services[stype]->on_bin_protocal_data(gateway_services.services[stype],s, data, len);
+		int ret = gateway_services.services[stype]->on_bin_protocal_data(gateway_services.services[stype]->moduel_data,s, data, len);
 		if (ret < 0) {
 			close_session(s);
 		}
