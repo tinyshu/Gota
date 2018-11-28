@@ -23,12 +23,16 @@ int on_center_json_protocal_data(void* moduel_data, struct session* s, json_t* r
 	int cmd = atoi(jcmd->text);
 	// 转给上层业务模块处理
 	// end 
-
-	// test 发送给gateway
+	json_t* jskey = json_object_at(root,"skey");
+	if (NULL == jskey) {
+		return 0;
+	}
+	//回发给gateway
 	json_t* juid = json_object_at(root, "uid");
 	json_t* ret = json_new_comand((SYPTE_CENTER + TYPE_OFFSET), cmd);
 	json_object_push_number(ret, "2", 1);
 	json_object_push_number(ret, "uid", atoll(juid->text));
+	json_object_push_number(ret, "skey", atoll(jskey->text));
 	session_json_send(s, ret);
 	json_free_value(&ret);
 	return 0;

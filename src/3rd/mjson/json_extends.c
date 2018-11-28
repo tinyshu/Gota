@@ -94,3 +94,32 @@ json_new_comand(int stype, int comand) {
 
 	return root;
 }
+
+void json_object_update_number(json_t* parent, char* key, int value) {
+	if (NULL==parent || NULL==key) {
+		return;
+	}
+
+	char buf[64];
+	snprintf(buf,sizeof(buf),"%d",value);
+
+	json_t* json_node = json_object_at(parent,key);
+	if (NULL==json_node || json_node->type!=JSON_NUMBER) {
+		return 0;
+	}
+	
+	//先释放节点
+	if (NULL!=json_node->text) {
+		free(json_node->text);
+		json_node->text = NULL;
+	}
+
+	int alloc_len = strlen(buf) + 1;
+	json_node->text = (char*)malloc(alloc_len);
+	if (NULL == json_node->text) {
+		return;
+	}
+
+	strncpy(json_node->text,buf, alloc_len);
+	json_node->text[alloc_len] = 0;
+}

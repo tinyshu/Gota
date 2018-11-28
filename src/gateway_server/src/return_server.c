@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "return_server.h"
+#include "../../utils/log.h"
 #include "../../types_service.h"
 #include "../../gate_moduel/services/service_gateway.h"
 #include "server_session_mgr.h"
@@ -10,34 +11,73 @@
 
 #define my_malloc malloc
 
+static unsigned int get_json_skey(json_t* root) {
+	if (NULL==root) {
+		return 0;
+	}
+	unsigned int skey = 0;
+	json_t* jvalue = json_object_at(root, "skey");
+	if (NULL == jvalue || jvalue->type != JSON_NUMBER) {
+		return 0;
+	}
+
+	skey = atoll(jvalue->text);
+	return skey;
+}
+
+static unsigned int get_json_uid(json_t* root) {
+	if (NULL == root) {
+		return 0;
+	}
+	unsigned int uid = 0;
+	json_t* jvalue = json_object_at(root, "skey");
+	if (NULL == jvalue || jvalue->type != JSON_NUMBER) {
+		return 0;
+	}
+
+	uid = atoll(jvalue->text);
+	return uid;
+}
 
 static int on_json_protocal_data(void* moduel_data, struct session* s, json_t* root,
 	unsigned char* pkg, int len) {
 	int stype = (int)moduel_data;
 
-	struct session* client_session = NULL;
 #ifdef _DEBUG
 	char* str = NULL;
 	json_tree_to_string(root,&str);
 	printf("on_json_protocal_data %s\n", str);
 	json_free_str(str);
 #endif
-	json_t* jvalue = json_object_at(root,"uid");
-	if (NULL == jvalue || jvalue->type != JSON_NUMBER) {
-		return 0;
-	}
-	//通过uid找到客户端对应的session
-	unsigned int session_uid = atoll(jvalue->text);
-	//get session
+	unsigned int session_uid = get_json_uid(root);
+	//通过透传的rand_key找找到client_session
+	unsigned int skey = get_json_skey(root);
+	struct session* client_session = get_session_by_key(skey);
 	if (NULL == client_session || session_uid <= 0) {
 		//没有找到客户端，可能客户端已经关闭连接
+		LOGINFO("not found client session is lost uid:%u\n", session_uid);
 		return 0;
 	}
 
 	int client_stype = stype - TYPE_OFFSET;
-	
+	if (client_stype >0 && client_stype < STYPE_MAX_OFFSET) {
+		LOGINFO("client_stype error %d", client_stype);
+		return 0;
+	}
 	//验证用户是否登录
-	//发送数据
+	//check_auth();
+	//给客户端发送数据
+	json_object_update_number(root,"0", client_stype);
+	//json_t* j_key = json_object_at(root,"skey");
+	//if (NULL!=j_key) {
+	//	json_free_value(&j_key);
+	//}
+
+	//json_t* j_uid = json_object_at(root, "uid");
+	//if (NULL != j_uid) {
+	//	json_free_value(&j_uid);
+	//}
+
 	session_json_send(client_session, root);
 	return 0;
 }

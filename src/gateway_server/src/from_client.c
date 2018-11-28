@@ -29,7 +29,7 @@ static int on_json_protocal_data (void* moduel_data, struct session* s, json_t* 
 	unsigned int session_key = get_session_key();
 	save_session_by_key(session_key,s);
 	json_object_push_number(root,"uid",uid);
-	json_object_push_number(root,"key", session_key); //后端服务需要透明传回这个值
+	json_object_push_number(root,"skey", session_key); //后端服务需要透明传回这个值
 	session_json_send(server_session, root);
 	return 0;
 }

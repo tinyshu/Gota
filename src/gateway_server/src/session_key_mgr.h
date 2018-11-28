@@ -17,4 +17,6 @@ void remove_session_by_key(unsigned int key);
 
 void clear_session_by_value(struct session* s);
 
+struct session* get_session_by_key(unsigned int key);
+
 #endif 

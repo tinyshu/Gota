@@ -37,6 +37,7 @@ json_array_push_string(json_t* parent, char* value);
 json_t* 
 json_new_comand(int stype, int comand);
 
+void json_object_update_number(json_t* parent,char* key,int value);
 
 #ifdef __cplusplus
 }

@@ -42,3 +42,6 @@ void clear_session_by_value(struct session* s) {
 	remove_hash_int_by_value(SESSINO_KEY_MGR.session_map,(void*)s);
 }
 
+struct session* get_session_by_key(unsigned int key) {
+	return (struct session*)get_value_by_key(SESSINO_KEY_MGR.session_map,key);
+}
