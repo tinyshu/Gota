@@ -3,3 +3,9 @@
 *.idb
 *.pdb
 *.ilk
+*.log
+.gitignore
+*.suo
+*.db
+.vs
+*.exe
