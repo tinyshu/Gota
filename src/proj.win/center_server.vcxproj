@@ -89,7 +89,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,8 +152,8 @@
     <ClCompile Include="..\center_server\main.c" />
     <ClCompile Include="..\center_server\src\cener_config.c" />
     <ClCompile Include="..\center_server\src\center_services.c" />
+    <ClCompile Include="..\gate_moduel\netbus\netbus.c" />
     <ClCompile Include="..\gate_moduel\net\net_iocp_win.c" />
-    <ClCompile Include="..\gate_moduel\services\service_gateway.c" />
     <ClCompile Include="..\gate_moduel\session\tcp_session.c" />
     <ClCompile Include="..\utils\log.c" />
     <ClCompile Include="..\utils\timer_list.c" />
@@ -166,8 +166,8 @@
     <ClInclude Include="..\3rd\mjson\json_extends.h" />
     <ClInclude Include="..\center_server\src\cener_config.h" />
     <ClInclude Include="..\center_server\src\center_services.h" />
+    <ClInclude Include="..\gate_moduel\netbus\netbus.h" />
     <ClInclude Include="..\gate_moduel\net\net_io.h" />
-    <ClInclude Include="..\gate_moduel\services\service_gateway.h" />
     <ClInclude Include="..\gate_moduel\session\tcp_session.h" />
     <ClInclude Include="..\utils\log.h" />
     <ClInclude Include="..\utils\timer.h" />

@@ -5,7 +5,7 @@
 #include "../../utils/log.h"
 #include "../../types_service.h"
 #include "../../protocal_cmd.h"
-#include "../../gate_moduel/services/service_gateway.h"
+#include "../../gate_moduel/netbus/netbus.h"
 #include "../../3rd/mjson/json_extends.h"
 #include "center_services.h"
 

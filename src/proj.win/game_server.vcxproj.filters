@@ -22,14 +22,14 @@
     <Filter Include="src\gate_moduel\net">
       <UniqueIdentifier>{c70850c5-f150-42bb-9ed9-ffbbe74cb81e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\gate_moduel\serivces">
-      <UniqueIdentifier>{68624591-4c12-480f-9f75-58e847906ebf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\gate_moduel\session">
       <UniqueIdentifier>{9d49ce3a-2a49-4b72-ae6f-8e83ac37b436}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\utils">
       <UniqueIdentifier>{4ffd9bd4-6e0f-4a6d-a422-3b3a8a9dac9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gate_moduel\netbus">
+      <UniqueIdentifier>{b7ba70cb-3cb2-4eb4-a74d-c9d42516f876}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -51,9 +51,6 @@
     <ClCompile Include="..\gate_moduel\net\net_iocp_win.c">
       <Filter>src\gate_moduel\net</Filter>
     </ClCompile>
-    <ClCompile Include="..\gate_moduel\services\service_gateway.c">
-      <Filter>src\gate_moduel\serivces</Filter>
-    </ClCompile>
     <ClCompile Include="..\gate_moduel\session\tcp_session.c">
       <Filter>src\gate_moduel\session</Filter>
     </ClCompile>
@@ -66,6 +63,9 @@
     <ClCompile Include="..\game_server\main.c" />
     <ClCompile Include="..\game_server\src\game_config.c">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gate_moduel\netbus\netbus.c">
+      <Filter>src\gate_moduel\netbus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -87,9 +87,6 @@
     <ClInclude Include="..\gate_moduel\net\net_io.h">
       <Filter>src\gate_moduel\net</Filter>
     </ClInclude>
-    <ClInclude Include="..\gate_moduel\services\service_gateway.h">
-      <Filter>src\gate_moduel\serivces</Filter>
-    </ClInclude>
     <ClInclude Include="..\gate_moduel\session\tcp_session.h">
       <Filter>src\gate_moduel\session</Filter>
     </ClInclude>
@@ -104,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="..\game_server\src\game_config.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gate_moduel\netbus\netbus.h">
+      <Filter>src\gate_moduel\netbus</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
