@@ -439,8 +439,8 @@ static int process_websocket_data(struct session* s, struct io_package* io_data,
 #if _DEBUG
 				printf("websocket pack: header_size:%d body_size:%d\n", header_size, pkg_size);
 #endif
-				//如果是0x88 websocket客户端请求关闭
-				if (0x88 == pkg[1]) {
+				//如果第一个字节是0x88 websocket客户端请求关闭
+				if (0x88 == pkg[0]) {
 					if (NULL != io_data->long_pkg) {
 						my_free(io_data->long_pkg);
 						my_free(io_data);
@@ -581,7 +581,7 @@ static int process_websocket_connect(struct session* s, struct io_package* io_da
 
 	send(s->c_sock, accept_buffer, strlen(accept_buffer), 0);
 	s->is_shake_hand = 1;
-
+	printf("websocket connect is success\n");
 	//连接成功在投递一个请求
 	DWORD dwRecv = 0;
 	DWORD dwFlags = 0;
