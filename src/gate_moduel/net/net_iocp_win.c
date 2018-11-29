@@ -18,7 +18,7 @@
 #include "../../3rd/crypt/base64_encoder.h"
 #include "../../3rd/mjson/json.h"
 
-#include "../services/service_gateway.h"
+#include "../netbus/netbus.h"
 #include "../../utils/log.h"
 //#include "../service/types_service.h"
 //#include "../service/table_service.h"

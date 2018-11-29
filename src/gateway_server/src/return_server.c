@@ -5,7 +5,7 @@
 #include "return_server.h"
 #include "../../utils/log.h"
 #include "../../types_service.h"
-#include "../../gate_moduel/services/service_gateway.h"
+#include "../../gate_moduel/netbus/netbus.h"
 #include "server_session_mgr.h"
 #include "../../3rd/mjson/json_extends.h"
 

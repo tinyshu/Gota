@@ -10,7 +10,7 @@
 #include "tcp_session.h"
 #include "../net/net_io.h"
 #include "../../3rd/mjson/json_extends.h"
-#include "../services/service_gateway.h"
+#include "../netbus/netbus.h"
 
 #define MAX_SESSION_NUM 6000
 #define my_malloc malloc
