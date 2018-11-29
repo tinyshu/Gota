@@ -1,5 +1,5 @@
-#ifndef SERVICE_GATEWAY_H__
-#define SERVICE_GATEWAY_H__
+#ifndef NETBUS_H__
+#define NETBUS_H__
 
 #include "../../3rd/mjson/json.h"
 extern struct timer_list* GATEWAY_TIMER_LIST;
