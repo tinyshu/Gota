@@ -130,7 +130,8 @@ static int on_header_value(http_parser* p, const char *at,
 	strncpy(client_ws_key, at, length);
 	client_ws_key[length] = 0;
 	has_client_key = 1;
-	printf("%s\n", client_ws_key);
+	//struct session* s = (struct session*)p->data;
+	//printf("%s\n", client_ws_key);
 	return 0;
 }
 
@@ -227,7 +228,7 @@ int read_json_tail(unsigned char* pkg_data, int recvlen, int* pkg_size) {
 	}
 #ifdef _DEBUG
 	
-	printf("read_json_tail:%s",pkg_data);
+	//printf("read_json_tail:%s",pkg_data);
 #endif // !_DEBUG
 
 	*pkg_size = 0;
@@ -528,6 +529,9 @@ static int process_websocket_connect(struct session* s, struct io_package* io_da
 	次投递读请求，到on_header_value读取到Sec-WebSocket-Key字段后，has_client_key==1
 	说明Sec-WebSocket-Key已经存储到client_ws_key
 	*/
+	//s->has_client_key = 0;
+	//绑定自定义的session,在on_header_value回调has_client_key设置为1
+	//p.data = (void*)s;
 	has_client_key = 0;
 	http_parser_execute(&p, &setting, pkg, io_data->recved);
 	if (0 == has_client_key) {
