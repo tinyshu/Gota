@@ -78,14 +78,13 @@ void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len
 	json_t* root = NULL;
 	int ret = json_parse_document(&root, data);
 	if (ret != JSON_OK || root == NULL) { // 不是一个正常的json包;
-		free(root);
 		return;
 	}
 
 	json_t* server_type = json_find_first_label(root, "0");
 	server_type = server_type->child;
 	if (server_type == NULL || server_type->type != JSON_NUMBER ) {
-		free(root);
+		json_free_value(&root);
 		return;
 	}
 	int stype = atoi(server_type->text);

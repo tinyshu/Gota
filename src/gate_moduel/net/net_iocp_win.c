@@ -622,6 +622,7 @@ struct session* gateway_connect(char* server_ip, int port,int stype) {
 	struct session* s = save_session(sock, inet_ntoa(sockaddr.sin_addr), ntohs(sockaddr.sin_port));
 	//连接后端服务使用tcp+json协议
 	s->socket_type = TCP_SOCKET_IO;
+	s->is_server_session = 1;
 	CreateIoCompletionPort((HANDLE)sock, g_iocp, (DWORD)s, 0);
 	post_recv((SOCKET)sock, g_iocp);
 
@@ -799,6 +800,7 @@ void start_server(char* ip, int port, int socket_type, int protocal_type) {
 			struct session* s = save_session(client_fd, inet_ntoa(r_addr->sin_addr), ntohs(r_addr->sin_port));
 			//设置成启动服务设置的socket_type
 			s->socket_type = socket_type;
+			s->is_server_session = 0;
 			//关联完成端口句柄和新连接句柄，并设置lpCompletionKey
 			//这个lpCompletionKey参数在GetQueuedCompletioStatus时候返回
 			CreateIoCompletionPort((HANDLE)client_fd, iocp, (DWORD)s, 0);

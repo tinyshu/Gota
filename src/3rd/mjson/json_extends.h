@@ -39,6 +39,8 @@ json_new_comand(int stype, int comand);
 
 void json_object_update_number(json_t* parent,char* key,int value);
 
+void json_object_remove(json_t* json, char* key);
+
 #ifdef __cplusplus
 }
 #endif

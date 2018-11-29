@@ -121,5 +121,9 @@ void json_object_update_number(json_t* parent, char* key, int value) {
 	}
 
 	strncpy(json_node->text,buf, alloc_len);
-	json_node->text[alloc_len] = 0;
+}
+
+void json_object_remove(json_t* json, char* key) {
+	json_t* j_key = json_find_first_label(json, key);
+	json_free_value(&j_key);
 }

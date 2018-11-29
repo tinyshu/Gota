@@ -36,12 +36,16 @@ static int on_json_protocal_data (void* moduel_data, struct session* s, json_t* 
 
 //当网络底层检测到客户端连接的session关闭，由网络层通知到该函数
 static void on_connect_lost (void* moduel_data, struct session* s) {
+	if (1 == s->is_server_session) {
+		//不处理服务器session类型
+		return;
+	}
 	int stype = (int)moduel_data;
 	//需要通知后端的服务,有客户端session断开
 	unsigned int uid = s->uid;
 	
 	struct session* server_session = get_server_session(stype);
-	if (server_session == NULL || uid == 0) { // gateway与服务所在进程断开了网络连接
+	if (server_session == NULL) {
 		//不是一个client类型的session
 		return;
 	}

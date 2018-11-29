@@ -3,6 +3,7 @@
 #include <string.h>
 #include "server_session_mgr.h"
 #include "gw_config.h"
+#include "../../utils/log.h"
 
 #define MAX_SERVER_COUNT 16
 struct SESSION_MGR {
@@ -15,7 +16,7 @@ void init_server_session() {
 	SESSION_MGR.need_connectd = 1;
 	GATEWAY_TIMER_LIST = create_timer_list();
 	//Æô¶¯¶¨Ê±Æ÷
-	gateway_schedule(check_server_online,NULL,3);
+	gateway_schedule(check_server_online,NULL,1);
 }
 
 void destroy_session_mgr() {
@@ -23,7 +24,8 @@ void destroy_session_mgr() {
 }
 
 struct session* get_server_session(int stype) {
-	if (stype < 0 || stype > STYPE_MAX) {
+	if (stype < 0 || stype > MAX_SERVER_COUNT) {
+		LOGERROR("get_server_session error stype:%d\n", stype);
 		return NULL;
 	}
 
@@ -35,7 +37,6 @@ void gateway_schedule(void(*on_time)(void* data), void* kdata, int after_sec) {
 }
 
 void check_server_online(void* data) {
-	//printf("check_server_online\n");
 	if (0 == SESSION_MGR.need_connectd) {
 		return;
 	}
@@ -58,7 +59,7 @@ void check_server_online(void* data) {
 }
 
 void lost_server_connection(int stype) {
-	if (stype < 0 || stype > STYPE_MAX) {
+	if (stype < 0 || stype > STYPE_MAX_OFFSET) {
 		return;
 	}
 	SESSION_MGR.server_session[stype] = NULL;

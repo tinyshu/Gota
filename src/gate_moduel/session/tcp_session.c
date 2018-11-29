@@ -264,7 +264,7 @@ void session_send(struct session* s, unsigned char* body, int len) {
 		send_bytes = send_websocket_data(s, body, len);
 	}
 
-	printf("send_bytes%d", send_bytes);
+	printf("send_bytes%d\n", send_bytes);
 }
 
 void session_json_send(struct session* s, json_t* json_object) {

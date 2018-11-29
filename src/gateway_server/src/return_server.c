@@ -26,6 +26,7 @@ static unsigned int get_json_skey(json_t* root) {
 }
 
 static unsigned int get_json_uid(json_t* root) {
+	
 	if (NULL == root) {
 		return 0;
 	}
@@ -59,8 +60,8 @@ static int on_json_protocal_data(void* moduel_data, struct session* s, json_t* r
 		return 0;
 	}
 
-	int client_stype = stype - TYPE_OFFSET;
-	if (client_stype >0 && client_stype < STYPE_MAX_OFFSET) {
+	int client_stype = stype;
+	if (client_stype <=0 || client_stype > STYPE_MAX_OFFSET) {
 		LOGINFO("client_stype error %d", client_stype);
 		return 0;
 	}
@@ -68,16 +69,14 @@ static int on_json_protocal_data(void* moduel_data, struct session* s, json_t* r
 	//check_auth();
 	//给客户端发送数据
 	json_object_update_number(root,"0", client_stype);
-	//json_t* j_key = json_object_at(root,"skey");
-	//if (NULL!=j_key) {
-	//	json_free_value(&j_key);
-	//}
-
-	//json_t* j_uid = json_object_at(root, "uid");
-	//if (NULL != j_uid) {
-	//	json_free_value(&j_uid);
-	//}
-
+	json_object_remove(root,"skey");
+	json_object_remove(root, "uid");
+#ifdef _DEBUG
+	char* text = NULL;
+	json_tree_to_string(root,&text);
+	printf("on_json_protocal_data: %s\n", text);
+	json_free_str(text);
+#endif
 	session_json_send(client_session, root);
 	return 0;
 }
@@ -85,7 +84,10 @@ static int on_json_protocal_data(void* moduel_data, struct session* s, json_t* r
 static void on_connect_lost(void* moduel_data, struct session* s) {
 	int stype = (int)moduel_data;
 	//后端里连接的服务器断线
-	lost_server_connection(stype);
+	if (1 == s->is_server_session) {
+		lost_server_connection(stype);
+	}
+	
 }
 
 
@@ -95,12 +97,14 @@ void register_server_return_moduel(int stype) {
 		exit(-1);
 	}
 
+	int return_stype = stype + TYPE_OFFSET;
+	register_moduel->stype = stype;
 	register_moduel->init_service_module = NULL;
 	register_moduel->on_bin_protocal_data = NULL;
 	register_moduel->on_json_protocal_data = on_json_protocal_data;
 	register_moduel->on_connect_lost = on_connect_lost;
-	register_moduel->moduel_data = (void*)stype;
+	register_moduel->moduel_data = stype;
 
-	register_services(stype + TYPE_OFFSET, register_moduel);
+	register_services(return_stype, register_moduel);
 }
 
