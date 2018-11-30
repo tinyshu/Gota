@@ -3,7 +3,7 @@
 #include <string.h>
 #include "from_client.h"
 #include "../../types_service.h"
-#include "../../protocal_cmd.h"
+#include "../../command.h"
 #include "../../moduel/netbus/netbus.h"
 #include "server_session_mgr.h"
 #include "../../3rd/mjson/json_extends.h"

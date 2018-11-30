@@ -127,3 +127,25 @@ void json_object_remove(json_t* json, char* key) {
 	json_t* j_key = json_find_first_label(json, key);
 	json_free_value(&j_key);
 }
+
+unsigned int json_object_get_unsigned_number(json_t* json, char* key) {
+	unsigned int value = 0;
+	json_t* jnumber = json_object_at(json, key);
+	if (NULL == jnumber || jnumber->type != JSON_NUMBER) {
+		return 0;
+	}
+
+	value = strtoul(jnumber->text,NULL,10);
+	return value;
+}
+
+int json_object_get_int_number(json_t* json, char* key) {
+	int value = 0;
+	json_t* jnumber = json_object_at(json, key);
+	if (NULL == jnumber || jnumber->type != JSON_NUMBER) {
+		return 0;
+	}
+
+	value = atoi(jnumber->text);
+	return value;
+}

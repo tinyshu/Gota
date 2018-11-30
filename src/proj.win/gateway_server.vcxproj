@@ -27,6 +27,7 @@
     <ClCompile Include="..\3rd\mjson\json_extends.c" />
     <ClCompile Include="..\center_server\src\cener_config.c" />
     <ClCompile Include="..\center_server\src\center_services.c" />
+    <ClCompile Include="..\command.c" />
     <ClCompile Include="..\command_server\src\command_config.c" />
     <ClCompile Include="..\game_server\src\game_config.c" />
     <ClCompile Include="..\gateway_server\main.c" />
@@ -51,7 +52,9 @@
     <ClInclude Include="..\3rd\mjson\json_extends.h" />
     <ClInclude Include="..\center_server\src\cener_config.h" />
     <ClInclude Include="..\center_server\src\center_services.h" />
+    <ClInclude Include="..\command.h" />
     <ClInclude Include="..\command_server\src\command_config.h" />
+    <ClInclude Include="..\error_command.h" />
     <ClInclude Include="..\game_server\src\game_config.h" />
     <ClInclude Include="..\gateway_server\src\from_client.h" />
     <ClInclude Include="..\gateway_server\src\gw_config.h" />

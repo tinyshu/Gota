@@ -15,7 +15,7 @@ static void init_service_module(struct service_module* module) {
 
 //json协议处理接口
 int on_center_json_protocal_data(void* moduel_data, struct session* s, json_t* root, unsigned char* pkg, int len) {
-	printf("on_center_json_protocal_data\n");
+	//printf("on_center_json_protocal_data\n");
 	json_t* jcmd = json_object_at(root, "1");
 	if (jcmd == NULL || jcmd->type != JSON_NUMBER) {
 		return 0;

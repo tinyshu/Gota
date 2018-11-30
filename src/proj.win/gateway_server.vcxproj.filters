@@ -112,6 +112,9 @@
     <ClCompile Include="..\game_server\src\game_config.c">
       <Filter>src\devlop\gameserver</Filter>
     </ClCompile>
+    <ClCompile Include="..\command.c">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h">
@@ -185,6 +188,12 @@
     </ClInclude>
     <ClInclude Include="..\game_server\src\game_config.h">
       <Filter>src\devlop\gameserver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\command.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\error_command.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

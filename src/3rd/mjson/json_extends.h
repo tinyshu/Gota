@@ -34,12 +34,15 @@ json_array_push_number(json_t* parent, int value);
 void
 json_array_push_string(json_t* parent, char* value);
 
-json_t* 
-json_new_comand(int stype, int comand);
+json_t* json_new_comand(int stype, int comand);
 
 void json_object_update_number(json_t* parent,char* key,int value);
 
 void json_object_remove(json_t* json, char* key);
+
+unsigned int json_object_get_unsigned_number(json_t* json, char* key);
+
+int json_object_get_int_number(json_t* json, char* key);
 
 #ifdef __cplusplus
 }
