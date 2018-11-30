@@ -14,7 +14,7 @@ struct session* get_server_session(int stype);
 
 void check_server_online(void*);
 
-void netbus_schedule(void(*on_time)(void* data), void* kdata, int after_sec);
+void netbus_schedule(void(*on_time)(void* data), void* kdata, float after_sec);
 
 void lost_server_connection(int stype);
 

@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "netbus.h"
-
+#include "../../3rd/mjson/json_extends.h"
 #ifdef GAME_DEVLOP
 #include "../session/tcp_session.h"
 #endif
@@ -14,7 +14,8 @@ struct timer_list* NETBUS_TIMER_LIST = NULL;
 
 extern void close_session(struct session* s);
 extern void session_send(struct session*s, unsigned char* body, int len);
-
+extern unsigned int get_session_key();
+extern void save_session_by_key(unsigned int key, struct session* s);
 //网关负责转发的后台service模块
 struct {
 	struct service_module* services[MAX_SERVICES];

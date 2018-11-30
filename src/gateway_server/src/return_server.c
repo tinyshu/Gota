@@ -8,7 +8,7 @@
 #include "../../moduel/netbus/netbus.h"
 #include "server_session_mgr.h"
 #include "../../3rd/mjson/json_extends.h"
-
+#include "../../moduel/session/tcp_session.h"
 #define my_malloc malloc
 
 static unsigned int get_json_skey(json_t* root) {
@@ -21,7 +21,7 @@ static unsigned int get_json_skey(json_t* root) {
 		return 0;
 	}
 
-	skey = atoll(jvalue->text);
+	skey = strtoul(jvalue->text,NULL,10);
 	return skey;
 }
 
@@ -36,7 +36,7 @@ static unsigned int get_json_uid(json_t* root) {
 		return 0;
 	}
 
-	uid = atoll(jvalue->text);
+	uid = strtoul(jvalue->text,NULL,10);
 	return uid;
 }
 
@@ -103,7 +103,7 @@ void register_server_return_moduel(int stype) {
 	register_moduel->on_bin_protocal_data = NULL;
 	register_moduel->on_json_protocal_data = on_json_protocal_data;
 	register_moduel->on_connect_lost = on_connect_lost;
-	register_moduel->moduel_data = stype;
+	register_moduel->moduel_data = (void*)stype;
 
 	register_services(return_stype, register_moduel);
 }

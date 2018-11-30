@@ -44,7 +44,7 @@ int set_hash_map_int(struct hash_map_int* map,int key, void* value) {
 	node->next = NULL;
 	*walk = node;
 	
-	//(*walk)->next = node;
+	return 0;
 }
 
 void remove_hash_int_by_key(struct hash_map_int* map,int key) {
@@ -102,4 +102,6 @@ void* get_value_by_key(struct hash_map_int* map, int key) {
 
 		walk = &(*walk)->next;
 	}
+
+	return NULL;
 }

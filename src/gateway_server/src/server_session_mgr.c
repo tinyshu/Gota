@@ -6,6 +6,8 @@
 #include "../../utils/log.h"
 
 #define MAX_SERVER_COUNT 16
+extern struct session* netbus_connect(char* server_ip, int port, int stype);
+
 struct SESSION_MGR {
 	int need_connectd; //是否连接成功
 	struct session* server_session[MAX_SERVER_COUNT];
@@ -38,7 +40,7 @@ struct session* get_server_session(int stype) {
 	return SESSION_MGR.server_session[stype];
 }
 
-void netbus_schedule(void(*on_time)(void* data), void* kdata, int after_sec) {
+void netbus_schedule(void(*on_time)(void* data), void* kdata, float after_sec) {
 	schedule_timer(NETBUS_TIMER_LIST, on_time, kdata, after_sec);
 }
 
