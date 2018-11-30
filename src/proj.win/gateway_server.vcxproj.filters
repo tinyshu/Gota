@@ -31,6 +31,9 @@
     <Filter Include="src\moduel\session">
       <UniqueIdentifier>{9251d204-6435-4e82-baf2-0ef1a525f71e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\3rd\md5">
+      <UniqueIdentifier>{b6a2ab62-3bfb-421b-81e0-1aadd9ef2f1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\gateway_server\main.c" />
@@ -81,6 +84,9 @@
     </ClCompile>
     <ClCompile Include="..\moduel\session\tcp_session.c">
       <Filter>src\moduel\session</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\md5\md5.c">
+      <Filter>src\3rd\md5</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +146,9 @@
     </ClInclude>
     <ClInclude Include="..\moduel\session\tcp_session.h">
       <Filter>src\moduel\session</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\md5\md5.h">
+      <Filter>src\3rd\md5</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
