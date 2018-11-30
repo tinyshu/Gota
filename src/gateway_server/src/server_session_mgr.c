@@ -15,8 +15,14 @@ void init_server_session() {
 	memset(&SESSION_MGR,0,sizeof(SESSION_MGR));
 	SESSION_MGR.need_connectd = 1;
 	NETBUS_TIMER_LIST = create_timer_list();
+#ifdef GAME_DEVLOP
+	//单进程模式不
+	LOGINFO("single dev moduel\n");
+#else
 	//启动定时器
-	netbus_schedule(check_server_online,NULL,1);
+	netbus_schedule(check_server_online, NULL, 1);
+#endif
+	
 }
 
 void destroy_session_mgr() {

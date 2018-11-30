@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include "netbus.h"
 
+#ifdef GAME_DEVLOP
+#include "../session/tcp_session.h"
+#endif
+
 #define MAX_SERVICES 512
 #define my_free free;
 
@@ -28,8 +32,6 @@ void register_services(int stype, struct service_module* module) {
 	}
 	
 }
-
-
 
 void init_server_netbus() {
 	memset(&gateway_services, 0, sizeof(gateway_services));
@@ -91,8 +93,23 @@ void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len
 #ifdef _DEBUG
 	printf("stype:%d", stype);
 #endif
+
 	if (gateway_services.services[stype] && gateway_services.services[stype]->on_json_protocal_data) {
+#ifdef GAME_DEVLOP
+		//调试模式调用本地模块，单进程模式
+		//from_client打包进json二个字段uid,skey在这里写入
+		if (0 == s->is_server_session) {
+			unsigned int uid = 123;
+			//uid = s->uid;
+			//获取一个随机key和session绑定
+			unsigned int session_key = get_session_key();
+			save_session_by_key(session_key, s);
+			json_object_push_number(root, "uid", uid);
+			json_object_push_number(root, "skey", session_key); //后端服务需要透明传回这个值
+		}
+#endif	
 		gateway_services.services[stype]->on_json_protocal_data(gateway_services.services[stype]->moduel_data,s, root,data,len);
+
 	}
 
 	json_free_value(&root);

@@ -25,6 +25,10 @@
     <ClCompile Include="..\3rd\md5\md5.c" />
     <ClCompile Include="..\3rd\mjson\json.c" />
     <ClCompile Include="..\3rd\mjson\json_extends.c" />
+    <ClCompile Include="..\center_server\src\cener_config.c" />
+    <ClCompile Include="..\center_server\src\center_services.c" />
+    <ClCompile Include="..\command_server\src\command_config.c" />
+    <ClCompile Include="..\game_server\src\game_config.c" />
     <ClCompile Include="..\gateway_server\main.c" />
     <ClCompile Include="..\gateway_server\src\from_client.c" />
     <ClCompile Include="..\gateway_server\src\gw_config.c" />
@@ -45,6 +49,10 @@
     <ClInclude Include="..\3rd\md5\md5.h" />
     <ClInclude Include="..\3rd\mjson\json.h" />
     <ClInclude Include="..\3rd\mjson\json_extends.h" />
+    <ClInclude Include="..\center_server\src\cener_config.h" />
+    <ClInclude Include="..\center_server\src\center_services.h" />
+    <ClInclude Include="..\command_server\src\command_config.h" />
+    <ClInclude Include="..\game_server\src\game_config.h" />
     <ClInclude Include="..\gateway_server\src\from_client.h" />
     <ClInclude Include="..\gateway_server\src\gw_config.h" />
     <ClInclude Include="..\gateway_server\src\return_server.h" />
@@ -132,7 +140,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;GAME_DEVLOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

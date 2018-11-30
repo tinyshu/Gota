@@ -31,8 +31,10 @@ int on_center_json_protocal_data(void* moduel_data, struct session* s, json_t* r
 	json_t* juid = json_object_at(root, "uid");
 	json_t* ret = json_new_comand((SYPTE_CENTER + TYPE_OFFSET), cmd);
 	json_object_push_number(ret, "2", 1);
+#ifndef GAME_DEVLOP
 	json_object_push_number(ret, "uid", atoll(juid->text));
 	json_object_push_number(ret, "skey", atoll(jskey->text));
+#endif
 	session_json_send(s, ret);
 	json_free_value(&ret);
 	return 0;
