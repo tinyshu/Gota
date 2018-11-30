@@ -14,13 +14,13 @@ struct SESSION_MGR {
 void init_server_session() {
 	memset(&SESSION_MGR,0,sizeof(SESSION_MGR));
 	SESSION_MGR.need_connectd = 1;
-	GATEWAY_TIMER_LIST = create_timer_list();
+	NETBUS_TIMER_LIST = create_timer_list();
 	//启动定时器
-	gateway_schedule(check_server_online,NULL,1);
+	netbus_schedule(check_server_online,NULL,1);
 }
 
 void destroy_session_mgr() {
-	destroy_timer_list(GATEWAY_TIMER_LIST);
+	destroy_timer_list(NETBUS_TIMER_LIST);
 }
 
 struct session* get_server_session(int stype) {
@@ -32,8 +32,8 @@ struct session* get_server_session(int stype) {
 	return SESSION_MGR.server_session[stype];
 }
 
-void gateway_schedule(void(*on_time)(void* data), void* kdata, int after_sec) {
-	schedule_timer(GATEWAY_TIMER_LIST, on_time, kdata, after_sec);
+void netbus_schedule(void(*on_time)(void* data), void* kdata, int after_sec) {
+	schedule_timer(NETBUS_TIMER_LIST, on_time, kdata, after_sec);
 }
 
 void check_server_online(void* data) {
@@ -45,7 +45,7 @@ void check_server_online(void* data) {
 	for (int i = 0; i < 1; ++i) {
 		int stype = GW_CONFIG.module_set[i].stype;
 		if (NULL == SESSION_MGR.server_session[stype]) {
-			SESSION_MGR.server_session[stype] = gateway_connect(GW_CONFIG.module_set[i].ip, GW_CONFIG.module_set[i].port, stype);
+			SESSION_MGR.server_session[stype] = netbus_connect(GW_CONFIG.module_set[i].ip, GW_CONFIG.module_set[i].port, stype);
 			if (NULL == SESSION_MGR.server_session[stype]) {
 				//连接失败了
 				printf("connect %s is faild ip:%s port:%d\n", GW_CONFIG.module_set[i].desic, GW_CONFIG.module_set[i].ip, GW_CONFIG.module_set[i].port);

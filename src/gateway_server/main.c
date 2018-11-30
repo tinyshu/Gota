@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
 	init_session_key_map();
 	//初始化连接后端服务组件和定时器
 	init_server_session();
-	init_server_gateway();
+	init_server_netbus();
 	//初始化客户端到后端服务转发处理模块
 	//for (int i = 0; i < GW_CONFIG.num_server_moudle;++i) {
 	for (int i = 0; i < 1; ++i) {
@@ -34,6 +34,7 @@ int main(int argc, char** argv) {
 
 	exit_session_key_map();
 	destroy_session_mgr();
+	exit_server_netbus();
 	return 0;
 }
 

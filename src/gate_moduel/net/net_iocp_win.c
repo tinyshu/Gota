@@ -607,7 +607,7 @@ static int process_websocket_connect(struct session* s, struct io_package* io_da
 	return 0;
 }
 
-struct session* gateway_connect(char* server_ip, int port,int stype) {
+struct session* netbus_connect(char* server_ip, int port,int stype) {
 	SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (sock == INVALID_SOCKET) {
 		return NULL;
@@ -690,8 +690,8 @@ void start_server(char* ip, int port, int socket_type, int protocal_type) {
 	while (1) {
 		clear_offline_session();
 		int m_sec = -1;
-		if (NULL != GATEWAY_TIMER_LIST) {
-			m_sec = update_timer_list(GATEWAY_TIMER_LIST);
+		if (NULL != NETBUS_TIMER_LIST) {
+			m_sec = update_timer_list(NETBUS_TIMER_LIST);
 		}
 		
 		// 阻塞函数，当IOCP唤醒这个线程来处理已经发生事件
@@ -823,7 +823,6 @@ failed:
 		closesocket(l_sock);
 	}
 	WSACleanup();
-	exit_server_gateway();
 	printf("server stop!!\n");
 }
 

@@ -6,7 +6,7 @@
 #define MAX_SERVICES 512
 #define my_free free;
 
-struct timer_list* GATEWAY_TIMER_LIST = NULL;
+struct timer_list* NETBUS_TIMER_LIST = NULL;
 
 extern void close_session(struct session* s);
 extern void session_send(struct session*s, unsigned char* body, int len);
@@ -31,11 +31,11 @@ void register_services(int stype, struct service_module* module) {
 
 
 
-void init_server_gateway() {
+void init_server_netbus() {
 	memset(&gateway_services, 0, sizeof(gateway_services));
 }
 
-void exit_server_gateway() {
+void exit_server_netbus() {
 	//ÊÍ·ÅÄÚ´æ
 	for (int i = 0; i < MAX_SERVICES; ++i) {
 		struct service_module* moduel = gateway_services.services[i];

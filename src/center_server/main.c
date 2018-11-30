@@ -10,7 +10,7 @@
 int main(int argc, char** argv) {
 	init_log();
 	//注册center服务模块
-	init_server_gateway();
+	init_server_netbus();
 	//初始化连接端使用的协议 
 	init_session_manager(TCP_SOCKET_IO, JSON_PROTOCAL);
 	

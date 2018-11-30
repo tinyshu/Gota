@@ -2,7 +2,7 @@
 #define NETBUS_H__
 
 #include "../../3rd/mjson/json.h"
-extern struct timer_list* GATEWAY_TIMER_LIST;
+extern struct timer_list* NETBUS_TIMER_LIST;
 
 struct service_module  {
 	int stype;
@@ -19,8 +19,8 @@ struct service_module  {
 	void* moduel_data;
 };
 
-extern void exit_server_gateway();
-extern void init_server_gateway();
+extern void exit_server_netbus();
+extern void init_server_netbus();
 extern void on_bin_protocal_recv_entry(struct session* s, unsigned char* data, int len);
 extern void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len);
 

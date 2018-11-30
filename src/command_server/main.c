@@ -11,5 +11,7 @@ int main(int argc, char** argv) {
 	//start_server("127.0.0.1",8000,TCP_SOCKET_IO,BIN_PROTOCAL);
 	//start_server("127.0.0.1", 8000, TCP_SOCKET_IO, JSON_PROTOCAL);
 	start_server(COMMAND_CONF.ip, COMMAND_CONF.port, WEB_SOCKET_IO, JSON_PROTOCAL);
+
+	exit_server_netbus();
 	return 0;
 }
