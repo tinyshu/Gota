@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\bin</OutDir>
+    <OutDir>..\..\bin\</OutDir>
     <IntDir>$(Configuration)\$(ProjectName)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -89,7 +89,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,9 +151,9 @@
     <ClCompile Include="..\3rd\mjson\json_extends.c" />
     <ClCompile Include="..\game_server\main.c" />
     <ClCompile Include="..\game_server\src\game_config.c" />
-    <ClCompile Include="..\gate_moduel\netbus\netbus.c" />
-    <ClCompile Include="..\gate_moduel\net\net_iocp_win.c" />
-    <ClCompile Include="..\gate_moduel\session\tcp_session.c" />
+    <ClCompile Include="..\moduel\netbus\netbus.c" />
+    <ClCompile Include="..\moduel\net\net_iocp_win.c" />
+    <ClCompile Include="..\moduel\session\tcp_session.c" />
     <ClCompile Include="..\utils\log.c" />
     <ClCompile Include="..\utils\timer_list.c" />
   </ItemGroup>
@@ -164,9 +164,9 @@
     <ClInclude Include="..\3rd\mjson\json.h" />
     <ClInclude Include="..\3rd\mjson\json_extends.h" />
     <ClInclude Include="..\game_server\src\game_config.h" />
-    <ClInclude Include="..\gate_moduel\netbus\netbus.h" />
-    <ClInclude Include="..\gate_moduel\net\net_io.h" />
-    <ClInclude Include="..\gate_moduel\session\tcp_session.h" />
+    <ClInclude Include="..\moduel\netbus\netbus.h" />
+    <ClInclude Include="..\moduel\net\net_io.h" />
+    <ClInclude Include="..\moduel\session\tcp_session.h" />
     <ClInclude Include="..\utils\log.h" />
     <ClInclude Include="..\utils\timer.h" />
     <ClInclude Include="..\utils\timer_list.h" />

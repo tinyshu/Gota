@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include  <stdlib.h>
-#include "../gate_moduel/net/net_io.h"
+#include "../moduel/net/net_io.h"
 #include "../utils/log.h"
 #include "./src/cener_config.h"
-#include "../gate_moduel/netbus/netbus.h"
+#include "../moduel/netbus/netbus.h"
 #include "../types_service.h"
 #include "src/center_services.h"
 int main(int argc, char** argv) {

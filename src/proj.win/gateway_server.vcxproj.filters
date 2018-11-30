@@ -16,20 +16,20 @@
     <Filter Include="src\3rd\mjson">
       <UniqueIdentifier>{3a470523-ee28-46e3-938d-5efcb501ad35}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\gate_moduel">
-      <UniqueIdentifier>{4a1716eb-138e-4ae9-b768-316d287b1d33}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\gate_moduel\net">
-      <UniqueIdentifier>{cea3968b-6343-43c6-94bf-7bbf01d8141b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\gate_moduel\session">
-      <UniqueIdentifier>{83435538-2412-4c3b-a50a-0f50da87a2a8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\utils">
       <UniqueIdentifier>{b8a3318e-1673-4f4c-8dc5-2e0de8d08e35}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\gate_moduel\netbus">
-      <UniqueIdentifier>{a7f76b74-153e-4f64-9baa-c835c67a8ba8}</UniqueIdentifier>
+    <Filter Include="src\moduel">
+      <UniqueIdentifier>{cff2721e-583b-4655-afb5-a5cd96f2ee43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\moduel\net">
+      <UniqueIdentifier>{40c6c933-4f3c-450b-8ec5-365197ac8493}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\moduel\netbus">
+      <UniqueIdentifier>{526e67ce-16e7-416b-9bb2-f8798f44a1ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\moduel\session">
+      <UniqueIdentifier>{9251d204-6435-4e82-baf2-0ef1a525f71e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,12 +48,6 @@
     </ClCompile>
     <ClCompile Include="..\3rd\mjson\json_extends.c">
       <Filter>src\3rd\mjson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gate_moduel\net\net_iocp_win.c">
-      <Filter>src\gate_moduel\net</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gate_moduel\session\tcp_session.c">
-      <Filter>src\gate_moduel\session</Filter>
     </ClCompile>
     <ClCompile Include="..\utils\log.c">
       <Filter>src\utils</Filter>
@@ -79,8 +73,14 @@
     <ClCompile Include="..\gateway_server\src\session_key_mgr.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\gate_moduel\netbus\netbus.c">
-      <Filter>src\gate_moduel\netbus</Filter>
+    <ClCompile Include="..\moduel\net\net_iocp_win.c">
+      <Filter>src\moduel\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\moduel\netbus\netbus.c">
+      <Filter>src\moduel\netbus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\moduel\session\tcp_session.c">
+      <Filter>src\moduel\session</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,12 +98,6 @@
     </ClInclude>
     <ClInclude Include="..\3rd\mjson\json_extends.h">
       <Filter>src\3rd\mjson</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gate_moduel\net\net_io.h">
-      <Filter>src\gate_moduel\net</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gate_moduel\session\tcp_session.h">
-      <Filter>src\gate_moduel\session</Filter>
     </ClInclude>
     <ClInclude Include="..\utils\log.h">
       <Filter>src\utils</Filter>
@@ -138,8 +132,14 @@
     <ClInclude Include="..\gateway_server\src\session_key_mgr.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\gate_moduel\netbus\netbus.h">
-      <Filter>src\gate_moduel\netbus</Filter>
+    <ClInclude Include="..\moduel\net\net_io.h">
+      <Filter>src\moduel\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\moduel\netbus\netbus.h">
+      <Filter>src\moduel\netbus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\moduel\session\tcp_session.h">
+      <Filter>src\moduel\session</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

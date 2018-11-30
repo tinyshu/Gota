@@ -4,7 +4,7 @@
 #include "from_client.h"
 #include "../../types_service.h"
 #include "../../protocal_cmd.h"
-#include "../../gate_moduel/netbus/netbus.h"
+#include "../../moduel/netbus/netbus.h"
 #include "server_session_mgr.h"
 #include "../../3rd/mjson/json_extends.h"
 #include "session_key_mgr.h"

@@ -3,7 +3,7 @@
 
 #include "../../utils/timer.h"
 #include "../../utils/timer_list.h"
-#include "../../gate_moduel/session/tcp_session.h"
+#include "../../moduel/session/tcp_session.h"
 #include "../../types_service.h"
 
 extern struct timer_list* NETBUS_TIMER_LIST;

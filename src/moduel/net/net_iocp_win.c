@@ -730,7 +730,7 @@ void start_server(char* ip, int port, int socket_type, int protocal_type) {
 				LOGWARNING("error iocp %d\n", GetLastError());
 				if (io_data->opt == IOCP_ACCPET) {
 					closesocket(io_data->accpet_sock);
-					post_accept(l_sock, iocp, io_data);
+					post_accept(l_sock, iocp);
 				}
 				else if (io_data->opt == IOCP_RECV) {
 					DWORD dwRecv = 0;

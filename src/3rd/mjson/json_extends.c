@@ -105,7 +105,7 @@ void json_object_update_number(json_t* parent, char* key, int value) {
 
 	json_t* json_node = json_object_at(parent,key);
 	if (NULL==json_node || json_node->type!=JSON_NUMBER) {
-		return 0;
+		return;
 	}
 	
 	//先释放节点
