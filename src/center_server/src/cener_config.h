@@ -5,8 +5,15 @@ struct center_config {
 	char* ip;
 	int port;
 
-	// Êý¾Ý¿â£¬redis
-	// end 
+	//mysql
+	char* mysql_ip;
+	char* mysql_name;
+	int mysql_port;
+	char* mysql_pwd;
+	char* database_name;
+
+	//redis
+	//end 
 };
 
 extern struct center_config CENTER_CONF;

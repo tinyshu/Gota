@@ -4,6 +4,8 @@
 #include "command.h"
 #include "types_service.h"
 
+const int CENTER_TYPE = SYPTE_CENTER + TYPE_OFFSET;
+
 void json_get_uid_and_key(json_t* cmd, unsigned int* uid, unsigned int* s_key) {
 	
 	*uid = json_object_get_unsigned_number(cmd, "uid");
@@ -22,10 +24,11 @@ json_new_server_return_cmd(int stype, int cmd,
 }
 
 void write_error(struct session* s, int stype,
-	int cmd, int status,
+	int cmd, int status, char* errmsg,
 	unsigned int uid, unsigned int s_key) {
 	json_t* json = json_new_server_return_cmd(stype, cmd, uid, s_key);
 	json_object_push_number(json, "2", status);
+	json_object_push_string(json, "errmsg", errmsg);
 	session_json_send(s, json);
 	json_free_value(&json);
 }
