@@ -149,3 +149,13 @@ int json_object_get_int_number(json_t* json, char* key) {
 	value = atoi(jnumber->text);
 	return value;
 }
+
+char* json_object_get_string(json_t* json, char* key) {
+	json_t* jstr = json_object_at(json,key);
+	if (NULL == jstr || jstr->type != JSON_STRING) {
+		return NULL;
+	}
+
+	return jstr->text;
+}
+

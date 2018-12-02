@@ -10,25 +10,10 @@
 #include "../../3rd/mjson/json_extends.h"
 #include "center_services.h"
 
+//逻辑模块入口
+#include "logic_moduels/auth.h"
 ///////////////////////////////////////////////////////////////
-static void guest_login(void* moduel_data, struct session* s, 
-	json_t* root,unsigned int uid,unsigned int skey) {
 
-	int para_count = json_object_size(root);
-	if (3 != para_count) {
-		write_error(s, CENTER_TYPE, GUEST_LOGIN, INVALID_PARAMS,"parament count error",uid,skey);
-		return;
-	}
-
-	json_t* client_rand_key = json_object_at(root,"2");
-	if (NULL!=client_rand_key || client_rand_key->type) {
-		write_error(s, CENTER_TYPE, GUEST_LOGIN, INVALID_PARAMS, "not fount client rand key",uid, skey);
-		return;
-	}
-
-	//使用key在db里查找
-	
-}
 ///////////////////////////////////////////////////////////////
 static void init_service_module(struct service_module* module) {
 	
@@ -67,7 +52,14 @@ int on_center_json_protocal_data(void* moduel_data, struct session* s, json_t* r
 }
 
 void on_center_connect_lost(void* module_data, struct session* s) {
+#ifndef GAME_DEVLOP
+	//多进程部署模式，s为gateway连接
 	LOGINFO("center_connect_lost\n");
+#else
+	//单进程调试方式，s是前端连接的client
+#endif // !GAME_DEVLOP
+
+	
 }
 
 struct service_module CENTER_SERVICE = {

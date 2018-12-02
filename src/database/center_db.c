@@ -2,9 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "connect_center_db.h"
-#include "cener_config.h"
-#include "../../utils/log.h"
+#include "center_db.h"
+#include "center_db_conf.h"
+#include "../utils/log.h"
+
 MYSQL* mysql_center = NULL;
 
 void connect_to_centerdb() {
@@ -14,8 +15,8 @@ void connect_to_centerdb() {
 		exit(-1);
 	}
 
-	int is_success = mysql_real_connect(mysql_center, CENTER_CONF.mysql_ip, CENTER_CONF.mysql_name,
-		CENTER_CONF.mysql_pwd, CENTER_CONF.database_name, CENTER_CONF.mysql_port,NULL,0);
+	int is_success = mysql_real_connect(mysql_center, CENTER_DB_CONFIG.mysql_ip, CENTER_DB_CONFIG.mysql_name,
+		CENTER_DB_CONFIG.mysql_pwd, CENTER_DB_CONFIG.database_name, CENTER_DB_CONFIG.mysql_port,NULL,0);
 
 	if (0 == is_success) {
 		LOGERROR("connect error!!! \n %s\n", mysql_error(mysql_center));
@@ -24,6 +25,6 @@ void connect_to_centerdb() {
 		exit(-1);
 	}
 	else {
-		LOGINFO("connect user_center db sucess ip:%s", CENTER_CONF.mysql_ip);
+		LOGINFO("connect user_center db sucess ip:%s", CENTER_DB_CONFIG.mysql_ip);
 	}
 }

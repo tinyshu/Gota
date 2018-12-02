@@ -34,6 +34,12 @@
     <Filter Include="src\db_moduels">
       <UniqueIdentifier>{8f475e83-ddbe-4987-8a83-ccf55f9d944c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\logic_moduels">
+      <UniqueIdentifier>{2e4e5bb4-f650-4a86-9734-fb2c8b323761}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\database">
+      <UniqueIdentifier>{df9acf01-b93d-426a-9530-21539e99e3ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\center_server\main.c">
@@ -75,14 +81,20 @@
     <ClCompile Include="..\command.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\center_server\src\connect_center_db.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\center_server\src\center_services.c">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\center_server\src\db_moduels\login_moduel.c">
       <Filter>src\db_moduels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\center_server\src\logic_moduels\auth.c">
+      <Filter>src\logic_moduels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\database\center_db.c">
+      <Filter>src\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\database\center_db_conf.c">
+      <Filter>src\database</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,11 +140,17 @@
     <ClInclude Include="..\command.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\center_server\src\connect_center_db.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\center_server\src\db_moduels\login_moduel.h">
       <Filter>src\db_moduels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\center_server\src\logic_moduels\auth.h">
+      <Filter>src\logic_moduels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database\center_db.h">
+      <Filter>src\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database\center_db_conf.h">
+      <Filter>src\database</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

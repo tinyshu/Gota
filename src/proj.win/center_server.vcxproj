@@ -154,9 +154,11 @@
     <ClCompile Include="..\center_server\main.c" />
     <ClCompile Include="..\center_server\src\cener_config.c" />
     <ClCompile Include="..\center_server\src\center_services.c" />
-    <ClCompile Include="..\center_server\src\connect_center_db.c" />
     <ClCompile Include="..\center_server\src\db_moduels\login_moduel.c" />
+    <ClCompile Include="..\center_server\src\logic_moduels\auth.c" />
     <ClCompile Include="..\command.c" />
+    <ClCompile Include="..\database\center_db.c" />
+    <ClCompile Include="..\database\center_db_conf.c" />
     <ClCompile Include="..\moduel\netbus\netbus.c" />
     <ClCompile Include="..\moduel\net\net_iocp_win.c" />
     <ClCompile Include="..\moduel\session\tcp_session.c" />
@@ -171,9 +173,11 @@
     <ClInclude Include="..\3rd\mjson\json_extends.h" />
     <ClInclude Include="..\center_server\src\cener_config.h" />
     <ClInclude Include="..\center_server\src\center_services.h" />
-    <ClInclude Include="..\center_server\src\connect_center_db.h" />
     <ClInclude Include="..\center_server\src\db_moduels\login_moduel.h" />
+    <ClInclude Include="..\center_server\src\logic_moduels\auth.h" />
     <ClInclude Include="..\command.h" />
+    <ClInclude Include="..\database\center_db.h" />
+    <ClInclude Include="..\database\center_db_conf.h" />
     <ClInclude Include="..\moduel\netbus\netbus.h" />
     <ClInclude Include="..\moduel\net\net_io.h" />
     <ClInclude Include="..\moduel\session\tcp_session.h" />

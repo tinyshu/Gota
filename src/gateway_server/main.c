@@ -12,6 +12,7 @@
 #ifdef GAME_DEVLOP
 #include "../moduel/netbus/netbus.h"
 #include "../center_server/src/center_services.h"
+#include "../database/center_db.h"
 #endif
 
 //53
@@ -30,6 +31,7 @@ int main(int argc, char** argv) {
 	  在开发完成后，去掉GMAE_DEVLOP定义就可以做多进程分开部署
 	*/
 	register_services(SYPTE_CENTER,&CENTER_SERVICE);
+	connect_to_centerdb();
 #else
 	//初始化客户端到后端服务转发处理模块
 	//for (int i = 0; i < GW_CONFIG.num_server_moudle;++i) {

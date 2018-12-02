@@ -46,6 +46,15 @@
     <Filter Include="src\devlop\gameserver">
       <UniqueIdentifier>{889578c0-769b-4e95-9458-e73b0367bddf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\devlop\centerserver\logic_moduels">
+      <UniqueIdentifier>{5632f154-033a-411b-ba6d-1c390784c927}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\database">
+      <UniqueIdentifier>{60e8a975-2887-41ca-8134-8e68ad5e1de6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\devlop\centerserver\db_moduels">
+      <UniqueIdentifier>{611a89fd-0e7f-4491-b864-11944b577d11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\gateway_server\main.c" />
@@ -114,6 +123,18 @@
     </ClCompile>
     <ClCompile Include="..\command.c">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\center_server\src\logic_moduels\auth.c">
+      <Filter>src\devlop\centerserver\logic_moduels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\database\center_db.c">
+      <Filter>src\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\database\center_db_conf.c">
+      <Filter>src\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\center_server\src\db_moduels\login_moduel.c">
+      <Filter>src\devlop\centerserver\db_moduels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +215,18 @@
     </ClInclude>
     <ClInclude Include="..\error_command.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\center_server\src\logic_moduels\auth.h">
+      <Filter>src\devlop\centerserver\logic_moduels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database\center_db.h">
+      <Filter>src\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database\center_db_conf.h">
+      <Filter>src\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\center_server\src\db_moduels\login_moduel.h">
+      <Filter>src\devlop\centerserver\db_moduels</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

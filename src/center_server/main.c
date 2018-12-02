@@ -7,7 +7,7 @@
 #include "../moduel/netbus/netbus.h"
 #include "../types_service.h"
 #include "src/center_services.h"
-#include "src/connect_center_db.h"
+#include "../database/center_db.h"
 int main(int argc, char** argv) {
 	init_log();
 	//×¢²ácenter·þÎñÄ£¿é

@@ -44,6 +44,8 @@ unsigned int json_object_get_unsigned_number(json_t* json, char* key);
 
 int json_object_get_int_number(json_t* json, char* key);
 
+char* json_object_get_string(json_t* json, char* key);
+
 #ifdef __cplusplus
 }
 #endif
