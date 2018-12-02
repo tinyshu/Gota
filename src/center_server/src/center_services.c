@@ -40,14 +40,14 @@ int on_center_json_protocal_data(void* moduel_data, struct session* s, json_t* r
 	}
 
 	//»Ø·¢¸øgateway
-	json_t* ret = json_new_comand((SYPTE_CENTER + TYPE_OFFSET), cmd);
-	json_object_push_number(ret, "2", 1);
-#ifndef GAME_DEVLOP
-	json_object_push_number(ret, "uid", strtoul(juid->text,NULL,10));
-	json_object_push_number(ret, "skey", strtoul(jskey->text,NULL,10));
-#endif
-	session_json_send(s, ret);
-	json_free_value(&ret);
+//	json_t* ret = json_new_comand((SYPTE_CENTER + TYPE_OFFSET), cmd);
+//	json_object_push_number(ret, "2", 1);
+//#ifndef GAME_DEVLOP
+//	json_object_push_number(ret, "uid", strtoul(juid->text,NULL,10));
+//	json_object_push_number(ret, "skey", strtoul(jskey->text,NULL,10));
+//#endif
+//	session_json_send(s, ret);
+//	json_free_value(&ret);
 	return 0;
 }
 

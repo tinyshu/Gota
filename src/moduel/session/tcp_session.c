@@ -263,8 +263,9 @@ void session_send(struct session* s, unsigned char* body, int len) {
 	else if (WEB_SOCKET_IO == s->socket_type) {
 		send_bytes = send_websocket_data(s, body, len);
 	}
-
+#ifdef _DEBUG
 	printf("send_bytes%d\n", send_bytes);
+#endif
 }
 
 void session_json_send(struct session* s, json_t* json_object) {

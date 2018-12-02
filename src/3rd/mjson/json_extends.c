@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "json.h"
+#include "../../types_service.h"
 
 void 
 json_free_str(char* json_str) {
@@ -158,4 +159,3 @@ char* json_object_get_string(json_t* json, char* key) {
 
 	return jstr->text;
 }
-

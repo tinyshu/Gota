@@ -94,9 +94,6 @@
     <ClCompile Include="..\utils\hash_map_int.c">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\gateway_server\src\session_key_mgr.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\moduel\net\net_iocp_win.c">
       <Filter>src\moduel\net</Filter>
     </ClCompile>
@@ -135,6 +132,9 @@
     </ClCompile>
     <ClCompile Include="..\center_server\src\db_moduels\login_moduel.c">
       <Filter>src\devlop\centerserver\db_moduels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\moduel\netbus\session_key_mgr.c">
+      <Filter>src\moduel\netbus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -183,9 +183,6 @@
     <ClInclude Include="..\utils\hash_map_int.h">
       <Filter>src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\gateway_server\src\session_key_mgr.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\moduel\net\net_io.h">
       <Filter>src\moduel\net</Filter>
     </ClInclude>
@@ -227,6 +224,9 @@
     </ClInclude>
     <ClInclude Include="..\center_server\src\db_moduels\login_moduel.h">
       <Filter>src\devlop\centerserver\db_moduels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\moduel\netbus\session_key_mgr.h">
+      <Filter>src\moduel\netbus</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

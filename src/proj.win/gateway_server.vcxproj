@@ -39,8 +39,8 @@
     <ClCompile Include="..\gateway_server\src\gw_config.c" />
     <ClCompile Include="..\gateway_server\src\return_server.c" />
     <ClCompile Include="..\gateway_server\src\server_session_mgr.c" />
-    <ClCompile Include="..\gateway_server\src\session_key_mgr.c" />
     <ClCompile Include="..\moduel\netbus\netbus.c" />
+    <ClCompile Include="..\moduel\netbus\session_key_mgr.c" />
     <ClCompile Include="..\moduel\net\net_iocp_win.c" />
     <ClCompile Include="..\moduel\session\tcp_session.c" />
     <ClCompile Include="..\utils\hash_map_int.c" />
@@ -68,8 +68,8 @@
     <ClInclude Include="..\gateway_server\src\gw_config.h" />
     <ClInclude Include="..\gateway_server\src\return_server.h" />
     <ClInclude Include="..\gateway_server\src\server_session_mgr.h" />
-    <ClInclude Include="..\gateway_server\src\session_key_mgr.h" />
     <ClInclude Include="..\moduel\netbus\netbus.h" />
+    <ClInclude Include="..\moduel\netbus\session_key_mgr.h" />
     <ClInclude Include="..\moduel\net\net_io.h" />
     <ClInclude Include="..\moduel\session\tcp_session.h" />
     <ClInclude Include="..\protocal_cmd.h" />

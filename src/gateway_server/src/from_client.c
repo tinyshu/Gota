@@ -7,7 +7,7 @@
 #include "../../moduel/netbus/netbus.h"
 #include "server_session_mgr.h"
 #include "../../3rd/mjson/json_extends.h"
-#include "session_key_mgr.h"
+#include "../../moduel/netbus/session_key_mgr.h"
 #define my_malloc malloc
 
 //收到客户端json数据后,网络层调用service_gateway模块on_json_protocal_data,
