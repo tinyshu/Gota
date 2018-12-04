@@ -11,6 +11,9 @@ MYSQL* mysql_center = NULL;
 static char sql_buf[2048];
 
 void connect_to_centerdb() {
+	if (mysql_center!=NULL) {
+		mysql_close(mysql_center);
+	}
 	mysql_center = mysql_init(NULL);
 	if (NULL == mysql_center) {
 		mysql_close(mysql_center);
@@ -40,19 +43,35 @@ int get_userinfo_buy_key(const char* rand_key, struct user_info* userinfo) {
 	snprintf(sql_buf, sizeof(sql_buf), sql, rand_key);
 
 	LOGINFO("%s", sql_buf);
-	
-	if (mysql_query(mysql_center, sql_buf)) {
-		LOGERROR("%s %s\n", sql_buf, mysql_error(mysql_center));
-		return -1;
+	int tyr_count = 0;
+	while (tyr_count < 2) {
+		if (mysql_query(mysql_center, sql_buf)) {
+			LOGERROR("%s %s\n", sql_buf, mysql_error(mysql_center));
+			if (mysql_errno(mysql_center) == 2006 || mysql_errno(mysql_center) == 2013) {
+				tyr_count++;
+				connect_to_centerdb();
+				continue;
+			}
+			else {
+				return -1;
+			}
+			
+		}
+		break;
 	}
+	
 
 	//获取结果集
 	MYSQL_RES* res = mysql_store_result(mysql_center);
+	if (res==NULL) {
+		return;
+	}
 	if (mysql_num_rows(res) == 0){
+		mysql_free_result(res);
 		return -1;
 	}
 
-	MYSQL_ROW* row = mysql_fetch_row(res);
+	MYSQL_ROW row = mysql_fetch_row(res);
 	int fields_num = mysql_field_count(mysql_center);
 	if (row) {
 		userinfo->uid = atoi(row[0]);
@@ -69,6 +88,7 @@ int get_userinfo_buy_key(const char* rand_key, struct user_info* userinfo) {
 		
 	}
 
+	mysql_free_result(res);
 	return 0;
 }
 
