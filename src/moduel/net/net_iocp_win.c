@@ -1,3 +1,5 @@
+#ifndef USE_LIBUV
+
 #include<stdio.h>
 #include<string.h>
 #include <stdlib.h>
@@ -847,3 +849,5 @@ const char* conver_protocal_str(int protocal_type) {
 		return "Unkonow";
 	}
 }
+
+#endif

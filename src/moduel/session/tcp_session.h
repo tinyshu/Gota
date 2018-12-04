@@ -16,7 +16,12 @@ extern "C" {
 struct session {
 	char c_ip[32];
 	int c_port;
-	int c_sock; 
+#ifdef USE_LIBUV
+	void* c_sock;
+#else
+	int c_sock;
+#endif
+	
 	int removed;
 	//websocket是否握手成功
 	int is_shake_hand;
@@ -33,7 +38,7 @@ void exit_session_manager();
 
 
 // 有客服端进来，保存这个sesssion;
-struct session* save_session(int c_sock, char* ip, int port);
+struct session* save_session(void* c_sock, char* ip, int port);
 extern void close_session(struct session* s);
 
 // 遍历我们session集合里面的所有session
@@ -49,6 +54,8 @@ extern void session_send(struct session* s, unsigned char* body, int len);
 
 //发送json对象
 extern void session_json_send(struct session* s, json_t* object);
+
+extern int get_proto_type();
 
 #endif
 

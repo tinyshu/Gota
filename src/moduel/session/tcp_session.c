@@ -62,10 +62,18 @@ static void cache_free(struct session* s) {
 	
 }
 
+int get_socket_type() {
+	return session_manager.socket_type;
+}
+
+int get_proto_type() {
+	return session_manager.protocal_type;
+}
+
 void init_session_manager(int socket_type,int protocal_type) {
 	memset(&session_manager, 0, sizeof(session_manager));
 	session_manager.socket_type = socket_type;
-	session_manager.protocal_type = protocal_type;
+	session_manager.protocal_type = protocal_type; //本次框架使用的协议类型
 	// 将6000个session一次分配出来。
 	session_manager.cache_mem = (struct session*)my_malloc(MAX_SESSION_NUM * sizeof(struct session));
 	memset(session_manager.cache_mem, 0, MAX_SESSION_NUM * sizeof(struct session));
@@ -82,8 +90,14 @@ void exit_session_manager() {
 
 }
 
-struct session* save_session(int c_sock, char* ip, int port) {
+struct session* save_session(void* c_sock, char* ip, int port) {
 	struct session* s = cache_alloc();
+#ifdef USE_LIBUV
+	s->c_sock = c_sock;
+#else
+	s->c_sock = (int)c_sock;
+#endif
+	
 	s->c_sock = c_sock;
 	s->c_port = port;
 	int len = strlen(ip);
@@ -135,9 +149,9 @@ void clear_offline_session() {
 			s->next = NULL;
 			//通知上层session关闭
 			on_connect_lost(s);
-			if (s->c_sock != 0) {
+			/*if (s->c_sock != 0) {
 				closesocket(s->c_sock);
-			}
+			}*/
 
 			s->c_sock = 0;
 			// 释放session
@@ -151,39 +165,42 @@ void clear_offline_session() {
 }
 
 static int send_tcp_data(struct session* s, unsigned char* data, int len) {
-	int long_pkg = 0;
+	//int long_pkg = 0;
 	unsigned char* pkg_ptr = NULL;
 
 	if (len + 2 > MAX_SEND_PKG) {
 		pkg_ptr = my_malloc(len + 2); //2字节头部长度
-		long_pkg = 1;
+		//long_pkg = 1;
 	}
 	else {
-		pkg_ptr = s->send_buf;
+		//pkg_ptr = s->send_buf;
+		pkg_ptr = my_malloc(MAX_SEND_PKG);
 	}
 	int ssize = 0;
 	if (session_manager.protocal_type == JSON_PROTOCAL) {
 		memcpy(pkg_ptr, data, len);
 		strncpy(pkg_ptr + len, "\r\n", 2);
-		ssize = send(s->c_sock, pkg_ptr, len + 2, 0);
+		//ssize = send(s->c_sock, pkg_ptr, len + 2, 0);
+		uv_send_data(s->c_sock, pkg_ptr, len + 2);
 	}
 	else if (session_manager.protocal_type == BIN_PROTOCAL) {
 		memcpy(pkg_ptr + 2, data, len);
 		pkg_ptr[0] = ((len + 2)) & 0x000000ff;
 		pkg_ptr[1] = (((len + 2)) & 0x0000ff00) >> 8;
-		ssize = send(s->c_sock, pkg_ptr, len + 2, 0);
+		//ssize = send(s->c_sock, pkg_ptr, len + 2, 0);
+		uv_send_data(s->c_sock, pkg_ptr, len + 2);
 	}
-	if (long_pkg && pkg_ptr != NULL) {
+	if (pkg_ptr != NULL) {
 		my_free(pkg_ptr);
 	}
 
-	return ssize;
+	return 0;
 }
 
 //发送websocket数据
 static int send_websocket_data(struct session* s, unsigned char* data, int len) {
 	
-	int long_pkg = 0;
+	//int long_pkg = 0;
 	unsigned char* pkg_ptr = NULL;
 
 	int head_len = 1; //固定一字节
@@ -200,10 +217,11 @@ static int send_websocket_data(struct session* s, unsigned char* data, int len) 
 	if (len + head_len > MAX_SEND_PKG) {
 		//需要动态分配内存
 		pkg_ptr = my_malloc(len + head_len);
-		long_pkg = 1;
+		//long_pkg = 1;
 	}
 	else {
-		pkg_ptr = s->send_buf;
+		//pkg_ptr = s->send_buf;
+		pkg_ptr = my_malloc(MAX_SEND_PKG);
 	}
 
 	//发送格式 固定1字节0x81 + 数据长度(变长) + 数据
@@ -242,14 +260,14 @@ static int send_websocket_data(struct session* s, unsigned char* data, int len) 
 	//copy数据到缓存区
 	memcpy(pkg_ptr + send_len, data, len);
 	send_len += len; //整个数据包长度
-	int send_bytes = send(s->c_sock, pkg_ptr, send_len, 0);
-
-	if (long_pkg){
+	//int send_bytes = send(s->c_sock, pkg_ptr, send_len, 0);
+	uv_send_data(s->c_sock, pkg_ptr, send_len);
+	if (pkg_ptr!=NULL){
 		my_free(pkg_ptr);
 		pkg_ptr = NULL;
 	}
 
-	return send_bytes;
+	return 0;
 }
 
 void session_send(struct session* s, unsigned char* body, int len) {

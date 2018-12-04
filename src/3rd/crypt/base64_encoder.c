@@ -58,3 +58,10 @@ base64_encode(const uint8_t* text, int sz, int* out_esz) {
 	*out_esz = encode_sz;
 	return buffer;
 }
+
+void base64_encode_free(char* result, int base64_len) {
+	if (base64_len > SMALL_CHUNK) {
+		my_free(result);
+	}
+	
+}
