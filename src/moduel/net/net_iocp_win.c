@@ -1,4 +1,4 @@
-#ifndef USE_LIBUV
+#if 0
 
 #include<stdio.h>
 #include<string.h>

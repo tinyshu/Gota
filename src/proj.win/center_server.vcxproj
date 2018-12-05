@@ -90,7 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;GAME_DEVLOP;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../3rd/mysql/win/include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../3rd/mysql/win/include/;../3rd/libuv/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,6 +149,37 @@
     <ClCompile Include="..\3rd\crypt\base64_encoder.c" />
     <ClCompile Include="..\3rd\crypt\sha1.c" />
     <ClCompile Include="..\3rd\http_parser\http_parser.c" />
+    <ClCompile Include="..\3rd\libuv\src\fs-poll.c" />
+    <ClCompile Include="..\3rd\libuv\src\inet.c" />
+    <ClCompile Include="..\3rd\libuv\src\threadpool.c" />
+    <ClCompile Include="..\3rd\libuv\src\uv-common.c" />
+    <ClCompile Include="..\3rd\libuv\src\version.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\async.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\core.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\dl.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\error.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\fs-event.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\fs.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\getaddrinfo.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\getnameinfo.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\handle.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\loop-watcher.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\pipe.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\poll.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\process-stdio.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\process.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\req.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\signal.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\snprintf.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\stream.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\tcp.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\thread.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\timer.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\tty.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\udp.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\util.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\winapi.c" />
+    <ClCompile Include="..\3rd\libuv\src\win\winsock.c" />
     <ClCompile Include="..\3rd\mjson\json.c" />
     <ClCompile Include="..\3rd\mjson\json_extends.c" />
     <ClCompile Include="..\center_server\main.c" />
@@ -162,6 +193,7 @@
     <ClCompile Include="..\moduel\netbus\netbus.c" />
     <ClCompile Include="..\moduel\netbus\session_key_mgr.c" />
     <ClCompile Include="..\moduel\net\net_iocp_win.c" />
+    <ClCompile Include="..\moduel\net\net_uv.c" />
     <ClCompile Include="..\moduel\session\tcp_session.c" />
     <ClCompile Include="..\utils\hash_map_int.c" />
     <ClCompile Include="..\utils\log.c" />
@@ -171,6 +203,31 @@
     <ClInclude Include="..\3rd\crypt\base64_encoder.h" />
     <ClInclude Include="..\3rd\crypt\sha1.h" />
     <ClInclude Include="..\3rd\http_parser\http_parser.h" />
+    <ClInclude Include="..\3rd\libuv\include\android-ifaddrs.h" />
+    <ClInclude Include="..\3rd\libuv\include\pthread-barrier.h" />
+    <ClInclude Include="..\3rd\libuv\include\stdint-msvc2008.h" />
+    <ClInclude Include="..\3rd\libuv\include\tree.h" />
+    <ClInclude Include="..\3rd\libuv\include\uv-aix.h" />
+    <ClInclude Include="..\3rd\libuv\include\uv-bsd.h" />
+    <ClInclude Include="..\3rd\libuv\include\uv-darwin.h" />
+    <ClInclude Include="..\3rd\libuv\include\uv-errno.h" />
+    <ClInclude Include="..\3rd\libuv\include\uv-linux.h" />
+    <ClInclude Include="..\3rd\libuv\include\uv-sunos.h" />
+    <ClInclude Include="..\3rd\libuv\include\uv-threadpool.h" />
+    <ClInclude Include="..\3rd\libuv\include\uv-unix.h" />
+    <ClInclude Include="..\3rd\libuv\include\uv-version.h" />
+    <ClInclude Include="..\3rd\libuv\include\uv-win.h" />
+    <ClInclude Include="..\3rd\libuv\include\uv.h" />
+    <ClInclude Include="..\3rd\libuv\src\heap-inl.h" />
+    <ClInclude Include="..\3rd\libuv\src\queue.h" />
+    <ClInclude Include="..\3rd\libuv\src\uv-common.h" />
+    <ClInclude Include="..\3rd\libuv\src\win\atomicops-inl.h" />
+    <ClInclude Include="..\3rd\libuv\src\win\handle-inl.h" />
+    <ClInclude Include="..\3rd\libuv\src\win\internal.h" />
+    <ClInclude Include="..\3rd\libuv\src\win\req-inl.h" />
+    <ClInclude Include="..\3rd\libuv\src\win\stream-inl.h" />
+    <ClInclude Include="..\3rd\libuv\src\win\winapi.h" />
+    <ClInclude Include="..\3rd\libuv\src\win\winsock.h" />
     <ClInclude Include="..\3rd\mjson\json.h" />
     <ClInclude Include="..\3rd\mjson\json_extends.h" />
     <ClInclude Include="..\center_server\src\cener_config.h" />

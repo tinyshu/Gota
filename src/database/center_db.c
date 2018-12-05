@@ -64,7 +64,7 @@ int get_userinfo_buy_key(const char* rand_key, struct user_info* userinfo) {
 	//获取结果集
 	MYSQL_RES* res = mysql_store_result(mysql_center);
 	if (res==NULL) {
-		return;
+		return 0;
 	}
 	if (mysql_num_rows(res) == 0){
 		mysql_free_result(res);

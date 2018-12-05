@@ -112,9 +112,6 @@
     <ClCompile Include="..\moduel\netbus\netbus.c">
       <Filter>src\moduel\netbus</Filter>
     </ClCompile>
-    <ClCompile Include="..\moduel\session\tcp_session.c">
-      <Filter>src\moduel\session</Filter>
-    </ClCompile>
     <ClCompile Include="..\3rd\md5\md5.c">
       <Filter>src\3rd\md5</Filter>
     </ClCompile>
@@ -136,14 +133,8 @@
     <ClCompile Include="..\center_server\src\logic_moduels\auth.c">
       <Filter>src\devlop\centerserver\logic_moduels</Filter>
     </ClCompile>
-    <ClCompile Include="..\database\center_db.c">
-      <Filter>src\database</Filter>
-    </ClCompile>
     <ClCompile Include="..\database\center_db_conf.c">
       <Filter>src\database</Filter>
-    </ClCompile>
-    <ClCompile Include="..\center_server\src\db_moduels\login_moduel.c">
-      <Filter>src\devlop\centerserver\db_moduels</Filter>
     </ClCompile>
     <ClCompile Include="..\moduel\netbus\session_key_mgr.c">
       <Filter>src\moduel\netbus</Filter>
@@ -243,6 +234,15 @@
     </ClCompile>
     <ClCompile Include="..\3rd\libuv\src\win\winsock.c">
       <Filter>src\3rd\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\moduel\session\tcp_session.c">
+      <Filter>src\moduel\session</Filter>
+    </ClCompile>
+    <ClCompile Include="..\database\center_db.c">
+      <Filter>src\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\center_server\src\db_moduels\login_moduel.c">
+      <Filter>src\devlop\centerserver\db_moduels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

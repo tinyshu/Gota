@@ -214,7 +214,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../3rd/mysql/win/lib/;../3rd/libuv/lib/x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../3rd/mysql/win/lib/</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
