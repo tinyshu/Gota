@@ -67,9 +67,14 @@
     <Filter Include="src\3rd\libuv\src\win">
       <UniqueIdentifier>{c8d18597-9101-4e98-b895-681cb0473a45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\3rd\lua">
+      <UniqueIdentifier>{748bdfed-32ca-4524-8012-51c42e721afc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\lua_wrapper">
+      <UniqueIdentifier>{48d84570-8979-4990-8903-1fe9b1693aa2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\gateway_server\main.c" />
     <ClCompile Include="..\3rd\crypt\base64_encoder.c">
       <Filter>src\3rd\crypt</Filter>
     </ClCompile>
@@ -244,6 +249,112 @@
     <ClCompile Include="..\center_server\src\db_moduels\login_moduel.c">
       <Filter>src\devlop\centerserver\db_moduels</Filter>
     </ClCompile>
+    <ClCompile Include="..\3rd\lua\lapi.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lauxlib.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lbaselib.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lbitlib.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lcode.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lcorolib.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lctype.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\ldblib.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\ldebug.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\ldo.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\ldump.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lfunc.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lgc.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\linit.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\liolib.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\llex.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lmathlib.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lmem.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\loadlib.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lobject.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lopcodes.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\loslib.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lparser.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lstate.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lstring.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lstrlib.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\ltable.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\ltablib.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\ltm.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lundump.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lutf8lib.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lvm.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\lua\lzio.c">
+      <Filter>src\3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua_wrapper\lua_wrapper.cpp">
+      <Filter>src\lua_wrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gateway_server\main.cc" />
+    <ClCompile Include="..\utils\logger.cc">
+      <Filter>src\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h">
@@ -410,6 +521,90 @@
     </ClInclude>
     <ClInclude Include="..\3rd\libuv\src\win\winsock.h">
       <Filter>src\3rd\libuv\src\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lapi.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lauxlib.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lcode.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lctype.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\ldebug.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\ldo.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lfunc.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lgc.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\llex.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\llimits.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lmem.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lobject.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lopcodes.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lparser.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lprefix.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lstate.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lstring.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\ltable.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\ltm.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lua.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lua.hpp">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\luaconf.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lualib.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lundump.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lvm.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\lua\lzio.h">
+      <Filter>src\3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_wrapper\lua_wrapper.h">
+      <Filter>src\lua_wrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\logger.h">
+      <Filter>src\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

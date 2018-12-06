@@ -53,6 +53,39 @@
     <ClCompile Include="..\3rd\libuv\src\win\util.c" />
     <ClCompile Include="..\3rd\libuv\src\win\winapi.c" />
     <ClCompile Include="..\3rd\libuv\src\win\winsock.c" />
+    <ClCompile Include="..\3rd\lua\lapi.c" />
+    <ClCompile Include="..\3rd\lua\lauxlib.c" />
+    <ClCompile Include="..\3rd\lua\lbaselib.c" />
+    <ClCompile Include="..\3rd\lua\lbitlib.c" />
+    <ClCompile Include="..\3rd\lua\lcode.c" />
+    <ClCompile Include="..\3rd\lua\lcorolib.c" />
+    <ClCompile Include="..\3rd\lua\lctype.c" />
+    <ClCompile Include="..\3rd\lua\ldblib.c" />
+    <ClCompile Include="..\3rd\lua\ldebug.c" />
+    <ClCompile Include="..\3rd\lua\ldo.c" />
+    <ClCompile Include="..\3rd\lua\ldump.c" />
+    <ClCompile Include="..\3rd\lua\lfunc.c" />
+    <ClCompile Include="..\3rd\lua\lgc.c" />
+    <ClCompile Include="..\3rd\lua\linit.c" />
+    <ClCompile Include="..\3rd\lua\liolib.c" />
+    <ClCompile Include="..\3rd\lua\llex.c" />
+    <ClCompile Include="..\3rd\lua\lmathlib.c" />
+    <ClCompile Include="..\3rd\lua\lmem.c" />
+    <ClCompile Include="..\3rd\lua\loadlib.c" />
+    <ClCompile Include="..\3rd\lua\lobject.c" />
+    <ClCompile Include="..\3rd\lua\lopcodes.c" />
+    <ClCompile Include="..\3rd\lua\loslib.c" />
+    <ClCompile Include="..\3rd\lua\lparser.c" />
+    <ClCompile Include="..\3rd\lua\lstate.c" />
+    <ClCompile Include="..\3rd\lua\lstring.c" />
+    <ClCompile Include="..\3rd\lua\lstrlib.c" />
+    <ClCompile Include="..\3rd\lua\ltable.c" />
+    <ClCompile Include="..\3rd\lua\ltablib.c" />
+    <ClCompile Include="..\3rd\lua\ltm.c" />
+    <ClCompile Include="..\3rd\lua\lundump.c" />
+    <ClCompile Include="..\3rd\lua\lutf8lib.c" />
+    <ClCompile Include="..\3rd\lua\lvm.c" />
+    <ClCompile Include="..\3rd\lua\lzio.c" />
     <ClCompile Include="..\3rd\md5\md5.c" />
     <ClCompile Include="..\3rd\mjson\json.c" />
     <ClCompile Include="..\3rd\mjson\json_extends.c" />
@@ -65,11 +98,12 @@
     <ClCompile Include="..\database\center_db.c" />
     <ClCompile Include="..\database\center_db_conf.c" />
     <ClCompile Include="..\game_server\src\game_config.c" />
-    <ClCompile Include="..\gateway_server\main.c" />
+    <ClCompile Include="..\gateway_server\main.cc" />
     <ClCompile Include="..\gateway_server\src\from_client.c" />
     <ClCompile Include="..\gateway_server\src\gw_config.c" />
     <ClCompile Include="..\gateway_server\src\return_server.c" />
     <ClCompile Include="..\gateway_server\src\server_session_mgr.c" />
+    <ClCompile Include="..\lua_wrapper\lua_wrapper.cpp" />
     <ClCompile Include="..\moduel\netbus\netbus.c" />
     <ClCompile Include="..\moduel\netbus\session_key_mgr.c" />
     <ClCompile Include="..\moduel\net\net_iocp_win.c" />
@@ -77,6 +111,7 @@
     <ClCompile Include="..\moduel\session\tcp_session.c" />
     <ClCompile Include="..\utils\hash_map_int.c" />
     <ClCompile Include="..\utils\log.c" />
+    <ClCompile Include="..\utils\logger.cc" />
     <ClCompile Include="..\utils\timer_list.c" />
   </ItemGroup>
   <ItemGroup>
@@ -108,6 +143,32 @@
     <ClInclude Include="..\3rd\libuv\src\win\stream-inl.h" />
     <ClInclude Include="..\3rd\libuv\src\win\winapi.h" />
     <ClInclude Include="..\3rd\libuv\src\win\winsock.h" />
+    <ClInclude Include="..\3rd\lua\lapi.h" />
+    <ClInclude Include="..\3rd\lua\lauxlib.h" />
+    <ClInclude Include="..\3rd\lua\lcode.h" />
+    <ClInclude Include="..\3rd\lua\lctype.h" />
+    <ClInclude Include="..\3rd\lua\ldebug.h" />
+    <ClInclude Include="..\3rd\lua\ldo.h" />
+    <ClInclude Include="..\3rd\lua\lfunc.h" />
+    <ClInclude Include="..\3rd\lua\lgc.h" />
+    <ClInclude Include="..\3rd\lua\llex.h" />
+    <ClInclude Include="..\3rd\lua\llimits.h" />
+    <ClInclude Include="..\3rd\lua\lmem.h" />
+    <ClInclude Include="..\3rd\lua\lobject.h" />
+    <ClInclude Include="..\3rd\lua\lopcodes.h" />
+    <ClInclude Include="..\3rd\lua\lparser.h" />
+    <ClInclude Include="..\3rd\lua\lprefix.h" />
+    <ClInclude Include="..\3rd\lua\lstate.h" />
+    <ClInclude Include="..\3rd\lua\lstring.h" />
+    <ClInclude Include="..\3rd\lua\ltable.h" />
+    <ClInclude Include="..\3rd\lua\ltm.h" />
+    <ClInclude Include="..\3rd\lua\lua.h" />
+    <ClInclude Include="..\3rd\lua\lua.hpp" />
+    <ClInclude Include="..\3rd\lua\luaconf.h" />
+    <ClInclude Include="..\3rd\lua\lualib.h" />
+    <ClInclude Include="..\3rd\lua\lundump.h" />
+    <ClInclude Include="..\3rd\lua\lvm.h" />
+    <ClInclude Include="..\3rd\lua\lzio.h" />
     <ClInclude Include="..\3rd\md5\md5.h" />
     <ClInclude Include="..\3rd\mjson\json.h" />
     <ClInclude Include="..\3rd\mjson\json_extends.h" />
@@ -125,6 +186,7 @@
     <ClInclude Include="..\gateway_server\src\gw_config.h" />
     <ClInclude Include="..\gateway_server\src\return_server.h" />
     <ClInclude Include="..\gateway_server\src\server_session_mgr.h" />
+    <ClInclude Include="..\lua_wrapper\lua_wrapper.h" />
     <ClInclude Include="..\moduel\netbus\netbus.h" />
     <ClInclude Include="..\moduel\netbus\session_key_mgr.h" />
     <ClInclude Include="..\moduel\net\net_io.h" />
@@ -133,6 +195,7 @@
     <ClInclude Include="..\types_service.h" />
     <ClInclude Include="..\utils\hash_map_int.h" />
     <ClInclude Include="..\utils\log.h" />
+    <ClInclude Include="..\utils\logger.h" />
     <ClInclude Include="..\utils\timer.h" />
     <ClInclude Include="..\utils\timer_list.h" />
   </ItemGroup>
@@ -209,7 +272,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;USE_LIBUV;GAME_DEVLOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../3rd/mysql/win/include/;../3rd/libuv/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../3rd/mysql/win/include/;../3rd/libuv/include;../3rd/lua</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

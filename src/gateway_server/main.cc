@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include  <stdlib.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "../moduel/net/net_io.h"
 #include "../utils/log.h"
 #include "./src/gw_config.h"
@@ -8,12 +12,19 @@
 #include "src/from_client.h"
 #include "src/return_server.h"
 #include "../utils/hash_map_int.h"
+#include "../../moduel/netbus/session_key_mgr.h"
 
 #ifdef GAME_DEVLOP
 #include "../moduel/netbus/netbus.h"
 #include "../center_server/src/center_services.h"
 #include "../database/center_db.h"
 #endif
+
+#ifdef __cplusplus
+}
+#endif
+
+#include "../lua_wrapper/lua_wrapper.h"
 
 //57
 int main(int argc, char** argv) {
@@ -42,6 +53,9 @@ int main(int argc, char** argv) {
 #endif
 	//初始化session模块,在接入大量客户端连接的服务采用初始化这个模块 
 	init_session_manager(WEB_SOCKET_IO, JSON_PROTOCAL);
+	//初始化lua虚拟机
+	lua_wrapper::get_instance().init_lua();
+	lua_wrapper::get_instance().exce_lua_file("./main.lua");
 	//启动服务
 	//start_server("127.0.0.1",8000,TCP_SOCKET_IO,BIN_PROTOCAL);
 	//start_server("127.0.0.1", 8000, TCP_SOCKET_IO, JSON_PROTOCAL);
@@ -52,6 +66,7 @@ int main(int argc, char** argv) {
 	exit_session_key_map();
 	destroy_session_mgr();
 	exit_server_netbus();
+	lua_wrapper::exit_lua();
 	return 0;
 }
 
