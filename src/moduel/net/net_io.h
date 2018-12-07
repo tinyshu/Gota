@@ -1,6 +1,7 @@
 #ifndef NETIO_H__
 #define NETIO_H__
 
+#include "uv.h"
 //µ×²ã´«ÊäÐ­Òé
 enum {
 	TCP_SOCKET_IO = 0,  // tcp
@@ -19,5 +20,8 @@ const char* conver_protocal_str(int protocal_type);
 void start_server(char* ip,int port ,int socket_type ,int proto_type);
 
 void uv_send_data(void* stream, char* pkg, unsigned int pkg_len);
+
+uv_loop_t* get_uv_loop();
+
 #endif
 

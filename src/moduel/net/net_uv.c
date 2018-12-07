@@ -2,7 +2,7 @@
 #include<string.h>
 #include <stdlib.h>
 #include "net_io.h"
-#include "uv.h"
+
 
 #ifdef WIN32
 #include <WinSock2.h>
@@ -42,7 +42,7 @@ extern void on_bin_protocal_recv_entry(struct session* s, unsigned char* data, i
 extern void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len);
 
 static HANDLE g_iocp = 0;
-static uv_loop_t* loop = NULL;
+ uv_loop_t* loop = NULL;
 static uv_connect_t* connect_req;
 //监听socket对象
 static uv_tcp_t l_server;
@@ -71,6 +71,9 @@ typedef struct {
 	uv_buf_t buf;
 } write_req_t;
 
+uv_loop_t* get_uv_loop() {
+	return loop;
+}
 //框架会传入uv_buf_t让该函数分配内存
 //handle触发读事件的uv_tcp_t对象
 //suggested_size 框架建议本次分配的内存buff大小
@@ -473,7 +476,7 @@ static int process_websocket_connect(struct session* s, struct io_package* io_da
 	s->is_shake_hand = 1;
 	uv_send_data(s->c_sock, accept_buffer, (int)strlen(accept_buffer));
 	if (bs_str!=NULL) {
-		base64_encode_free(bs_str, base64_len);
+		base64_encode_free(bs_str);
 	}
 	
 	if (io_data->long_pkg != NULL) {

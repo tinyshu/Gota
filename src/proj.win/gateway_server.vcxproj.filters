@@ -355,6 +355,9 @@
     <ClCompile Include="..\utils\logger.cc">
       <Filter>src\utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\database\mysql_warpper.cpp">
+      <Filter>src\database</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h">
@@ -605,6 +608,9 @@
     </ClInclude>
     <ClInclude Include="..\utils\logger.h">
       <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database\mysql_warpper.h">
+      <Filter>src\database</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

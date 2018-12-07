@@ -97,6 +97,7 @@
     <ClCompile Include="..\command_server\src\command_config.c" />
     <ClCompile Include="..\database\center_db.c" />
     <ClCompile Include="..\database\center_db_conf.c" />
+    <ClCompile Include="..\database\mysql_warpper.cpp" />
     <ClCompile Include="..\game_server\src\game_config.c" />
     <ClCompile Include="..\gateway_server\main.cc" />
     <ClCompile Include="..\gateway_server\src\from_client.c" />
@@ -180,6 +181,7 @@
     <ClInclude Include="..\command_server\src\command_config.h" />
     <ClInclude Include="..\database\center_db.h" />
     <ClInclude Include="..\database\center_db_conf.h" />
+    <ClInclude Include="..\database\mysql_warpper.h" />
     <ClInclude Include="..\error_command.h" />
     <ClInclude Include="..\game_server\src\game_config.h" />
     <ClInclude Include="..\gateway_server\src\from_client.h" />

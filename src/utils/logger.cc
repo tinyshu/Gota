@@ -120,7 +120,7 @@ logger::log(const char* file_name,
 	uv_fs_t writeReq;
 	int result = uv_fs_write(NULL, &writeReq, g_file_handle.result, buf, sizeof(buf) / sizeof(buf[0]), -1, NULL);
 	if (result < 0) {
-		fprintf(stderr, "log failed %s%s%s%s", g_format_time, g_log_level[level], msg_meta_info, msg_content);
+		fprintf(stderr, "log failed %s%s%s%s\n", g_format_time, g_log_level[level], msg_meta_info, msg_content);
 	}
 
 	uv_fs_req_cleanup(&writeReq);

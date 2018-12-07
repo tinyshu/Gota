@@ -50,12 +50,19 @@ int main(int argc, char** argv) {
 		 (GW_CONFIG.module_set[i].stype);
 		register_server_return_moduel(GW_CONFIG.module_set[i].stype);
 	}
-#endif
+#endif 
 	//初始化session模块,在接入大量客户端连接的服务采用初始化这个模块 
 	init_session_manager(WEB_SOCKET_IO, JSON_PROTOCAL);
 	//初始化lua虚拟机
 	lua_wrapper::get_instance().init_lua();
 	lua_wrapper::get_instance().exce_lua_file("./main.lua");
+
+	//lua_getglobal(g_lua_state, "myname");
+	////const char* name = luaL_checkstring(L, -1);
+	//int idx = lua_gettop(g_lua_state);
+	//printf("lua var =%s\n", lua_tostring(g_lua_state, -1));
+	//lua_pop(g_lua_state, 1);
+
 	//启动服务
 	//start_server("127.0.0.1",8000,TCP_SOCKET_IO,BIN_PROTOCAL);
 	//start_server("127.0.0.1", 8000, TCP_SOCKET_IO, JSON_PROTOCAL);

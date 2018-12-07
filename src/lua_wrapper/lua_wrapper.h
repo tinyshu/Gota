@@ -2,6 +2,7 @@
 #define LUA_WRAPPER_H__
 
 #include "lua.hpp"
+extern lua_State* g_lua_state;
 
 class lua_wrapper {
 public:
