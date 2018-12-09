@@ -21,6 +21,7 @@ void start_server(char* ip,int port ,int socket_type ,int proto_type);
 
 void uv_send_data(void* stream, char* pkg, unsigned int pkg_len);
 
+void init_uv();
 uv_loop_t* get_uv_loop();
 
 #endif

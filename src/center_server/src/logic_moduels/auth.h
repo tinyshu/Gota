@@ -1,7 +1,6 @@
 #ifndef AUTH_H__
 #define AUTH_H__
 
-#include "../../../moduel/session/tcp_session.h"
 #include "../../../3rd/mjson/json.h"
 
 void guest_login(void* moduel_data, struct session* s,

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+extern "C" {
 #include "../../utils/log.h"
 #include "../../types_service.h"
 #include "../../command.h"
@@ -9,6 +10,7 @@
 #include "../../moduel/netbus/netbus.h"
 #include "../../3rd/mjson/json_extends.h"
 #include "center_services.h"
+}
 
 //逻辑模块入口
 #include "logic_moduels/auth.h"
@@ -39,15 +41,6 @@ int on_center_json_protocal_data(void* moduel_data, struct session* s, json_t* r
 
 	}
 
-	//回发给gateway
-//	json_t* ret = json_new_comand((SYPTE_CENTER + TYPE_OFFSET), cmd);
-//	json_object_push_number(ret, "2", 1);
-//#ifndef GAME_DEVLOP
-//	json_object_push_number(ret, "uid", strtoul(juid->text,NULL,10));
-//	json_object_push_number(ret, "skey", strtoul(jskey->text,NULL,10));
-//#endif
-//	session_json_send(s, ret);
-//	json_free_value(&ret);
 	return 0;
 }
 

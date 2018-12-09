@@ -90,12 +90,12 @@
     <ClCompile Include="..\3rd\mjson\json.c" />
     <ClCompile Include="..\3rd\mjson\json_extends.c" />
     <ClCompile Include="..\center_server\src\cener_config.c" />
-    <ClCompile Include="..\center_server\src\center_services.c" />
-    <ClCompile Include="..\center_server\src\db_moduels\login_moduel.c" />
-    <ClCompile Include="..\center_server\src\logic_moduels\auth.c" />
+    <ClCompile Include="..\center_server\src\center_services.cpp" />
+    <ClCompile Include="..\center_server\src\db_moduels\login_moduel.cpp" />
+    <ClCompile Include="..\center_server\src\logic_moduels\auth.cpp" />
     <ClCompile Include="..\command.c" />
     <ClCompile Include="..\command_server\src\command_config.c" />
-    <ClCompile Include="..\database\center_db.c" />
+    <ClCompile Include="..\database\center_db.cpp" />
     <ClCompile Include="..\database\center_db_conf.c" />
     <ClCompile Include="..\database\mysql_warpper.cpp" />
     <ClCompile Include="..\game_server\src\game_config.c" />
@@ -182,6 +182,7 @@
     <ClInclude Include="..\database\center_db.h" />
     <ClInclude Include="..\database\center_db_conf.h" />
     <ClInclude Include="..\database\mysql_warpper.h" />
+    <ClInclude Include="..\database\query_callback.h" />
     <ClInclude Include="..\error_command.h" />
     <ClInclude Include="..\game_server\src\game_config.h" />
     <ClInclude Include="..\gateway_server\src\from_client.h" />

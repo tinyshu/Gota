@@ -9,6 +9,7 @@
 #include "server_session_mgr.h"
 #include "../../3rd/mjson/json_extends.h"
 #include "../../moduel/session/tcp_session.h"
+#include "../../moduel/netbus/session_key_mgr.h"
 #define my_malloc malloc
 
 static unsigned int get_json_skey(json_t* root) {

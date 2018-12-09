@@ -3,15 +3,18 @@
 #include <stdlib.h>
 #include "mysql.h"
 #include "center_db.h"
+extern "C" {
 #include "center_db_conf.h"
 #include "../utils/log.h"
+}
+
 
 MYSQL* mysql_center = NULL;
 
 static char sql_buf[2048];
 
 void connect_to_centerdb() {
-	if (mysql_center!=NULL) {
+	if (mysql_center != NULL) {
 		mysql_close(mysql_center);
 	}
 	mysql_center = mysql_init(NULL);
@@ -20,10 +23,8 @@ void connect_to_centerdb() {
 		exit(-1);
 	}
 
-	int is_success = mysql_real_connect(mysql_center, CENTER_DB_CONFIG.mysql_ip, CENTER_DB_CONFIG.mysql_name,
-		CENTER_DB_CONFIG.mysql_pwd, CENTER_DB_CONFIG.database_name, CENTER_DB_CONFIG.mysql_port,NULL,0);
-
-	if (0 == is_success) {
+	if (NULL==mysql_real_connect(mysql_center, CENTER_DB_CONFIG.mysql_ip, CENTER_DB_CONFIG.mysql_name,
+		CENTER_DB_CONFIG.mysql_pwd, CENTER_DB_CONFIG.database_name, CENTER_DB_CONFIG.mysql_port, NULL, 0)) {
 		LOGERROR("connect error!!! \n %s\n", mysql_error(mysql_center));
 		mysql_close(mysql_center);
 		mysql_center = NULL;

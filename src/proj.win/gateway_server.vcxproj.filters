@@ -123,9 +123,6 @@
     <ClCompile Include="..\center_server\src\cener_config.c">
       <Filter>src\devlop\centerserver</Filter>
     </ClCompile>
-    <ClCompile Include="..\center_server\src\center_services.c">
-      <Filter>src\devlop\centerserver</Filter>
-    </ClCompile>
     <ClCompile Include="..\command_server\src\command_config.c">
       <Filter>src\devlop\commserver</Filter>
     </ClCompile>
@@ -134,9 +131,6 @@
     </ClCompile>
     <ClCompile Include="..\command.c">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\center_server\src\logic_moduels\auth.c">
-      <Filter>src\devlop\centerserver\logic_moduels</Filter>
     </ClCompile>
     <ClCompile Include="..\database\center_db_conf.c">
       <Filter>src\database</Filter>
@@ -242,12 +236,6 @@
     </ClCompile>
     <ClCompile Include="..\moduel\session\tcp_session.c">
       <Filter>src\moduel\session</Filter>
-    </ClCompile>
-    <ClCompile Include="..\database\center_db.c">
-      <Filter>src\database</Filter>
-    </ClCompile>
-    <ClCompile Include="..\center_server\src\db_moduels\login_moduel.c">
-      <Filter>src\devlop\centerserver\db_moduels</Filter>
     </ClCompile>
     <ClCompile Include="..\3rd\lua\lapi.c">
       <Filter>src\3rd\lua</Filter>
@@ -357,6 +345,18 @@
     </ClCompile>
     <ClCompile Include="..\database\mysql_warpper.cpp">
       <Filter>src\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\center_server\src\logic_moduels\auth.cpp">
+      <Filter>src\devlop\centerserver\logic_moduels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\center_server\src\center_services.cpp">
+      <Filter>src\devlop\centerserver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\database\center_db.cpp">
+      <Filter>src\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\center_server\src\db_moduels\login_moduel.cpp">
+      <Filter>src\devlop\centerserver\db_moduels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -610,6 +610,9 @@
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\database\mysql_warpper.h">
+      <Filter>src\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database\query_callback.h">
       <Filter>src\database</Filter>
     </ClInclude>
   </ItemGroup>

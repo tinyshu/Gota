@@ -113,5 +113,6 @@ void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len
 
 	}
 
+	//如果db使用异步方式，这里就不能释放内存
 	json_free_value(&root);
 }

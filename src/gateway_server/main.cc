@@ -17,7 +17,7 @@ extern "C" {
 #ifdef GAME_DEVLOP
 #include "../moduel/netbus/netbus.h"
 #include "../center_server/src/center_services.h"
-#include "../database/center_db.h"
+
 #endif
 
 #ifdef __cplusplus
@@ -25,7 +25,7 @@ extern "C" {
 #endif
 
 #include "../lua_wrapper/lua_wrapper.h"
-
+#include "../database/center_db.h"
 //57
 int main(int argc, char** argv) {
 	//初始化log组件

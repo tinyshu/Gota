@@ -71,6 +71,10 @@ typedef struct {
 	uv_buf_t buf;
 } write_req_t;
 
+void init_uv() {
+	loop = uv_default_loop();
+}
+
 uv_loop_t* get_uv_loop() {
 	return loop;
 }
@@ -476,7 +480,7 @@ static int process_websocket_connect(struct session* s, struct io_package* io_da
 	s->is_shake_hand = 1;
 	uv_send_data(s->c_sock, accept_buffer, (int)strlen(accept_buffer));
 	if (bs_str!=NULL) {
-		base64_encode_free(bs_str);
+		base64_encode_free(bs_str,strlen(bs_str));
 	}
 	
 	if (io_data->long_pkg != NULL) {
@@ -562,7 +566,10 @@ static void on_connection(uv_stream_t* server, int status) {
 
 void start_server(char* ip, int port, int socket_type, int protocal_type) {
 	//创建一个事件循环对象
-	loop = uv_default_loop();
+	if (loop==NULL) {
+		loop = uv_default_loop();
+	}
+	
 	uv_tcp_init(loop, &l_server);
 	struct sockaddr_in addr;
 	//uv_ip4_addr(ip, port, &addr);
