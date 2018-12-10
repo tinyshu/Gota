@@ -158,6 +158,7 @@ usex.
 //}
 /////////////////
 
+////////////////mysql同步访问方式
 void guest_login(void* moduel_data, struct session* s,
 	json_t* root, unsigned int uid, unsigned int skey) {
 
