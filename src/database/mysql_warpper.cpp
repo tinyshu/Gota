@@ -28,7 +28,7 @@ typedef struct connect_req {
 	cb_connect_db f_connect_db;
 	char* err;
 	void* context;
-
+	void* u_data;
 }connect_req;
 
 typedef struct close_req{
@@ -78,7 +78,7 @@ void on_connect_done_cb(uv_work_t* req, int status) {
 	printf("connecing complete db\n");
 	connect_req* conn_req = static_cast<connect_req*>(req->data);
 	//通知上层回调函数,如果是连接池在这里可以把连接句柄通知到上层
-	conn_req->f_connect_db(conn_req->err, conn_req->context);
+	conn_req->f_connect_db(conn_req->err, conn_req->context, conn_req->u_data);
 	if (conn_req->err!=NULL) {
 		//这里要释放strdup获取的char*
 		my_free(conn_req->err);
@@ -89,7 +89,7 @@ void on_connect_done_cb(uv_work_t* req, int status) {
 }
 
 void mysql_wrapper::connect(const char* ip, int port, const char* db_name, const char* user_name,
-	const char* passwd, cb_connect_db connect_db) {
+	const char* passwd, cb_connect_db connect_db,void* udata) {
 
 	if (ip==NULL || db_name==NULL) {
 		log_error("connect db parament is null\n");
@@ -116,9 +116,10 @@ void mysql_wrapper::connect(const char* ip, int port, const char* db_name, const
 	strncpy(conn_req->db_name, db_name, strlen(db_name)+1);
 	strncpy(conn_req->uname,user_name,strlen(user_name)+1);
 	strncpy(conn_req->upasswd, passwd, strlen(passwd) + 1);
-
+	conn_req->u_data = udata; //存储lua函数handleid
 	//携带自己的自定义数据
 	work->data = static_cast<void*>(conn_req);
+	
 	/*
 	uv_queue_work添加uv_work_t到线程队列
 	on_connect_work_cb 线程调度入口函数

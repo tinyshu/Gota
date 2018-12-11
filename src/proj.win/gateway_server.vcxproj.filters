@@ -73,6 +73,9 @@
     <Filter Include="src\lua_wrapper">
       <UniqueIdentifier>{48d84570-8979-4990-8903-1fe9b1693aa2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\3rd\tolua">
+      <UniqueIdentifier>{ffcd5ecf-87ea-4461-a643-e2ecba6a93c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\crypt\base64_encoder.c">
@@ -358,6 +361,27 @@
     <ClCompile Include="..\center_server\src\db_moduels\login_moduel.cpp">
       <Filter>src\devlop\centerserver\db_moduels</Filter>
     </ClCompile>
+    <ClCompile Include="..\3rd\tolua\tolua_event.c">
+      <Filter>src\3rd\tolua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\tolua\tolua_fix.cc">
+      <Filter>src\3rd\tolua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\tolua\tolua_is.c">
+      <Filter>src\3rd\tolua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\tolua\tolua_map.c">
+      <Filter>src\3rd\tolua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\tolua\tolua_push.c">
+      <Filter>src\3rd\tolua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\tolua\tolua_to.c">
+      <Filter>src\3rd\tolua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\database\mysql_export_to_lua.cpp">
+      <Filter>src\database</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h">
@@ -613,6 +637,18 @@
       <Filter>src\database</Filter>
     </ClInclude>
     <ClInclude Include="..\database\query_callback.h">
+      <Filter>src\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\tolua\tolua_event.h">
+      <Filter>src\3rd\tolua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\tolua\tolua_fix.h">
+      <Filter>src\3rd\tolua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\tolua\tolua++.h">
+      <Filter>src\3rd\tolua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database\mysql_export_to_lua.h">
       <Filter>src\database</Filter>
     </ClInclude>
   </ItemGroup>

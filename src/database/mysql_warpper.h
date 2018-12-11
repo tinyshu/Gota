@@ -9,7 +9,7 @@
 class mysql_wrapper {
 public:
 	static void connect(const char* ip, int port, const char* db_name, const char* user_name,
-		const char* passwd, cb_connect_db connect_db);
+		const char* passwd, cb_connect_db connect_db, void* udata = NULL);
 
 	static void close(void* context, cb_close_db on_close);
 

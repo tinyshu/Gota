@@ -14,7 +14,7 @@ typedef struct context_req {
 
 typedef std::vector<std::vector<std::string> > DBRES;
 typedef std::vector<std::map<std::string,std::string> > DBRESMAP;
-typedef void(*cb_connect_db)(char* error, void* context);
+typedef void(*cb_connect_db)(char* error, void* context,void* udata);
 typedef void(*cb_query_db)(char*error, DBRES* res);
 typedef void(*cb_close_db)(char*error);
 /*
