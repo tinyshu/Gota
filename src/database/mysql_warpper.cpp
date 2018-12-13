@@ -49,6 +49,10 @@ typedef struct query_req {
 	cb_query_no_res_cb f_query_no_res;   //无结果集返回
 }query_req;
 
+typedef struct mysql_lock_context {
+	void* connect_handle;
+	uv_mutex_t mutex;
+}mysql_lock_context;
 
 void on_connect_work_cb(uv_work_t* req) {
 	printf("connecing db\n");
@@ -68,7 +72,13 @@ void on_connect_work_cb(uv_work_t* req) {
 		
 	}
 	else {
-		conn_req->context = static_cast<void*>(pConn);
+		mysql_lock_context* pcontext = (mysql_lock_context*)my_malloc(sizeof(mysql_lock_context));
+		if (pcontext==NULL) {
+			exit(-2);
+		}
+		pcontext->connect_handle = (void*)pConn;
+		uv_mutex_init(&(pcontext->mutex));
+		conn_req->context = pcontext;
 		conn_req->err = NULL;
 	}
 
@@ -130,11 +140,14 @@ void mysql_wrapper::connect(const char* ip, int port, const char* db_name, const
 
 void on_close_work_cb(uv_work_t* req){
 	close_req* cl_req = static_cast<close_req*>(req->data);
-	MYSQL* pconn = static_cast<MYSQL*>(cl_req->context);
+	mysql_lock_context* c = (mysql_lock_context*)cl_req->context;
+	uv_mutex_lock(&(c->mutex));
+	MYSQL* pconn = static_cast<MYSQL*>(c->connect_handle);
 	if (pconn!=NULL) {
 		mysql_close(pconn);
 		pconn = NULL;
 	}
+	uv_mutex_unlock(&(c->mutex));
 }
 
 void on_close_done_cb(uv_work_t* req, int status) {
@@ -145,10 +158,16 @@ void on_close_done_cb(uv_work_t* req, int status) {
 	if (cl_req->err!=NULL) {
 		my_free(cl_req->err);
 	}
+
+	mysql_lock_context* c = (mysql_lock_context*)cl_req->context;
+	if (c!=NULL) {
+		my_free(c);
+	}
 	my_free(cl_req);
 	my_free(req);
 }
 
+//context是mysql_lock_context结构
 void mysql_wrapper::close(void* context, cb_close_db on_close) {
 	uv_work_t* work = (uv_work_t*)my_malloc(sizeof(uv_work_t));
 	if (work == NULL) {
@@ -158,7 +177,7 @@ void mysql_wrapper::close(void* context, cb_close_db on_close) {
 	memset(work, 0, sizeof(uv_work_t));
 
 	close_req* req = (close_req*)my_malloc(sizeof(close_req));
-	req->err = NULL;
+	req->err = NULL; 
 	req->context = context;
 	req->f_close_cb = on_close;
 	work->data = static_cast<void*>(req);
@@ -168,8 +187,11 @@ void mysql_wrapper::close(void* context, cb_close_db on_close) {
 
 void on_query_work_cb(uv_work_t* req) {
 	query_req* q_req = static_cast<query_req*>(req->data);
-	MYSQL* mysql_handle = static_cast<MYSQL*>(q_req->context);
+	mysql_lock_context* c = (mysql_lock_context*)q_req->context;
+
+	MYSQL* mysql_handle = static_cast<MYSQL*>(c->connect_handle);
 	
+	uv_mutex_lock(&(c->mutex));
 	if (mysql_query(mysql_handle, q_req->sql)) {
 		log_error("%s %s\n", q_req->sql, mysql_error(mysql_handle));
 		q_req->err = strdup(mysql_error(mysql_handle));
@@ -178,7 +200,7 @@ void on_query_work_cb(uv_work_t* req) {
 			//mysql_ping(mysql_handle);
 			//continue;
 		}
-
+		uv_mutex_unlock(&(c->mutex));
 		return;
 	}
 	//
@@ -187,18 +209,21 @@ void on_query_work_cb(uv_work_t* req) {
 	if (res == NULL) {
 		q_req->err = strdup("get store is null");
 		q_req->f_query_cb(q_req->err, NULL);
+		uv_mutex_unlock(&(c->mutex));
 		return;
 	}
 	if (mysql_num_rows(res) == 0) {
 		q_req->err = strdup("get store num is zero!");
 		q_req->f_query_cb(q_req->err, NULL);
 		mysql_free_result(res);
+		uv_mutex_unlock(&(c->mutex));
 		return;
 	}
 	
 	int fields_num = mysql_field_count(mysql_handle);
 	if (fields_num<=0) {
 		mysql_free_result(res);
+		uv_mutex_unlock(&(c->mutex));
 		return;
 	}
 	//mysql_fetch_field
@@ -221,6 +246,8 @@ void on_query_work_cb(uv_work_t* req) {
 	}
 	q_req->res = db_res;
 	mysql_free_result(res);
+
+	uv_mutex_unlock(&(c->mutex));
 }
 
 void on_query_done_cb(uv_work_t* req,int status) {
@@ -244,6 +271,9 @@ void on_query_done_cb(uv_work_t* req,int status) {
 		delete q_req->res;
 		q_req->res = NULL;
 	}
+	if (q_req->context!=NULL) {
+		my_free(q_req->context);
+	}
 
 	my_free(q_req);
 	my_free(req);
@@ -251,8 +281,10 @@ void on_query_done_cb(uv_work_t* req,int status) {
 
 void on_query_map_work_cb(uv_work_t* req) {
 	query_req* q_req = static_cast<query_req*>(req->data);
-	MYSQL* mysql_handle = static_cast<MYSQL*>(q_req->context);
+	mysql_lock_context* c = (mysql_lock_context*)q_req->context;
+	MYSQL* mysql_handle = static_cast<MYSQL*>(c->connect_handle);
 
+	uv_mutex_lock(&(c->mutex));
 	if (mysql_query(mysql_handle, q_req->sql)) {
 		log_error("%s %s\n", q_req->sql, mysql_error(mysql_handle));
 		q_req->err = q_req->sql, mysql_error(mysql_handle);
@@ -261,7 +293,7 @@ void on_query_map_work_cb(uv_work_t* req) {
 			//mysql_ping(mysql_handle);
 			//continue;
 		}
-
+		uv_mutex_unlock(&(c->mutex));
 		return;
 	}
 
@@ -270,17 +302,20 @@ void on_query_map_work_cb(uv_work_t* req) {
 	if (res == NULL) {
 		q_req->err = strdup("get store is null");
 		q_req->f_query_map_cb(q_req->err, NULL, q_req->r_context);
+		uv_mutex_unlock(&(c->mutex));
 		return;
 	}
 	if (mysql_num_rows(res) == 0) {
 		q_req->f_query_map_cb(q_req->err, NULL,q_req->r_context);
 		mysql_free_result(res);
+		uv_mutex_unlock(&(c->mutex));
 		return;
 	}
 
 	int fields_num = mysql_field_count(mysql_handle);
 	if (fields_num <= 0) {
 		mysql_free_result(res);
+		uv_mutex_unlock(&(c->mutex));
 		return;
 	}
 
@@ -312,33 +347,35 @@ void on_query_map_work_cb(uv_work_t* req) {
 	}
 	q_req->resmap = db_res;
 	mysql_free_result(res);
+
+	uv_mutex_unlock(&(c->mutex));
 }
 
 void mysql_wrapper::query2map(void* context, const char* sql, cb_query_db_res_map on_query_map) {
-	if (context == NULL || sql == NULL) {
-		return;
-	}
+	//if (context == NULL || sql == NULL) {
+	//	return;
+	//}
 
-	uv_work_t* work = (uv_work_t*)my_malloc(sizeof(uv_work_t));
-	if (work == NULL) {
-		log_error("query db malloc uv_work_t error\n");
-		return;
-	}
-	memset(work, 0, sizeof(uv_work_t));
-	query_req* req = (query_req*)my_malloc(sizeof(query_req));
-	if (req == NULL) {
-		log_error("query db malloc query_req error\n");
-		return;
-	}
-	context_req* r_context = (context_req*)context;
-	req->context = r_context->mysql_handle;
-	req->sql = strdup(sql); //在回调完成后要释放
-	req->f_query_map_cb = on_query_map;
-	req->err = NULL;
-	req->res = NULL;
-	req->r_context = r_context;
-	work->data = static_cast<void*>(req);
-	uv_queue_work(get_uv_loop(), work, on_query_map_work_cb, on_query_done_cb);
+	//uv_work_t* work = (uv_work_t*)my_malloc(sizeof(uv_work_t));
+	//if (work == NULL) {
+	//	log_error("query db malloc uv_work_t error\n");
+	//	return;
+	//}
+	//memset(work, 0, sizeof(uv_work_t));
+	//query_req* req = (query_req*)my_malloc(sizeof(query_req));
+	//if (req == NULL) {
+	//	log_error("query db malloc query_req error\n");
+	//	return;
+	//}
+	//context_req* r_context = (context_req*)context;
+	//req->context = r_context->mysql_handle;
+	//req->sql = strdup(sql); //在回调完成后要释放
+	//req->f_query_map_cb = on_query_map;
+	//req->err = NULL;
+	//req->res = NULL;
+	//req->r_context = r_context; //这里是存储lua的回调函数handle值
+	//work->data = static_cast<void*>(req);
+	//uv_queue_work(get_uv_loop(), work, on_query_map_work_cb, on_query_done_cb);
 
 }
 
@@ -402,17 +439,6 @@ void mysql_wrapper::query_no_res(void* context, const char* sql, cb_query_no_res
 		log_error("query db malloc query_req error\n");
 		return;
 	}
-	
-	/*
-	context_req* r_context = (context_req*)context;
-	req->context = r_context->mysql_handle;
-	req->sql = strdup(sql); //在回调完成后要释放
-	req->f_query_map_cb = on_query_map;
-	req->err = NULL;
-	req->res = NULL;
-	req->r_context = r_context;
-	*/
-
 	req->context = context;
 	req->sql = strdup(sql); //在回调完成后要释放
 	req->f_query_no_res = on_query_no_res_cb;

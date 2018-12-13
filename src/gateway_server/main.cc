@@ -28,7 +28,7 @@ extern "C" {
 #include "../database/center_db.h"
 
 
-//43
+//28
 int main(int argc, char** argv) {
 	
 	//初始化log组件
@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
 	init_session_manager(WEB_SOCKET_IO, JSON_PROTOCAL);
 	//初始化lua虚拟机
 	lua_wrapper::get_instance().init_lua();
-	lua_wrapper::get_instance().exce_lua_file("./main.lua");
+	//lua_wrapper::get_instance().exce_lua_file("./main.lua");
 	
 	//lua_getglobal(g_lua_state, "myname");
 	////const char* name = luaL_checkstring(L, -1);

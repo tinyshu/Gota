@@ -105,6 +105,7 @@
     <ClCompile Include="..\database\center_db_conf.c" />
     <ClCompile Include="..\database\mysql_export_to_lua.cpp" />
     <ClCompile Include="..\database\mysql_warpper.cpp" />
+    <ClCompile Include="..\database\redis_warpper.cpp" />
     <ClCompile Include="..\game_server\src\game_config.c" />
     <ClCompile Include="..\gateway_server\main.cc" />
     <ClCompile Include="..\gateway_server\src\from_client.c" />
@@ -194,6 +195,7 @@
     <ClInclude Include="..\database\mysql_export_to_lua.h" />
     <ClInclude Include="..\database\mysql_warpper.h" />
     <ClInclude Include="..\database\query_callback.h" />
+    <ClInclude Include="..\database\redis_warpper.h" />
     <ClInclude Include="..\error_command.h" />
     <ClInclude Include="..\game_server\src\game_config.h" />
     <ClInclude Include="..\gateway_server\src\from_client.h" />
@@ -286,12 +288,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;USE_LIBUV;GAME_DEVLOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../3rd/mysql/win/include/;../3rd/libuv/include;../3rd/lua</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../3rd/mysql/win/include/;../3rd/libuv/include;../3rd/lua;../3rd/hiredis/win/include/</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../3rd/mysql/win/lib/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../3rd/mysql/win/lib/;../3rd/hiredis/win/x86_libs/</AdditionalLibraryDirectories>
+      <AdditionalOptions>/NODEFAULTLIB:libcmt.lib </AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

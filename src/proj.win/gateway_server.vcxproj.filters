@@ -382,6 +382,9 @@
     <ClCompile Include="..\database\mysql_export_to_lua.cpp">
       <Filter>src\database</Filter>
     </ClCompile>
+    <ClCompile Include="..\database\redis_warpper.cpp">
+      <Filter>src\database</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h">
@@ -649,6 +652,9 @@
       <Filter>src\3rd\tolua</Filter>
     </ClInclude>
     <ClInclude Include="..\database\mysql_export_to_lua.h">
+      <Filter>src\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database\redis_warpper.h">
       <Filter>src\database</Filter>
     </ClInclude>
   </ItemGroup>
