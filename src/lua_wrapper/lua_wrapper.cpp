@@ -54,12 +54,33 @@ int lua_logerror(lua_State* L) {
 	return 0;
 }
 
-lua_wrapper& lua_wrapper::get_instance() {
-	static lua_wrapper _instance;
-	return _instance;
-}
+//lua_wrapper& lua_wrapper::get_instance() {
+//	static lua_wrapper _instance;
+//	return _instance;
+//}
 
 static intlua_panic(lua_State* pState) {	const char *msg = lua_tostring(pState, -1);	do_log_message(print_error, msg);	return 0;}
+
+
+const char* lua_wrapper::read_table_by_key(lua_State* L, const char* table_name, const char* key) {
+	if (table_name==NULL || key==NULL) {
+		return NULL;
+	}
+	lua_getglobal(L, table_name);
+	//判断栈顶是否为table类型
+	int l_type = lua_type(L, -1);
+	if (l_type != LUA_TTABLE) {
+		log_error("print_table input parment type error %d", l_type);
+		return 0;
+	}
+	lua_pushstring(L, key);
+	lua_gettable(L,-2);
+	
+	const char* value = lua_tostring(L, -1);
+	lua_pop(L, 2);
+	return value;
+}
+
 //test//////////////////////
 //返回一个普通值
 int add(lua_State* pState) {
@@ -147,6 +168,7 @@ int print_table(lua_State* pState) {
 	return 0;
 }
 
+
 //检查字段类型
 //函数返回普通类型返回值
 //函数返回值表示，函数返回参数个数
@@ -223,6 +245,7 @@ int lua_wrapper::execute_function(int args_num) {
 	}
 
 	int traceback = 0;
+	//lua_getglobal获取全局变量的值，并放入栈顶
 	lua_getglobal(g_lua_state, "__G__TRACKBACK__");                         /* L: ... func arg1 arg2 ... G */
 	if (!lua_isfunction(g_lua_state, -1))
 	{

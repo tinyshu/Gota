@@ -58,9 +58,11 @@ int main(int argc, char** argv) {
 	//初始化session模块,在接入大量客户端连接的服务采用初始化这个模块 
 	init_session_manager(WEB_SOCKET_IO, JSON_PROTOCAL);
 	//初始化lua虚拟机
-	lua_wrapper::get_instance().init_lua();
-	//lua_wrapper::get_instance().exce_lua_file("./main.lua");
-	
+	lua_wrapper::init_lua();
+	//lua_wrapper::exce_lua_file("./main.lua");
+	//该接口是C++读取lua table类型配置接口
+	//const char* value = lua_wrapper::read_table_by_key(g_lua_state,"table1","name");
+
 	//lua_getglobal(g_lua_state, "myname");
 	////const char* name = luaL_checkstring(L, -1);
 	//int idx = lua_gettop(g_lua_state);

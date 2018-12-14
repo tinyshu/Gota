@@ -8,7 +8,7 @@
 #endif
 
 #define MAX_SERVICES 512
-#define my_free free;
+#define my_free free
 
 struct timer_list* NETBUS_TIMER_LIST = NULL;
 
