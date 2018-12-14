@@ -36,6 +36,7 @@
 #ifndef _WIN32
 #include <sys/time.h> /* for struct timeval */
 #else
+//#include "../../src/Win32_Interop/win32_types_hiredis.h"
 #include "Win32_Interop/win32_types_hiredis.h"
 #endif
 

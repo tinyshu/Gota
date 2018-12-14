@@ -11,11 +11,18 @@ public:
 
 	static int exce_lua_file(const char* lua_file_path);
 
-	static lua_wrapper& get_instance();
+	//static lua_wrapper& get_instance();
 
 	static void reg_func2lua(const char* func_name, int (*lua_function)(lua_State* L));
+	static lua_State* get_luastatus();
+
+	static const char* read_table_by_key(lua_State* L,const char* table_name,const char* key);
+	//C++Ö´ÐÐluaº¯Êý
+	static int execute_lua_script_by_handle(int handle_id,int args_num);
+	static int remove_lua_script_by_handle(int handle_id);
 private:
-	
+	static int push_function_by_handle(int handle_id);
+	static int execute_function(int args_num);
 };
 
 #endif
