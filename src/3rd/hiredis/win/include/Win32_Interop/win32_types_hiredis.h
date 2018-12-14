@@ -38,10 +38,15 @@ typedef double            PORT_LONGDOUBLE;
 
 #ifdef _WIN64
 typedef __int64           ssize_t;
+# define _SSIZE_T_
+# define _SSIZE_T_DEFINED
+
 typedef __int64           PORT_LONG;
 typedef unsigned __int64  PORT_ULONG;
 #else
 typedef long              ssize_t;
+# define _SSIZE_T_
+# define _SSIZE_T_DEFINED
 typedef long              PORT_LONG;
 typedef unsigned long     PORT_ULONG;
 #endif
