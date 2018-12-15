@@ -12,7 +12,7 @@ public:
 
 	static void rediseclose(void* context, cb_close_db on_close);
 
-	static void redisequery(void* context, const char* sql, redis_query_cb f_query_cb);
+	static void redisequery(void* context, const char* sql, redis_query_cb f_query_cb,void* udata=NULL);
 
 };
 

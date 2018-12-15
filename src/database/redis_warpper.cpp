@@ -47,6 +47,7 @@ typedef struct redis_query_req {
 	redisReply* res;
 	void* r_context; //这个是应用层传入的上下文,现在存储的是lua的函数handle
 	redis_query_cb f_query_cb;
+	void* udata;
 	
 }redis_query_req;
 
@@ -61,9 +62,10 @@ static void on_connect_work_cb(uv_work_t* req) {
 		return;
 	}
 	struct timeval timeout_val;
-	timeout_val.tv_sec = conn_req->timeout;
+	timeout_val.tv_sec = 5;
 	timeout_val.tv_usec = 0;
 
+	
 	redis_lock_context* lock_context = (redis_lock_context*)conn_req->context;
 	uv_mutex_lock(&(lock_context->mutex));
 	redisContext* rc = redisConnectWithTimeout((char*)conn_req->ip, conn_req->port, timeout_val);
@@ -74,16 +76,16 @@ static void on_connect_work_cb(uv_work_t* req) {
 		redisFree(rc);
 	}
 	else {
-		redis_lock_context* p_context = (redis_lock_context*)my_malloc(sizeof(redis_lock_context));
-		if (p_context ==NULL) {
+		
+		if (lock_context ==NULL) {
 			uv_mutex_unlock(&(lock_context->mutex));
 			return;
 		}
-		p_context->connect_handle = rc;
-		uv_mutex_init(&(p_context->mutex));
+		lock_context->connect_handle = rc;
+		
 
 		conn_req->err = NULL;
-		conn_req->context = p_context;	
+		//conn_req->context = (void*)lock_context;
 	}
 
 	uv_mutex_unlock(&(lock_context->mutex));
@@ -118,11 +120,15 @@ void redis_wrapper::rediseconnect(const char* ip, int port, int timeout, cb_conn
 	}
 	memset(conn_req, 0, sizeof(redis_connect_req));
 	
+	redis_lock_context* lock_context = (redis_lock_context*)my_malloc(sizeof(redis_lock_context));
+	lock_context->connect_handle = NULL;
+	uv_mutex_init(&(lock_context->mutex));
+
 	conn_req->port = port;
 	conn_req->f_connect_db = connect_db;
 	strncpy(conn_req->ip, ip, strlen(ip) + 1);
 	conn_req->u_data = udata; //存储lua函数handleid
-							  //携带自己的自定义数据
+	conn_req->context = lock_context;
 	work->data = static_cast<void*>(conn_req);
 
 	uv_queue_work(get_uv_loop(), work, on_connect_work_cb, on_connect_done_cb);
@@ -144,9 +150,6 @@ static void on_close_work_cb(uv_work_t* req) {
 	uv_mutex_lock(&(lock_context->mutex));
 	redisFree(r_context);
 	uv_mutex_unlock(&(lock_context->mutex));
-
-	my_free(lock_context);
-	lock_context = NULL;
 }
 
 static void on_close_done_cb(uv_work_t* req,int status) {
@@ -155,9 +158,16 @@ static void on_close_done_cb(uv_work_t* req,int status) {
 		return;
 	}
 
-	r->f_close_cb(r->err);
+	if(r->f_close_cb!=NULL){
+	   r->f_close_cb(r->err);
+	}
+	
 	if (r->err!=NULL) {
 		my_free(r->err);
+	}
+
+	if (r->context != NULL) {
+		my_free(r->context);
 	}
 
 	my_free(r);
@@ -204,7 +214,7 @@ static void on_query_done_cb(uv_work_t* req,int status) {
 	
 	redis_query_req* r = (redis_query_req*)req->data;
 	if (r->f_query_cb!=NULL) {
-		r->f_query_cb(r->err,r->res);
+		r->f_query_cb(r->err,r->res,r->udata);
 	}
 
 	if (r->res!=NULL) {
@@ -218,7 +228,7 @@ static void on_query_done_cb(uv_work_t* req,int status) {
 	my_free(req);
 }
 
-void redis_wrapper::redisequery(void* context, const char* cmd, redis_query_cb f_query_cb) {
+void redis_wrapper::redisequery(void* context, const char* cmd, redis_query_cb f_query_cb, void* udata) {
 	if (context==NULL || cmd==NULL) {
 		return;
 	}
@@ -242,7 +252,7 @@ void redis_wrapper::redisequery(void* context, const char* cmd, redis_query_cb f
 	r->err = NULL;
 	r->f_query_cb = f_query_cb;
 	r->res = NULL;
-
+	r->udata = udata;
 	work->data = r;
 	uv_queue_work(get_uv_loop(), work, on_query_work_cb, on_query_done_cb);
 }

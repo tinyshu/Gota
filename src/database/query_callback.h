@@ -6,20 +6,18 @@ extern "C" {
 }
 #include <vector>
 #include <map>
-
-//typedef struct context_req {
-//	void* mysql_handle;
-//	json_t* root; //session收到的数据
-//}context_req;
+#include "mysql.h"
+//struct MYSQL_RES;
 struct redisReply;
 
 typedef std::vector<std::vector<std::string> > DBRES;
 typedef std::vector<std::map<std::string,std::string> > DBRESMAP;
 typedef void(*cb_connect_db)(char* error, void* context,void* udata);
-typedef void(*cb_query_db)(char*error, DBRES* res);
+//typedef void(*cb_query_db)(char*error, DBRES* res);
+typedef void(*cb_query_db)(char*error, MYSQL_RES* res,void* udata);
 typedef void(*cb_close_db)(char*error);
 
-typedef void(*redis_query_cb)(char*error, redisReply* result);
+typedef void(*redis_query_cb)(char*error, redisReply* result,void* udata);
 /*
 上层请求回调函数定义
 查询成功 error==NULL,反之不为NULL，查询错误

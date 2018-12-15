@@ -13,7 +13,7 @@ public:
 
 	static void close(void* context, cb_close_db on_close);
 
-	static void query(void* context,const char* sql, cb_query_db on_query);
+	static void query(void* context,const char* sql, cb_query_db on_query,void* udata = NULL);
 	static void query2map(void* context, const char* sql, cb_query_db_res_map on_query_map);
 	//不返回结果集
 	static void query_no_res(void* context, const char* sql, cb_query_no_res_cb on_query_res_cb);
