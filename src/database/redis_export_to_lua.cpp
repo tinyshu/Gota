@@ -119,7 +119,7 @@ int lua_redis_query(lua_State* tolua_s) {
 	if (context==NULL) {
 		return -1;
 	}
-	//char* cmd = (char*)lua_touserdata(lua_wrapper::get_luastatus(),2);
+	
 	char* cmd = (char*)tolua_tostring(lua_wrapper::get_luastatus(), 2,0);
 	if (cmd==NULL) {
 		return -1;

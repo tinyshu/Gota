@@ -231,25 +231,6 @@ void on_query_work_cb(uv_work_t* req) {
 		return;
 	}
 	
-	//DBRES* db_res = new DBRES;
-	//db_res->clear();
-	//MYSQL_ROW row;
-	//while ((row = mysql_fetch_row(res)) != NULL) {
-	//	std::vector<std::string> d_row;
-	//	d_row.reserve(fields_num);
-	//	for (int i = 0; i < fields_num;i++) {
-	//		if (row[i]==NULL) {
-	//			d_row.push_back("");
-	//		}
-	//		else {
-	//			d_row.push_back(row[i]);
-	//		}
-	//	}
-
-	//	db_res->push_back(d_row);
-	//}
-	//q_req->res = db_res;
-	//mysql_free_result(res);
 	q_req->res = res;
 	uv_mutex_unlock(&(c->mutex));
 }
@@ -262,12 +243,12 @@ void on_query_done_cb(uv_work_t* req,int status) {
 	}
 
 	if (q_req->err!=NULL) {
-		free(q_req->err);
+		my_free(q_req->err);
 		q_req->err = NULL;
 	}
 
 	if (q_req->sql!=NULL) {
-		free(q_req->sql);
+		my_free(q_req->sql);
 		q_req->sql = NULL;
 	}
 
@@ -275,10 +256,6 @@ void on_query_done_cb(uv_work_t* req,int status) {
 		mysql_free_result(q_req->res);
 		q_req->res = NULL;
 	}
-	if (q_req->context!=NULL) {
-		my_free(q_req->context);
-	}
-
 	my_free(q_req);
 	my_free(req);
 }

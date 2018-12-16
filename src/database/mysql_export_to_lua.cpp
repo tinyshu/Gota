@@ -78,6 +78,7 @@ static void query_db_cb(char*error, MYSQL_RES* res,void* udata) {
 			lua_pushnil(lua_wrapper::get_luastatus()); //error
 			//栈顶创建一个{}
 			lua_newtable(lua_wrapper::get_luastatus());
+
 			int field_num = mysql_num_fields(res);
 			int idx = 1; //存入lua{}的位置,从1开始
 			MYSQL_ROW row;
@@ -108,7 +109,7 @@ static void query_db_cb(char*error, MYSQL_RES* res,void* udata) {
 
 int lua_mysql_query(lua_State* tolua_s) {
 	void* context = (void*)lua_touserdata(tolua_s, 1);
-	if (context) {
+	if (context==NULL) {
 		return -1;
 	}
 
