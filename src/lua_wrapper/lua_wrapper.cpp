@@ -5,6 +5,8 @@
 #include "../../utils/logger.h"
 #include "../3rd/tolua/tolua_fix.h"
 #include "../database/mysql_export_to_lua.h"
+#include "../database/redis_export_to_lua.h"
+
 lua_State* g_lua_state = NULL;
 
 lua_State* lua_wrapper::get_luastatus() {
@@ -190,7 +192,7 @@ void lua_wrapper::init_lua() {
 	toluafix_open(g_lua_state);
 	//注册导出函数
 	register_mysql_export_tolua(g_lua_state);
-
+	register_redis_export_tolua(g_lua_state);
 	/////////////////////////////////////////////////
 
 	//导出框架接口
@@ -198,10 +200,10 @@ void lua_wrapper::init_lua() {
 	reg_func2lua("LOGWARNING", lua_logwarning);
 	reg_func2lua("LOGERROR", lua_logerror);
 	//test
-	reg_func2lua("Add", add);
-	reg_func2lua("print_array", print_array);
-	reg_func2lua("print_table", print_table);
-	reg_func2lua("re_table", re_table);
+	//reg_func2lua("Add", add);
+	//reg_func2lua("print_array", print_array);
+	//reg_func2lua("print_table", print_table);
+	//reg_func2lua("re_table", re_table);
 }
 
 void lua_wrapper::exit_lua() {
@@ -294,16 +296,20 @@ int lua_wrapper::execute_function(int args_num) {
 	return ret;
 }
 int lua_wrapper::execute_lua_script_by_handle(int handle_id, int args_num) {
-	int ret = 0;
-	if (push_function_by_handle(handle_id)) {
-		if (args_num > 1) {
+	int ret = 0; 
+	if (0 == push_function_by_handle(handle_id)) {
+		if (args_num > 0) {
 			//把栈顶元素插入指定的有效索引处，并依次移动这个索引之上的元素
 			lua_insert(g_lua_state,-(args_num+1));
 		}
 		//执行脚本函数
-		execute_function(args_num);
+		if (execute_function(args_num)!=0) {
+			return -1;
+		}
 	}
-
+	else {
+		return -1;
+	}
 	lua_settop(g_lua_state,0);
 	return 0;
 }

@@ -105,6 +105,7 @@
     <ClCompile Include="..\database\center_db_conf.c" />
     <ClCompile Include="..\database\mysql_export_to_lua.cpp" />
     <ClCompile Include="..\database\mysql_warpper.cpp" />
+    <ClCompile Include="..\database\redis_export_to_lua.cpp" />
     <ClCompile Include="..\database\redis_warpper.cpp" />
     <ClCompile Include="..\game_server\src\game_config.c" />
     <ClCompile Include="..\gateway_server\main.cc" />
@@ -195,6 +196,7 @@
     <ClInclude Include="..\database\mysql_export_to_lua.h" />
     <ClInclude Include="..\database\mysql_warpper.h" />
     <ClInclude Include="..\database\query_callback.h" />
+    <ClInclude Include="..\database\redis_export_to_lua.h" />
     <ClInclude Include="..\database\redis_warpper.h" />
     <ClInclude Include="..\error_command.h" />
     <ClInclude Include="..\game_server\src\game_config.h" />

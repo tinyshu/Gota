@@ -41,9 +41,11 @@ typedef struct query_req {
 	char* err;
 	void* context; //这个是mysql句柄
 	char* sql;
-	DBRES* res;
+	//DBRES* res;
+	MYSQL_RES* res;
 	DBRESMAP* resmap;
 	void* r_context; //这个是应用层传入的上下文
+	void* udata; //lua回调函数id
 	cb_query_db f_query_cb; //结果集返回vector<vector>
 	cb_query_db_res_map f_query_map_cb;  //结果集返回vector<map>
 	cb_query_no_res_cb f_query_no_res;   //无结果集返回
@@ -55,7 +57,6 @@ typedef struct mysql_lock_context {
 }mysql_lock_context;
 
 void on_connect_work_cb(uv_work_t* req) {
-	printf("connecing db\n");
 	connect_req* conn_req = static_cast<connect_req*>(req->data);
 	if (conn_req==NULL) {
 		return;
@@ -85,7 +86,6 @@ void on_connect_work_cb(uv_work_t* req) {
 }
 
 void on_connect_done_cb(uv_work_t* req, int status) {
-	printf("connecing complete db\n");
 	connect_req* conn_req = static_cast<connect_req*>(req->data);
 	//通知上层回调函数,如果是连接池在这里可以把连接句柄通知到上层
 	conn_req->f_connect_db(conn_req->err, conn_req->context, conn_req->u_data);
@@ -188,9 +188,12 @@ void mysql_wrapper::close(void* context, cb_close_db on_close) {
 void on_query_work_cb(uv_work_t* req) {
 	query_req* q_req = static_cast<query_req*>(req->data);
 	mysql_lock_context* c = (mysql_lock_context*)q_req->context;
-
-	MYSQL* mysql_handle = static_cast<MYSQL*>(c->connect_handle);
 	
+	MYSQL* mysql_handle = static_cast<MYSQL*>(c->connect_handle);
+	if (mysql_handle==NULL) {
+		return;
+	}
+
 	uv_mutex_lock(&(c->mutex));
 	if (mysql_query(mysql_handle, q_req->sql)) {
 		log_error("%s %s\n", q_req->sql, mysql_error(mysql_handle));
@@ -208,13 +211,13 @@ void on_query_work_cb(uv_work_t* req) {
 	MYSQL_RES* res = mysql_store_result(mysql_handle);
 	if (res == NULL) {
 		q_req->err = strdup("get store is null");
-		q_req->f_query_cb(q_req->err, NULL);
+		q_req->f_query_cb(q_req->err, NULL,NULL);
 		uv_mutex_unlock(&(c->mutex));
 		return;
 	}
 	if (mysql_num_rows(res) == 0) {
 		q_req->err = strdup("get store num is zero!");
-		q_req->f_query_cb(q_req->err, NULL);
+		q_req->f_query_cb(q_req->err, NULL,NULL);
 		mysql_free_result(res);
 		uv_mutex_unlock(&(c->mutex));
 		return;
@@ -222,31 +225,13 @@ void on_query_work_cb(uv_work_t* req) {
 	
 	int fields_num = mysql_field_count(mysql_handle);
 	if (fields_num<=0) {
+		q_req->f_query_cb(q_req->err, NULL,NULL);
 		mysql_free_result(res);
 		uv_mutex_unlock(&(c->mutex));
 		return;
 	}
-	//mysql_fetch_field
-	DBRES* db_res = new DBRES;
-	db_res->clear();
-	MYSQL_ROW row;
-	while ((row = mysql_fetch_row(res)) != NULL) {
-		std::vector<std::string> d_row;
-		d_row.reserve(fields_num);
-		for (int i = 0; i < fields_num;i++) {
-			if (row[i]==NULL) {
-				d_row.push_back("");
-			}
-			else {
-				d_row.push_back(row[i]);
-			}
-		}
-
-		db_res->push_back(d_row);
-	}
-	q_req->res = db_res;
-	mysql_free_result(res);
-
+	
+	q_req->res = res;
 	uv_mutex_unlock(&(c->mutex));
 }
 
@@ -254,27 +239,23 @@ void on_query_done_cb(uv_work_t* req,int status) {
 	query_req* q_req = static_cast<query_req*>(req->data);
 	if (q_req->f_query_cb!=NULL) {
 		//包查询的结果集回调给上层的应用
-		q_req->f_query_map_cb(q_req->err,q_req->resmap, q_req->r_context);
+		q_req->f_query_cb(q_req->err, q_req->res, q_req->udata);
 	}
 
 	if (q_req->err!=NULL) {
-		free(q_req->err);
+		my_free(q_req->err);
 		q_req->err = NULL;
 	}
 
 	if (q_req->sql!=NULL) {
-		free(q_req->sql);
+		my_free(q_req->sql);
 		q_req->sql = NULL;
 	}
 
 	if (q_req->res!=NULL) {
-		delete q_req->res;
+		mysql_free_result(q_req->res);
 		q_req->res = NULL;
 	}
-	if (q_req->context!=NULL) {
-		my_free(q_req->context);
-	}
-
 	my_free(q_req);
 	my_free(req);
 }
@@ -379,7 +360,7 @@ void mysql_wrapper::query2map(void* context, const char* sql, cb_query_db_res_ma
 
 }
 
-void mysql_wrapper::query(void* context,const char* sql, cb_query_db on_query) {
+void mysql_wrapper::query(void* context,const char* sql, cb_query_db on_query, void* udata) {
 	if (context==NULL ||sql==NULL) {
 		return;
 	}
@@ -401,6 +382,7 @@ void mysql_wrapper::query(void* context,const char* sql, cb_query_db on_query) {
 	req->f_query_cb = on_query;
 	req->err = NULL;
 	req->res = NULL;
+	req->udata = udata;
 	work->data = static_cast<void*>(req);
 	uv_queue_work(get_uv_loop(), work, on_query_work_cb, on_query_done_cb);
  }
