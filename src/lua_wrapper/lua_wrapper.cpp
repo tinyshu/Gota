@@ -6,6 +6,7 @@
 #include "../3rd/tolua/tolua_fix.h"
 #include "../database/mysql_export_to_lua.h"
 #include "../database/redis_export_to_lua.h"
+#include "../database/service_export_to_lua.h"
 
 lua_State* g_lua_state = NULL;
 
@@ -193,6 +194,7 @@ void lua_wrapper::init_lua() {
 	//注册导出函数
 	register_mysql_export_tolua(g_lua_state);
 	register_redis_export_tolua(g_lua_state);
+	register_service_export_tolua(g_lua_state);
 	/////////////////////////////////////////////////
 
 	//导出框架接口
@@ -295,6 +297,7 @@ int lua_wrapper::execute_function(int args_num) {
 
 	return ret;
 }
+
 int lua_wrapper::execute_lua_script_by_handle(int handle_id, int args_num) {
 	int ret = 0; 
 	if (0 == push_function_by_handle(handle_id)) {
@@ -304,7 +307,7 @@ int lua_wrapper::execute_lua_script_by_handle(int handle_id, int args_num) {
 		}
 		//执行脚本函数
 		if (execute_function(args_num)!=0) {
-			return -1;
+			return -2;
 		}
 	}
 	else {
@@ -316,5 +319,60 @@ int lua_wrapper::execute_lua_script_by_handle(int handle_id, int args_num) {
 
 int lua_wrapper::remove_lua_script_by_handle(int handle_id) {
 	toluafix_remove_function_by_refid(g_lua_state,handle_id);
+	return 0;
+}
+
+void lua_wrapper::get_service_function_by_refid(lua_State* L, int refid)
+{
+	lua_pushstring(L, SERVICE_FUNCTION_MAPPING);
+	lua_rawget(L, LUA_REGISTRYINDEX);                               /* stack: ... refid_fun */
+	lua_pushinteger(L, refid);                                  /* stack: ... refid_fun refid */
+	lua_rawget(L, -2);                                              /* stack: ... refid_fun fun */
+	lua_remove(L, -2);                                              /* stack: ... fun */
+}
+
+int lua_wrapper::push_service_fun_by_handle(int handle_id) {
+	get_service_function_by_refid(g_lua_state, handle_id);
+	if (!lua_isfunction(g_lua_state, -1)) {
+		log_error("push_service_fun_by_handle error %d", handle_id);
+		lua_pop(g_lua_state, 1);
+		return -1;
+	}
+	return 0;
+}
+
+int lua_wrapper::execute_service_fun_by_handle(int handle_id, int args_num) {
+	int ret = 0;
+	if (0 == push_service_fun_by_handle(handle_id)) {
+		if (args_num > 0) {
+			//把栈顶元素插入指定的有效索引处，并依次移动这个索引之上的元素
+			lua_insert(g_lua_state, -(args_num + 1));
+		}
+		//执行脚本函数
+		if (execute_function(args_num) != 0) {
+			return -2;
+		}
+	}
+	else {
+		return -1;
+	}
+	lua_settop(g_lua_state, 0);
+	return 0;
+}
+
+void remove_serivce_fun_by_refid(lua_State* L, int refid)
+{
+	lua_pushstring(L, TOLUA_REFID_FUNCTION_MAPPING);
+	lua_rawget(L, LUA_REGISTRYINDEX);                           /* stack: ... refid_fun */
+	lua_pushinteger(L, refid);                                  /* stack: ... refid_fun refid */
+	lua_pushnil(L);                                             /* stack: ... refid_fun refid nil */
+	lua_rawset(L, -3);                  /* refid_fun[refid] = fun, stack: ... refid_ptr */
+	lua_pop(L, 1);                                              /* stack: ... */
+
+																// luaL_unref(L, LUA_REGISTRYINDEX, refid);
+}
+
+int lua_wrapper::remove_service_fun_by_handle(int handle_id) {
+	remove_serivce_fun_by_refid(g_lua_state, handle_id);
 	return 0;
 }

@@ -2,6 +2,8 @@
 #define LUA_WRAPPER_H__
 
 #include "lua.hpp"
+#define SERVICE_FUNCTION_MAPPING "service_function_map"
+
 extern lua_State* g_lua_state;
 
 class lua_wrapper {
@@ -20,6 +22,11 @@ public:
 	//C++执行lua函数
 	static int execute_lua_script_by_handle(int handle_id,int args_num);
 	static int remove_lua_script_by_handle(int handle_id);
+	//执行lua注册在表里的函数
+	static void get_service_function_by_refid(lua_State* L, int refid);
+	static int execute_service_fun_by_handle(int handle_id, int args_num);
+	static int push_service_fun_by_handle(int handle_id);
+	static int remove_service_fun_by_handle(int handle_id);
 private:
 	static int push_function_by_handle(int handle_id);
 	static int execute_function(int args_num);

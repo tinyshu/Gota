@@ -2,6 +2,8 @@
 #define NETIO_H__
 
 #include "uv.h"
+
+struct session;
 //µ×²ã´«ÊäĞ­Òé
 enum {
 	TCP_SOCKET_IO = 0,  // tcp

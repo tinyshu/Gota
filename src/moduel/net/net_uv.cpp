@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<string.h>
 #include <stdlib.h>
+
 #include "net_uv.h"
 
 
@@ -48,12 +49,6 @@ static HANDLE g_iocp = 0;
 static uv_connect_t* connect_req;
 //监听socket对象
 static uv_tcp_t l_server;
-
-//enum {
-//	IOCP_ACCPET = 0,
-//	IOCP_RECV,
-//	IOCP_WRITE,
-//};
 
 //存储http每次解析的头部value
 static char header_key[64];

@@ -394,6 +394,9 @@
     <ClCompile Include="..\moduel\net\net_uv.cpp">
       <Filter>src\moduel\net</Filter>
     </ClCompile>
+    <ClCompile Include="..\moduel\netbus\service_manger.cpp">
+      <Filter>src\moduel\netbus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h">
@@ -674,6 +677,12 @@
     </ClInclude>
     <ClInclude Include="..\moduel\net\net_uv.h">
       <Filter>src\moduel\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\moduel\netbus\service_manger.h">
+      <Filter>src\moduel\netbus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\moduel\netbus\recv_msg.h">
+      <Filter>src\moduel\netbus</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

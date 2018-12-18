@@ -117,6 +117,7 @@
     <ClCompile Include="..\lua_wrapper\lua_wrapper.cpp" />
     <ClCompile Include="..\moduel\netbus\netbus.cpp" />
     <ClCompile Include="..\moduel\netbus\service_interface.cpp" />
+    <ClCompile Include="..\moduel\netbus\service_manger.cpp" />
     <ClCompile Include="..\moduel\netbus\session_key_mgr.cpp" />
     <ClCompile Include="..\moduel\net\net_iocp_win.c" />
     <ClCompile Include="..\moduel\net\net_uv.cpp" />
@@ -209,7 +210,9 @@
     <ClInclude Include="..\gateway_server\src\server_session_mgr.h" />
     <ClInclude Include="..\lua_wrapper\lua_wrapper.h" />
     <ClInclude Include="..\moduel\netbus\netbus.h" />
+    <ClInclude Include="..\moduel\netbus\recv_msg.h" />
     <ClInclude Include="..\moduel\netbus\service_interface.h" />
+    <ClInclude Include="..\moduel\netbus\service_manger.h" />
     <ClInclude Include="..\moduel\netbus\session_key_mgr.h" />
     <ClInclude Include="..\moduel\net\net_uv.h" />
     <ClInclude Include="..\moduel\session\tcp_session.h" />

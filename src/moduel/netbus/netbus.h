@@ -3,6 +3,7 @@
 
 #include "../../3rd/mjson/json.h"
 extern struct timer_list* NETBUS_TIMER_LIST;
+#define MAX_SERVICES 512
 
 struct service_module  {
 	int stype;

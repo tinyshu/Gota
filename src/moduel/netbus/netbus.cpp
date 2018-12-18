@@ -2,16 +2,17 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "recv_msg.h"
+#include "../../types_service.h"
 #include "netbus.h"
 extern "C" {
-
 #include "../../3rd/mjson/json_extends.h"
-
 }
 #ifdef GAME_DEVLOP
 #include "../session/tcp_session.h"
 #endif
-#define MAX_SERVICES 512
+#include "../../moduel/netbus/service_manger.h"
+
 #define my_malloc malloc
 #define my_free free
 
@@ -96,15 +97,31 @@ void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len
 
 	json_t* server_type = json_find_first_label(root, "0");
 	server_type = server_type->child;
-	if (server_type == NULL || server_type->type != JSON_NUMBER ) {
+	if (server_type == NULL || server_type->type != JSON_NUMBER) {
 		json_free_value(&root);
 		return;
 	}
-	int stype = atoi(server_type->text);
-#ifdef _DEBUG
-	printf("stype:%d", stype);
-#endif
 
+	int stype = atoi(server_type->text);
+
+	json_t* jcmd = json_object_at(root, "1");
+	if (jcmd == NULL || jcmd->type != JSON_NUMBER) {
+		return;
+	}
+	int cmd = atoi(jcmd->text);
+
+	//创建一个recv_msg,可以考虑使用内存池
+	recv_msg* msg = (recv_msg*)my_malloc(sizeof(recv_msg));
+	if (msg==NULL) {
+		return;
+	}
+	msg->stype = stype;
+	msg->ctype = cmd;
+	msg->utag = 0;
+	msg->body = (void*)data;
+#ifdef USE_LUA
+	server_manage::get_instance().on_session_recv_cmd(s, msg);
+#else
 	if (gateway_services.services[stype] && gateway_services.services[stype]->on_json_protocal_data) {
 #ifdef GAME_DEVLOP
 		//调试模式调用本地模块，单进程模式
@@ -118,11 +135,11 @@ void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len
 			json_object_push_number(root, "uid", uid);
 			json_object_push_number(root, "skey", session_key); //后端服务需要透明传回这个值
 		}
-#endif	
-		gateway_services.services[stype]->on_json_protocal_data(gateway_services.services[stype]->moduel_data,s, root,data,len);
-
-	}
-
-	//如果db使用异步方式，这里就不能释放内存
+#endif
+	gateway_services.services[stype]->on_json_protocal_data(gateway_services.services[stype]->moduel_data, s, root, data, len);
+#endif
+	
 	json_free_value(&root);
+	my_free(msg);
+	
 }

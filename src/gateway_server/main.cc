@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
 	init_session_manager(WEB_SOCKET_IO, JSON_PROTOCAL);
 	//初始化lua虚拟机
 	lua_wrapper::init_lua();
-	lua_wrapper::exce_lua_file("./main.lua");
+	int a = lua_wrapper::exce_lua_file("./main.lua");
 	//该接口是C++读取lua table类型配置接口
 	//const char* value = lua_wrapper::read_table_by_key(g_lua_state,"table1","name");
 
