@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "session_key_mgr.h"
+extern "C" {
 #include "../../utils/hash_map_int.h"
+}
+
+#include "session_key_mgr.h"
+
 
 struct {
 	unsigned int key;

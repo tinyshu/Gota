@@ -8,8 +8,9 @@
 #include "server_session_mgr.h"
 #include "../../3rd/mjson/json_extends.h"
 #include "../../moduel/netbus/session_key_mgr.h"
-#define my_malloc malloc
 
+#define my_malloc malloc
+#define my_free free
 //收到客户端json数据后,网络层调用service_gateway模块on_json_protocal_data,
 //service_gateway在根据stype调用到这里
 //该函数处理消息在转发到对应的后端服务

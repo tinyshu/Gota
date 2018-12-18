@@ -14,6 +14,7 @@ enum {
 	JSON_PROTOCAL = 1, // json–≠“È
 };
 
+
 const char* conver_socket_type_str(int socket_type);
 const char* conver_protocal_str(int protocal_type);
 
@@ -22,7 +23,9 @@ void start_server(char* ip,int port ,int socket_type ,int proto_type);
 void uv_send_data(void* stream, char* pkg, unsigned int pkg_len);
 
 void init_uv();
-uv_loop_t* get_uv_loop();
+extern uv_loop_t* get_uv_loop();
+
+extern struct session* netbus_connect(char* server_ip, int port);
 
 #endif
 

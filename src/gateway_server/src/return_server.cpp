@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "return_server.h"
+extern "C" {
 #include "../../utils/log.h"
+}
+#include "return_server.h"
+
 #include "../../types_service.h"
 #include "../../moduel/netbus/netbus.h"
 #include "server_session_mgr.h"

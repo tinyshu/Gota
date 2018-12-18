@@ -10,9 +10,9 @@
 #pragma comment(lib,"Win32_Interop.lib")
 #endif
 
-extern "C" {
-#include "../moduel/net/net_io.h"
-}
+
+#include "../moduel/net/net_uv.h"
+
 //下面2个头文件顺序不能变，否侧包类型测定仪错误
 #include "hiredis.h"
 #include "uv.h"

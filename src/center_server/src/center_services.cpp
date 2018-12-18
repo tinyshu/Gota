@@ -9,9 +9,9 @@ extern "C" {
 #include "../../error_command.h"
 #include "../../moduel/netbus/netbus.h"
 #include "../../3rd/mjson/json_extends.h"
-#include "center_services.h"
-}
 
+}
+#include "center_services.h"
 //Âß¼­Ä£¿éÈë¿Ú
 #include "logic_moduels/auth.h"
 ///////////////////////////////////////////////////////////////

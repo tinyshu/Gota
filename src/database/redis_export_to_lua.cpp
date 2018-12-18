@@ -2,18 +2,19 @@
 #include <string.h>
 
 #include "mysql_export_to_lua.h"
-
+#include "../utils/logger.h"
+#include "hiredis.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 #include "../3rd/lua/lua.h"
 #include "../3rd/tolua/tolua++.h"
+
 #ifdef __cplusplus
 }
 #endif
-#include "../utils/logger.h"
+#include "../moduel/net/net_uv.h"
 #include "../lua_wrapper/lua_wrapper.h"
-#include "hiredis.h"
 #include "../3rd/tolua/tolua_fix.h"
 #include "redis_warpper.h"
 #include "query_callback.h"

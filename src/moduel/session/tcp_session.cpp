@@ -8,7 +8,7 @@
 #endif
 
 #include "tcp_session.h"
-#include "../net/net_io.h"
+#include "../net/net_uv.h"
 #include "../../3rd/mjson/json_extends.h"
 #include "../netbus/netbus.h"
 
@@ -43,7 +43,7 @@ static struct session* cache_alloc() {
 		session_manager.free_list = s->next;
 	}
 	else { // 调用系统的函数 malloc
-		s = my_malloc(sizeof(struct session));
+		s = (struct session*)my_malloc(sizeof(struct session));
 	}
 	memset(s, 0, sizeof(struct session));
 
@@ -169,26 +169,26 @@ static int send_tcp_data(struct session* s, unsigned char* data, int len) {
 	unsigned char* pkg_ptr = NULL;
 
 	if (len + 2 > MAX_SEND_PKG) {
-		pkg_ptr = my_malloc(len + 2); //2字节头部长度
+		pkg_ptr = (unsigned char*)my_malloc(len + 2); //2字节头部长度
 		//long_pkg = 1;
 	}
 	else {
 		//pkg_ptr = s->send_buf;
-		pkg_ptr = my_malloc(MAX_SEND_PKG);
+		pkg_ptr = (unsigned char*)my_malloc(MAX_SEND_PKG);
 	}
 	int ssize = 0;
 	if (session_manager.protocal_type == JSON_PROTOCAL) {
 		memcpy(pkg_ptr, data, len);
-		strncpy(pkg_ptr + len, "\r\n", 2);
+		strncpy((char*)pkg_ptr + len, "\r\n", 2);
 		//ssize = send(s->c_sock, pkg_ptr, len + 2, 0);
-		uv_send_data(s->c_sock, pkg_ptr, len + 2);
+		uv_send_data(s->c_sock, (char*)pkg_ptr, len + 2);
 	}
 	else if (session_manager.protocal_type == BIN_PROTOCAL) {
 		memcpy(pkg_ptr + 2, data, len);
 		pkg_ptr[0] = ((len + 2)) & 0x000000ff;
 		pkg_ptr[1] = (((len + 2)) & 0x0000ff00) >> 8;
 		//ssize = send(s->c_sock, pkg_ptr, len + 2, 0);
-		uv_send_data(s->c_sock, pkg_ptr, len + 2);
+		uv_send_data(s->c_sock, (char*)pkg_ptr, len + 2);
 	}
 	if (pkg_ptr != NULL) {
 		my_free(pkg_ptr);
@@ -216,12 +216,12 @@ static int send_websocket_data(struct session* s, unsigned char* data, int len) 
 
 	if (len + head_len > MAX_SEND_PKG) {
 		//需要动态分配内存
-		pkg_ptr = my_malloc(len + head_len);
+		pkg_ptr = (unsigned char*)my_malloc(len + head_len);
 		//long_pkg = 1;
 	}
 	else {
 		//pkg_ptr = s->send_buf;
-		pkg_ptr = my_malloc(MAX_SEND_PKG);
+		pkg_ptr = (unsigned char*)my_malloc(MAX_SEND_PKG);
 	}
 
 	//发送格式 固定1字节0x81 + 数据长度(变长) + 数据
@@ -261,7 +261,7 @@ static int send_websocket_data(struct session* s, unsigned char* data, int len) 
 	memcpy(pkg_ptr + send_len, data, len);
 	send_len += len; //整个数据包长度
 	//int send_bytes = send(s->c_sock, pkg_ptr, send_len, 0);
-	uv_send_data(s->c_sock, pkg_ptr, send_len);
+	uv_send_data(s->c_sock, (char*)pkg_ptr, send_len);
 	if (pkg_ptr!=NULL){
 		my_free(pkg_ptr);
 		pkg_ptr = NULL;
@@ -293,6 +293,6 @@ void session_json_send(struct session* s, json_t* json_object) {
 	}
 	char* json_str = NULL;
 	json_tree_to_string(json_object,&json_str);
-	session_send(s, json_str,strlen(json_str));
+	session_send(s, (unsigned char*)json_str,strlen(json_str));
 	json_free_str(json_str);
 }

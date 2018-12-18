@@ -99,26 +99,11 @@
     <ClCompile Include="..\utils\timer_list.c">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\gateway_server\src\gw_config.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gateway_server\src\server_session_mgr.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gateway_server\src\from_client.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gateway_server\src\return_server.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\utils\hash_map_int.c">
       <Filter>src\utils</Filter>
     </ClCompile>
     <ClCompile Include="..\moduel\net\net_iocp_win.c">
       <Filter>src\moduel\net</Filter>
-    </ClCompile>
-    <ClCompile Include="..\moduel\netbus\netbus.c">
-      <Filter>src\moduel\netbus</Filter>
     </ClCompile>
     <ClCompile Include="..\3rd\md5\md5.c">
       <Filter>src\3rd\md5</Filter>
@@ -132,17 +117,8 @@
     <ClCompile Include="..\game_server\src\game_config.c">
       <Filter>src\devlop\gameserver</Filter>
     </ClCompile>
-    <ClCompile Include="..\command.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\database\center_db_conf.c">
       <Filter>src\database</Filter>
-    </ClCompile>
-    <ClCompile Include="..\moduel\netbus\session_key_mgr.c">
-      <Filter>src\moduel\netbus</Filter>
-    </ClCompile>
-    <ClCompile Include="..\moduel\net\net_uv.c">
-      <Filter>src\moduel\net</Filter>
     </ClCompile>
     <ClCompile Include="..\3rd\libuv\src\fs-poll.c">
       <Filter>src\3rd\libuv\src</Filter>
@@ -236,9 +212,6 @@
     </ClCompile>
     <ClCompile Include="..\3rd\libuv\src\win\winsock.c">
       <Filter>src\3rd\libuv\src\win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\moduel\session\tcp_session.c">
-      <Filter>src\moduel\session</Filter>
     </ClCompile>
     <ClCompile Include="..\3rd\lua\lapi.c">
       <Filter>src\3rd\lua</Filter>
@@ -388,6 +361,39 @@
     <ClCompile Include="..\database\redis_export_to_lua.cpp">
       <Filter>src\database</Filter>
     </ClCompile>
+    <ClCompile Include="..\database\service_export_to_lua.cpp">
+      <Filter>src\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\moduel\netbus\service_interface.cpp">
+      <Filter>src\moduel\netbus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\moduel\netbus\netbus.cpp">
+      <Filter>src\moduel\netbus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gateway_server\src\server_session_mgr.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\moduel\netbus\session_key_mgr.cpp">
+      <Filter>src\moduel\netbus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\command.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gateway_server\src\from_client.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gateway_server\src\gw_config.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gateway_server\src\return_server.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\moduel\session\tcp_session.cpp">
+      <Filter>src\moduel\session</Filter>
+    </ClCompile>
+    <ClCompile Include="..\moduel\net\net_uv.cpp">
+      <Filter>src\moduel\net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h">
@@ -434,9 +440,6 @@
     </ClInclude>
     <ClInclude Include="..\utils\hash_map_int.h">
       <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\moduel\net\net_io.h">
-      <Filter>src\moduel\net</Filter>
     </ClInclude>
     <ClInclude Include="..\moduel\netbus\netbus.h">
       <Filter>src\moduel\netbus</Filter>
@@ -662,6 +665,15 @@
     </ClInclude>
     <ClInclude Include="..\database\redis_export_to_lua.h">
       <Filter>src\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database\service_export_to_lua.h">
+      <Filter>src\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\moduel\netbus\service_interface.h">
+      <Filter>src\moduel\netbus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\moduel\net\net_uv.h">
+      <Filter>src\moduel\net</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

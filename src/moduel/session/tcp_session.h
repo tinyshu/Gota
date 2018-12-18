@@ -56,6 +56,6 @@ extern void session_send(struct session* s, unsigned char* body, int len);
 extern void session_json_send(struct session* s, json_t* object);
 
 extern int get_proto_type();
-
+extern int get_socket_type();
 #endif
 

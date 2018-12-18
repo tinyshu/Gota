@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<string.h>
 #include <stdlib.h>
-#include "net_io.h"
+#include "net_uv.h"
 
 
 #ifdef WIN32
@@ -16,15 +16,17 @@
 
 #endif
 
-#include "../session/tcp_session.h"
+extern "C" {
+#include "../../utils/log.h"
+#include "../../utils/timer_list.h"
 #include "../../3rd/http_parser/http_parser.h"
 #include "../../3rd/crypt/sha1.h"
 #include "../../3rd/crypt/base64_encoder.h"
 #include "../../3rd/mjson/json.h"
-
+}
+#include "../session/tcp_session.h"
 #include "../netbus/netbus.h"
-#include "../../utils/log.h"
-#include "../../utils/timer_list.h"
+
 
 #define my_malloc malloc
 #define my_free free
@@ -93,12 +95,12 @@ static void on_read_alloc_buff(uv_handle_t* handle, size_t suggested_size, uv_bu
 	}
 
 	if (alloc_len > io_data->max_pkg_len) {
-		io_data->long_pkg = my_realloc(io_data->long_pkg, alloc_len + 1);
+		io_data->long_pkg = (unsigned char*)my_realloc(io_data->long_pkg, alloc_len + 1);
 		io_data->max_pkg_len = alloc_len;
 	}
 
 	//设置读写地址和空间
-	buf->base = io_data->long_pkg + io_data->recved;
+	buf->base = (char*)(io_data->long_pkg + io_data->recved);
 	buf->len = suggested_size;
 }
 
@@ -287,7 +289,7 @@ void uv_send_data(void* stream, char* pkg, unsigned int pkg_len) {
 		return;
 	}
 	memcpy(send_buf,pkg, pkg_len);
-	wr->buf = uv_buf_init(send_buf, pkg_len);
+	wr->buf = uv_buf_init((char*)send_buf, pkg_len);
 	if (uv_write(&wr->req, (uv_stream_t*)stream, &wr->buf, 1, after_write)) {
 		my_free(send_buf);
 		my_free(wr);
@@ -442,7 +444,7 @@ static int process_websocket_connect(struct session* s, struct io_package* io_da
 	//s->has_client_key = 0;
 	//绑定自定义的session,在on_header_value回调has_client_key设置为1
 	has_client_key = 0;
-	http_parser_execute(&p, &setting, pkg, io_data->recved);
+	http_parser_execute(&p, &setting, (const char*)pkg, io_data->recved);
 	if (0 == has_client_key) {
 		s->is_shake_hand = 0;
 		//websocket在握手阶段，如果收到的package大于MAX_RECV_SIZE表示出错了
@@ -498,7 +500,7 @@ static int process_websocket_connect(struct session* s, struct io_package* io_da
 static void on_after_read(uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf) {
 	if (nread < 0) {
 		uv_shutdown_t* sreq = NULL;
-		sreq = my_malloc(sizeof(uv_shutdown_t));
+		sreq = (uv_shutdown_t*)my_malloc(sizeof(uv_shutdown_t));
 		uv_shutdown(sreq, stream, on_after_shutdown);
 		return;
 	}
@@ -508,7 +510,7 @@ static void on_after_read(uv_stream_t* stream, ssize_t nread, const uv_buf_t* bu
 		return;
 	}
 
-	struct io_package* io_data = stream->data;
+	struct io_package* io_data = (struct io_package*)stream->data;
 	if (io_data) {
 		io_data->recved += nread;
 	}
@@ -549,7 +551,7 @@ static void on_connection(uv_stream_t* server, int status) {
 	int ret = uv_accept(server, (uv_stream_t*)new_client);
 
 	struct io_package* io_data;
-	io_data = my_malloc(sizeof(struct io_package));
+	io_data = (struct io_package*)my_malloc(sizeof(struct io_package));
 	new_client->data = io_data;
 	io_data->max_pkg_len = MAX_RECV_SIZE;
 	memset(new_client->data, 0, sizeof(struct io_package));
@@ -615,11 +617,11 @@ struct session* netbus_connect(char* server_ip, int port) {
 		return NULL;
 	}
 
-	uv_tcp_t* stream = my_malloc(sizeof(uv_tcp_t));
+	uv_tcp_t* stream = (uv_tcp_t*)my_malloc(sizeof(uv_tcp_t));
 	uv_tcp_init(loop, stream);
 
 	struct io_package* io_data;
-	io_data = my_malloc(sizeof(struct io_package));
+	io_data = (struct io_package*)my_malloc(sizeof(struct io_package));
 	memset(io_data, 0, sizeof(struct io_package));
 	stream->data = io_data;
 
@@ -630,7 +632,7 @@ struct session* netbus_connect(char* server_ip, int port) {
 	s->socket_type = TCP_SOCKET_IO;
 	s->is_server_session = 1;
 
-	connect_req = my_malloc(sizeof(uv_connect_t));
+	connect_req = (uv_connect_t*)my_malloc(sizeof(uv_connect_t));
 	iret = uv_tcp_connect(connect_req, stream, (struct sockaddr*)&bind_addr, on_after_connect);
 	if (iret) {
 		LOGERROR("uv_tcp_connect error!!!");

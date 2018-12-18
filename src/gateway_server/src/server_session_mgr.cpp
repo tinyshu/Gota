@@ -1,12 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+extern "C" {
+#include "../../utils/log.h"
+#include "../../utils/timer.h"
+#include "../../utils/timer_list.h"
+}
+
+#include "../../moduel/net/net_uv.h"
 #include "server_session_mgr.h"
 #include "gw_config.h"
-#include "../../utils/log.h"
+
+
 
 #define MAX_SERVER_COUNT 16
-extern struct session* netbus_connect(char* server_ip, int port, int stype);
+//extern struct session* netbus_connect(char* server_ip, int port, int stype);
 
 struct SESSION_MGR {
 	int need_connectd; //是否连接成功
@@ -53,7 +61,7 @@ void check_server_online(void* data) {
 	for (int i = 0; i < 1; ++i) {
 		int stype = GW_CONFIG.module_set[i].stype;
 		if (NULL == SESSION_MGR.server_session[stype]) {
-			SESSION_MGR.server_session[stype] = netbus_connect(GW_CONFIG.module_set[i].ip, GW_CONFIG.module_set[i].port, stype);
+			SESSION_MGR.server_session[stype] = netbus_connect(GW_CONFIG.module_set[i].ip, GW_CONFIG.module_set[i].port);
 			if (NULL == SESSION_MGR.server_session[stype]) {
 				//连接失败了
 				printf("connect %s is faild ip:%s port:%d\n", GW_CONFIG.module_set[i].desic, GW_CONFIG.module_set[i].ip, GW_CONFIG.module_set[i].port);

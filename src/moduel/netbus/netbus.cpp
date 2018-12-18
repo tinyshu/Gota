@@ -1,16 +1,23 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #include "netbus.h"
+extern "C" {
+
 #include "../../3rd/mjson/json_extends.h"
+
+}
 #ifdef GAME_DEVLOP
 #include "../session/tcp_session.h"
 #endif
-
 #define MAX_SERVICES 512
+#define my_malloc malloc
 #define my_free free
 
+
 struct timer_list* NETBUS_TIMER_LIST = NULL;
+
 
 extern void close_session(struct session* s);
 extern void session_send(struct session*s, unsigned char* body, int len);
@@ -20,6 +27,8 @@ extern void save_session_by_key(unsigned int key, struct session* s);
 struct {
 	struct service_module* services[MAX_SERVICES];
 }gateway_services;
+
+
 
 void register_services(int stype, struct service_module* module) {
 	if (stype <= 0 || stype >= MAX_SERVICES || NULL == module) {
@@ -31,10 +40,11 @@ void register_services(int stype, struct service_module* module) {
 	if (module->init_service_module) {
 		module->init_service_module(module);
 	}
-	
+
 }
 
 void init_server_netbus() {
+	//增加一个lua模式
 	memset(&gateway_services, 0, sizeof(gateway_services));
 }
 
@@ -79,7 +89,7 @@ void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len
 	}
 	data[len] = 0;
 	json_t* root = NULL;
-	int ret = json_parse_document(&root, data);
+	int ret = json_parse_document(&root, (const char*)data);
 	if (ret != JSON_OK || root == NULL) { // 不是一个正常的json包;
 		return;
 	}

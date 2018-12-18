@@ -4,9 +4,7 @@
 #include "../utils/logger.h"
 #include "uv.h"
 #include "mysql.h"
-extern "C" {
-#include "../moduel/net/net_io.h"
-}
+#include "../moduel/net/net_uv.h"
 #include "mysql_warpper.h"
 
 #ifdef WIN32

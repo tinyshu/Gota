@@ -19,11 +19,11 @@ struct service_module  {
 	void* moduel_data;
 };
 
-extern void exit_server_netbus();
-extern void init_server_netbus();
-extern void on_bin_protocal_recv_entry(struct session* s, unsigned char* data, int len);
-extern void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len);
 
+void exit_server_netbus();
+void init_server_netbus();
+void on_bin_protocal_recv_entry(struct session* s, unsigned char* data, int len);
+void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len);
 void register_services(int stype, struct service_module* module);
 
 #endif

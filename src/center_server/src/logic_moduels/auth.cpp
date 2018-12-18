@@ -5,13 +5,10 @@
 #include "auth.h"
 
 #include "../../../database/query_callback.h"
-extern "C" {
-#include "../../../types_service.h"
-#include "../../../command.h"
 #include "../../../error_command.h"
 #include "../../../moduel/session/tcp_session.h"
-}
-
+#include "../../../types_service.h"
+#include "../../../command.h"
 #include "../db_moduels/login_moduel.h"
 #include "../../../database/center_db.h"
 #include "../../database/mysql_warpper.h"
