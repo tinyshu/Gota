@@ -76,6 +76,9 @@
     <Filter Include="src\3rd\tolua">
       <UniqueIdentifier>{ffcd5ecf-87ea-4461-a643-e2ecba6a93c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\proto">
+      <UniqueIdentifier>{75b65332-6f50-440d-b762-b9b67fd2e582}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\crypt\base64_encoder.c">
@@ -397,6 +400,15 @@
     <ClCompile Include="..\moduel\netbus\service_manger.cpp">
       <Filter>src\moduel\netbus</Filter>
     </ClCompile>
+    <ClCompile Include="..\proto\message.pb.cc">
+      <Filter>src\proto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\proto\pb_cmd_map.cpp">
+      <Filter>src\proto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\proto\proto_manage.cpp">
+      <Filter>src\proto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h">
@@ -684,5 +696,19 @@
     <ClInclude Include="..\moduel\netbus\recv_msg.h">
       <Filter>src\moduel\netbus</Filter>
     </ClInclude>
+    <ClInclude Include="..\proto\message.pb.h">
+      <Filter>src\proto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\proto\pb_cmd_map.h">
+      <Filter>src\proto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\proto\proto_manage.h">
+      <Filter>src\proto</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\proto\message.proto">
+      <Filter>src\proto</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -26,7 +26,7 @@ extern "C" {
 #include "../lua_wrapper/lua_wrapper.h"
 #include "../database/center_db.h"
 #include "./src/server_session_mgr.h"
-
+//#include "../proto/message.pb.h"
 //28
 int main(int argc, char** argv) {
 	

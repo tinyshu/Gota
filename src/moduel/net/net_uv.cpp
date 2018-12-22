@@ -126,10 +126,10 @@ static void on_after_shutdown(uv_shutdown_t* req, int status) {
 }
 
 static int recv_header(unsigned char* pkg, int len, int* pkg_size) {
-	if (len <= 1) { // 收到的数据不能够将我们的包的大小解析出来
+	if (len <= 2) { // 收到的数据不能够将我们的包的大小解析出来
 		return -1;
 	}
-
+	//读取前2个字节,二进制包格式 包总长度(2byte)+recv_msg结构+body
 	*pkg_size = (pkg[0]) | (pkg[1] << 8);
 	return 0;
 }

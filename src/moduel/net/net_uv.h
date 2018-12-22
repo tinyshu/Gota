@@ -12,7 +12,7 @@ enum {
 
 //应用层协议
 enum {
-	BIN_PROTOCAL = 0, // 二进制协议
+	BIN_PROTOCAL = 0, // 二进制协议 pb
 	JSON_PROTOCAL = 1, // json协议
 };
 

@@ -122,6 +122,9 @@
     <ClCompile Include="..\moduel\net\net_iocp_win.c" />
     <ClCompile Include="..\moduel\net\net_uv.cpp" />
     <ClCompile Include="..\moduel\session\tcp_session.cpp" />
+    <ClCompile Include="..\proto\message.pb.cc" />
+    <ClCompile Include="..\proto\pb_cmd_map.cpp" />
+    <ClCompile Include="..\proto\proto_manage.cpp" />
     <ClCompile Include="..\utils\hash_map_int.c" />
     <ClCompile Include="..\utils\log.c" />
     <ClCompile Include="..\utils\logger.cc" />
@@ -217,12 +220,18 @@
     <ClInclude Include="..\moduel\net\net_uv.h" />
     <ClInclude Include="..\moduel\session\tcp_session.h" />
     <ClInclude Include="..\protocal_cmd.h" />
+    <ClInclude Include="..\proto\message.pb.h" />
+    <ClInclude Include="..\proto\pb_cmd_map.h" />
+    <ClInclude Include="..\proto\proto_manage.h" />
     <ClInclude Include="..\types_service.h" />
     <ClInclude Include="..\utils\hash_map_int.h" />
     <ClInclude Include="..\utils\log.h" />
     <ClInclude Include="..\utils\logger.h" />
     <ClInclude Include="..\utils\timer.h" />
     <ClInclude Include="..\utils\timer_list.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\proto\message.proto" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6096B2BF-BA7E-46EE-B56A-E286DB892614}</ProjectGuid>
@@ -297,14 +306,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;USE_LIBUV;GAME_DEVLOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../3rd/mysql/win/include/;../3rd/libuv/include;../3rd/lua;../3rd/hiredis/win/include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../3rd/mysql/win/include/;../3rd/libuv/include;../3rd/lua;../3rd/hiredis/win/include/;../3rd/protobuf/</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../3rd/mysql/win/lib/;../3rd/hiredis/win/x86_libs/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../3rd/mysql/win/lib/;../3rd/hiredis/win/x86_libs/;../3rd/protobuf/lib/win</AdditionalLibraryDirectories>
       <AdditionalOptions>/NODEFAULTLIB:libcmt.lib </AdditionalOptions>
+      <AdditionalDependencies>libprotobufd.lib;libprotocd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
