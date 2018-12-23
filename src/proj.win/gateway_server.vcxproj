@@ -122,6 +122,7 @@
     <ClCompile Include="..\moduel\net\net_iocp_win.c" />
     <ClCompile Include="..\moduel\net\net_uv.cpp" />
     <ClCompile Include="..\moduel\session\tcp_session.cpp" />
+    <ClCompile Include="..\proto\game.pb.cc" />
     <ClCompile Include="..\proto\message.pb.cc" />
     <ClCompile Include="..\proto\pb_cmd_map.cpp" />
     <ClCompile Include="..\proto\proto_manage.cpp" />
@@ -220,10 +221,12 @@
     <ClInclude Include="..\moduel\net\net_uv.h" />
     <ClInclude Include="..\moduel\session\tcp_session.h" />
     <ClInclude Include="..\protocal_cmd.h" />
+    <ClInclude Include="..\proto\game.pb.h" />
     <ClInclude Include="..\proto\message.pb.h" />
     <ClInclude Include="..\proto\pb_cmd_map.h" />
     <ClInclude Include="..\proto\proto_manage.h" />
     <ClInclude Include="..\types_service.h" />
+    <ClInclude Include="..\utils\conver.h" />
     <ClInclude Include="..\utils\hash_map_int.h" />
     <ClInclude Include="..\utils\log.h" />
     <ClInclude Include="..\utils\logger.h" />

@@ -26,6 +26,7 @@ extern "C" {
 #include "../lua_wrapper/lua_wrapper.h"
 #include "../database/center_db.h"
 #include "./src/server_session_mgr.h"
+#include "../proto/pb_cmd_map.h"
 //#include "../proto/message.pb.h"
 //28
 int main(int argc, char** argv) {
@@ -37,6 +38,7 @@ int main(int argc, char** argv) {
 	//初始化连接后端服务组件和定时器
 	init_server_session();
 	init_server_netbus();
+	init_pb_cmd_map();
 #ifdef GAME_DEVLOP
 	/*
 	  GMAE_DEVLOP宏定义用于:
@@ -54,8 +56,10 @@ int main(int argc, char** argv) {
 		register_server_return_moduel(GW_CONFIG.module_set[i].stype);
 	}
 #endif 
+	int socket_type = TCP_SOCKET_IO;
+	int proto_type = BIN_PROTOCAL;
 	//初始化session模块,在接入大量客户端连接的服务采用初始化这个模块 
-	init_session_manager(WEB_SOCKET_IO, JSON_PROTOCAL);
+	init_session_manager(socket_type, proto_type);
 	//初始化lua虚拟机
 	lua_wrapper::init_lua();
 	int a = lua_wrapper::exce_lua_file("./main.lua");
@@ -72,7 +76,10 @@ int main(int argc, char** argv) {
 	//start_server("127.0.0.1",8000,TCP_SOCKET_IO,BIN_PROTOCAL);
 	//start_server("127.0.0.1", 8000, TCP_SOCKET_IO, JSON_PROTOCAL);
 	LOGINFO("start gateway server at %s:%d\n", GW_CONFIG.ip, GW_CONFIG.port);
-	start_server(GW_CONFIG.ip, GW_CONFIG.port, WEB_SOCKET_IO, JSON_PROTOCAL);
+	//tcp+protobuf格式
+	start_server(GW_CONFIG.ip, GW_CONFIG.port, socket_type, proto_type);
+	//websocket+jsob格式
+	//start_server(GW_CONFIG.ip, GW_CONFIG.port, WEB_SOCKET_IO, JSON_PROTOCAL);
 
 
 	exit_session_key_map();

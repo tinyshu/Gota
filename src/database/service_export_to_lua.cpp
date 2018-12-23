@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
-
+#include <sstream>
+#include "google\protobuf\message.h"
 #include "service_export_to_lua.h"
-
+#include "../utils/conver.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -28,6 +29,8 @@ extern "C" {
 const char * service_moduel_name = "service_wrapper";
 static unsigned s_function_ref_id = 0;
 
+using namespace google::protobuf;
+
 //存储lua传入进来的函数handle_id
 class lua_service_module :public service {
 public:
@@ -43,6 +46,130 @@ public:
 	int on_session_recv_cmd_handle;
 	int on_session_disconnect_handle;
 };
+
+static void push_pb_message_tolua(const Message* pb_msg) {
+	if (pb_msg==NULL) {
+		return;
+	}
+
+	lua_State* lua_status = lua_wrapper::get_luastatus();
+
+	lua_newtable(lua_status);
+	const Descriptor* descriptor = pb_msg->GetDescriptor();
+	if (descriptor==NULL) {
+		return;
+	}
+
+	const Reflection* refletion = pb_msg->GetReflection();
+	if (refletion == NULL) {
+		return;
+	}
+
+	for (int i = 0; i < descriptor->field_count();++i) {
+		const FieldDescriptor* filedes = descriptor->field(i);
+		
+		const std::string& file_name = filedes->lowercase_name();
+		lua_pushstring(lua_status, file_name.c_str());
+
+		//是否为一个数组
+		if (filedes->is_repeated()) {
+			//遍历数组每个元素
+			lua_newtable(lua_status);
+			//数组大小
+			int size = refletion->FieldSize(*pb_msg, filedes);
+			for (int i = 0; i < size;++i) {
+				//基本类型，或者是内嵌的message
+				switch (filedes->cpp_type()) {
+				case FieldDescriptor::CPPTYPE_DOUBLE: {
+					lua_pushnumber(lua_status, refletion->GetDouble(*pb_msg, filedes));
+				}break;
+				case FieldDescriptor::CPPTYPE_FLOAT: {
+					lua_pushnumber(lua_status, refletion->GetFloat(*pb_msg, filedes));
+				}break;
+				case FieldDescriptor::CPPTYPE_INT64: {
+					std::string ss = convert<int64, std::string>(refletion->GetInt64(*pb_msg, filedes));
+					lua_pushstring(lua_status, ss.c_str());
+
+				}break;
+				case FieldDescriptor::CPPTYPE_UINT64: {
+					std::string ss = convert<int64, std::string>(refletion->GetUInt64(*pb_msg, filedes));
+					lua_pushstring(lua_status, ss.c_str());
+				}break;
+				case FieldDescriptor::CPPTYPE_ENUM: {
+					lua_pushinteger(lua_status, refletion->GetEnumValue(*pb_msg, filedes));
+				}break;
+				case FieldDescriptor::CPPTYPE_INT32: {
+					lua_pushinteger(lua_status, refletion->GetInt32(*pb_msg, filedes));
+				}break;
+				case FieldDescriptor::CPPTYPE_UINT32: {
+					lua_pushinteger(lua_status, refletion->GetUInt32(*pb_msg, filedes));
+				}break;
+				case FieldDescriptor::CPPTYPE_STRING: {
+					std::string ss = refletion->GetString(*pb_msg, filedes);
+					lua_pushstring(lua_status, ss.c_str());
+				}break;
+				case FieldDescriptor::CPPTYPE_BOOL: {
+					lua_pushboolean(lua_status, refletion->GetBool(*pb_msg, filedes));
+				}break;
+				case FieldDescriptor::CPPTYPE_MESSAGE: {
+					//又是内嵌的Message,需要递归在此调用push_pb_message_tolua
+					push_pb_message_tolua(pb_msg);
+				}break;
+				default: {
+
+				}break;
+				}//switch
+
+				lua_rawseti(lua_status, -2, i + 1);
+			}
+		}
+		else {
+			//基本类型，或者是内嵌的message
+			switch (filedes->cpp_type()) {
+			case FieldDescriptor::CPPTYPE_DOUBLE: {
+				lua_pushnumber(lua_status, refletion->GetDouble(*pb_msg, filedes));
+			}break;
+			case FieldDescriptor::CPPTYPE_FLOAT: {
+				lua_pushnumber(lua_status, refletion->GetFloat(*pb_msg, filedes));
+			}break;
+			case FieldDescriptor::CPPTYPE_INT64: {
+				std::string ss = convert<int64, std::string>(refletion->GetInt64(*pb_msg, filedes));
+				lua_pushstring(lua_status, ss.c_str());
+				
+			}break;
+			case FieldDescriptor::CPPTYPE_UINT64:{
+				std::string ss = convert<int64, std::string>(refletion->GetUInt64(*pb_msg, filedes));
+				lua_pushstring(lua_status, ss.c_str());
+			}break;
+			case FieldDescriptor::CPPTYPE_ENUM: {
+				lua_pushinteger(lua_status, refletion->GetEnumValue(*pb_msg, filedes));
+			}break;
+			case FieldDescriptor::CPPTYPE_INT32: {
+				lua_pushinteger(lua_status, refletion->GetInt32(*pb_msg, filedes));
+			}break;
+			case FieldDescriptor::CPPTYPE_UINT32: {
+				lua_pushinteger(lua_status, refletion->GetUInt32(*pb_msg, filedes));
+			}break;
+			case FieldDescriptor::CPPTYPE_STRING: {
+				std::string ss = refletion->GetString(*pb_msg, filedes);
+				lua_pushstring(lua_status, ss.c_str());
+			}break;
+			case FieldDescriptor::CPPTYPE_BOOL: {
+				lua_pushboolean(lua_status,refletion->GetBool(*pb_msg, filedes));
+			}break;
+			case FieldDescriptor::CPPTYPE_MESSAGE: {
+				//又是内嵌的Message,需要递归在此调用push_pb_message_tolua
+				push_pb_message_tolua(pb_msg);
+			}break;
+			default: {
+
+			}break;
+			}//switch
+		}
+		lua_rawset(lua_status,-3);
+	}//for
+
+}
 
 //当收到消息会根据stype来调用对应的函数,然后把协议数据放入栈，调用lua函数
 bool lua_service_module::on_session_recv_cmd(struct session* s, recv_msg* msg) {
@@ -76,11 +203,13 @@ bool lua_service_module::on_session_recv_cmd(struct session* s, recv_msg* msg) {
 		if (get_proto_type() == BIN_PROTOCAL) {
 			//二进制是pb格式
 			//stack : msg {1: stype, 2 ctype, 3 utag, 4 body table_or_str}
+			//pb的数据转成table格式,这个时候就需要Message对象的name,value信息
+			
 		}
 		else if (get_proto_type() == JSON_PROTOCAL) {
 			//字符串json格式
 			//stack : msg {1: stype, 2 ctype, 3 utag, 4 body table_or_str}
-			//解析json
+			//json到lua层，直接把json文本放入堆栈
 			lua_pushstring(lua_status,(char*)msg->body);
 			lua_rawseti(lua_status, -2, idx);
 			idx++;
@@ -97,7 +226,7 @@ bool lua_service_module::on_session_recv_cmd(struct session* s, recv_msg* msg) {
 
 void lua_service_module::on_session_disconnect(struct session* s) {
 	tolua_pushuserdata(lua_wrapper::get_luastatus(),s);
-	if (lua_wrapper::execute_service_fun_by_handle(on_session_disconnect_handle, 2) == 0) {
+	if (lua_wrapper::execute_service_fun_by_handle(on_session_disconnect_handle, 1) == 0) {
 		lua_wrapper::remove_service_fun_by_handle(on_session_disconnect_handle);
 	}
 }

@@ -409,6 +409,9 @@
     <ClCompile Include="..\proto\proto_manage.cpp">
       <Filter>src\proto</Filter>
     </ClCompile>
+    <ClCompile Include="..\proto\game.pb.cc">
+      <Filter>src\proto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h">
@@ -704,6 +707,12 @@
     </ClInclude>
     <ClInclude Include="..\proto\proto_manage.h">
       <Filter>src\proto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\proto\game.pb.h">
+      <Filter>src\proto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\conver.h">
+      <Filter>src\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,12 +2,12 @@
 #include <string.h>
 
 #include "pb_cmd_map.h"
-
+#include "proto_manage.h"
 char* g_pb_cmd_map[] = {
-	"LoginReq",
-	"LoginResq",
+	"LoginReq", 
+	"LoginRes",
 };
 
 void init_pb_cmd_map() {
-
+	proroManager::register_cmd(g_pb_cmd_map,2);
 }

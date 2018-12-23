@@ -109,9 +109,10 @@ unsigned char* proroManager::encode_cmd_msg(recv_msg* msg, int * out_len) {
 	}
 
 	unsigned char* package = NULL;
+	int total_len = 0;
 	if (get_proto_type() == BIN_PROTOCAL) {
 		Message* pb_msg = (Message*)msg->body;
-		int total_len = BIN_HEAD_LEN + pb_msg->ByteSize();
+		total_len = BIN_HEAD_LEN + pb_msg->ByteSize();
 		package = (unsigned char*)malloc(total_len);
 		if (package==NULL) {
 			*out_len = 0;
@@ -133,7 +134,7 @@ unsigned char* proroManager::encode_cmd_msg(recv_msg* msg, int * out_len) {
 	package[1] = ((msg->stype & 0x0000ff00) >> 8);
 	package[2] = (msg->ctype & 0x000000ff);
 	package[3] = ((msg->ctype & 0x0000ff00) >> 8);
-	memcpy(package + 4, &msg->utag, 4);
+	memcpy(package + 4, &msg->utag, sizeof(msg->utag));
 	
 	return package;
 }

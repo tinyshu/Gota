@@ -13,6 +13,7 @@ extern "C" {
 #endif
 #include "../../moduel/netbus/service_manger.h"
 #include "../../proto/proto_manage.h"
+#include "../../moduel/session/tcp_session.h"
 #define my_malloc malloc
 #define my_free free
 
@@ -83,9 +84,20 @@ void on_bin_protocal_recv_entry(struct session* s, unsigned char* data, int len)
 #endif*/
 
 	recv_msg* msg = NULL;
-	proroManager::decode_cmd_msg(data, len, &msg);
+	if(false==proroManager::decode_cmd_msg(data, len, &msg)){
+		proroManager::msg_free(msg);
+		return;
+	}
 	if (msg) {
 #ifdef USE_LUA
+		//test echo收到的数据包
+		int out_len = 0;
+		unsigned char* send_pkg = proroManager::encode_cmd_msg(msg,&out_len);
+		//send
+		session_send(s, send_pkg, out_len);
+		//free
+		free(send_pkg);
+		//////////////////////////
 		server_manage::get_instance().on_session_recv_cmd(s, msg);
 		proroManager::msg_free(msg);
 #else
