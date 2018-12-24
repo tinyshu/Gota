@@ -163,6 +163,7 @@ static void on_bin_protocal_recved(struct session* s, struct io_package* io_data
 			if (io_data->recved ==0 && io_data->long_pkg != NULL) {
 				my_free(io_data->long_pkg);
 				io_data->long_pkg = NULL;
+				io_data->max_pkg_len = 0;
 			}
 		}
 	}

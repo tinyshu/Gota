@@ -119,7 +119,8 @@ static void push_pb_message_tolua(const Message* pb_msg) {
 
 				}break;
 				}//switch
-
+				
+				//t[n] = v,v在栈顶 这个函数会将值弹出栈
 				lua_rawseti(lua_status, -2, i + 1);
 			}
 		}
@@ -166,6 +167,7 @@ static void push_pb_message_tolua(const Message* pb_msg) {
 			}break;
 			}//switch
 		}
+		//t[k] = v  这个函数会将键和值都弹出栈
 		lua_rawset(lua_status,-3);
 	}//for
 
@@ -204,16 +206,16 @@ bool lua_service_module::on_session_recv_cmd(struct session* s, recv_msg* msg) {
 			//二进制是pb格式
 			//stack : msg {1: stype, 2 ctype, 3 utag, 4 body table_or_str}
 			//pb的数据转成table格式,这个时候就需要Message对象的name,value信息
-			
+			push_pb_message_tolua((const Message*)msg->body);
 		}
 		else if (get_proto_type() == JSON_PROTOCAL) {
 			//字符串json格式
 			//stack : msg {1: stype, 2 ctype, 3 utag, 4 body table_or_str}
 			//json到lua层，直接把json文本放入堆栈
 			lua_pushstring(lua_status,(char*)msg->body);
-			lua_rawseti(lua_status, -2, idx);
-			idx++;
 		}
+		lua_rawseti(lua_status, -2, idx);
+		idx++;
 	}
 
 	//执行lua回调函数
