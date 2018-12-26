@@ -27,7 +27,8 @@ extern "C" {
 }
 #include "../session/tcp_session.h"
 #include "../netbus/netbus.h"
-
+#include "../session/export_session.h"
+#include "../session/export_tcpsession.h"
 
 #define my_malloc malloc
 #define my_free free
@@ -57,7 +58,8 @@ static char client_ws_key[128];
 static int has_client_key = 0;
 
 struct io_package {
-	struct session* s;
+	//struct session* s;
+	export_session * s;
 	int recved; // 收到的字节数;
 	unsigned char* long_pkg;
 	int max_pkg_len;
@@ -103,7 +105,7 @@ static void on_read_alloc_buff(uv_handle_t* handle, size_t suggested_size, uv_bu
 static void on_close_stream(uv_handle_t* peer) {
 	struct io_package* io_data = (struct io_package*)peer->data;
 	if (io_data->s != NULL) {
-		close_session(io_data->s);
+		close_session(io_data->s->get_inner_session());
 		io_data->s = NULL;
 	}
 
@@ -513,7 +515,7 @@ static void on_after_read(uv_stream_t* stream, ssize_t nread, const uv_buf_t* bu
 
 	int protocal_type = get_proto_type();
 
-	struct session* s = io_data->s;
+	struct session* s = io_data->s->get_inner_session();
 	if (s->socket_type == TCP_SOCKET_IO) {
 		if (protocal_type == BIN_PROTOCAL) {
 			//tcp+二进制协议
@@ -552,9 +554,13 @@ static void on_connection(uv_stream_t* server, int status) {
 	io_data->max_pkg_len = MAX_RECV_SIZE;
 	memset(new_client->data, 0, sizeof(struct io_package));
 
+	export_tcp_session* tcp_session = new export_tcp_session;
 	struct session* s = save_session(new_client, "127.0.0.1", 100);
+	tcp_session->_session = s;
+	s->lua_session = tcp_session;
 	s->socket_type = get_socket_type();
-	io_data->s = s;
+	//io_data->s = s;
+	io_data->s = tcp_session;
 	io_data->long_pkg = NULL;
 	//给新连接绑定关心的事件和回调
 	uv_read_start((uv_stream_t*)new_client, on_read_alloc_buff, on_after_read);
@@ -621,9 +627,11 @@ struct session* netbus_connect(char* server_ip, int port) {
 	memset(io_data, 0, sizeof(struct io_package));
 	stream->data = io_data;
 
+	export_tcp_session* tcp_session = new export_tcp_session;
 	struct session* s = save_session(stream, server_ip, port);
+	tcp_session->_session = s;
 	io_data->max_pkg_len = 0;
-	io_data->s = s;
+	io_data->s = tcp_session;
 	io_data->long_pkg = NULL;
 	s->socket_type = TCP_SOCKET_IO;
 	s->is_server_session = 1;

@@ -412,6 +412,18 @@
     <ClCompile Include="..\proto\game.pb.cc">
       <Filter>src\proto</Filter>
     </ClCompile>
+    <ClCompile Include="..\moduel\session\export_tcpsession.cpp">
+      <Filter>src\moduel\session</Filter>
+    </ClCompile>
+    <ClCompile Include="..\database\session_export_to_lua.cpp">
+      <Filter>src\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\moduel\session\export_udpsession.cpp">
+      <Filter>src\moduel\session</Filter>
+    </ClCompile>
+    <ClCompile Include="..\moduel\session\udp_session.cpp">
+      <Filter>src\moduel\session</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h">
@@ -713,6 +725,21 @@
     </ClInclude>
     <ClInclude Include="..\utils\conver.h">
       <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\moduel\session\export_tcpsession.h">
+      <Filter>src\moduel\session</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database\session_export_to_lua.h">
+      <Filter>src\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\moduel\session\export_udpsession.h">
+      <Filter>src\moduel\session</Filter>
+    </ClInclude>
+    <ClInclude Include="..\moduel\session\udp_session.h">
+      <Filter>src\moduel\session</Filter>
+    </ClInclude>
+    <ClInclude Include="..\moduel\session\export_session.h">
+      <Filter>src\moduel\session</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

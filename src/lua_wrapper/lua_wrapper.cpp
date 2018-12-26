@@ -7,7 +7,7 @@
 #include "../database/mysql_export_to_lua.h"
 #include "../database/redis_export_to_lua.h"
 #include "../database/service_export_to_lua.h"
-
+#include "../database/session_export_to_lua.h"
 lua_State* g_lua_state = NULL;
 
 lua_State* lua_wrapper::get_luastatus() {
@@ -195,6 +195,7 @@ void lua_wrapper::init_lua() {
 	register_mysql_export_tolua(g_lua_state);
 	register_redis_export_tolua(g_lua_state);
 	register_service_export_tolua(g_lua_state);
+	register_session_export_tolua(g_lua_state);
 	/////////////////////////////////////////////////
 
 	//导出框架接口

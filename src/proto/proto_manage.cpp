@@ -1,5 +1,3 @@
-#include "google/protobuf/message.h"
-
 #include "proto_manage.h"
 #include "../moduel/netbus/recv_msg.h"
 #include "../moduel/session/tcp_session.h"
@@ -32,7 +30,7 @@ const std::string proroManager::get_cmmand_protoname(int cmd) {
 }
 
 //使用pb的反射机制创建对应的message对象 14
-static Message* create_message_by_name(const std::string& type_name) {
+Message* proroManager::create_message_by_name(const std::string& type_name) {
 	if (type_name.empty()) {
 		return NULL;
 	}

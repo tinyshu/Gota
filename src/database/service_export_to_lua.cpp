@@ -181,7 +181,8 @@ bool lua_service_module::on_session_recv_cmd(struct session* s, recv_msg* msg) {
 	}
 	lua_State* lua_status = lua_wrapper::get_luastatus();
 	int idx = 1;
-	tolua_pushuserdata(lua_status,s);
+	//C++网络底层使用struct session
+	tolua_pushuserdata(lua_status,s->lua_session);
 
 	//创建一个表，存入{1: stype, 2 ctype, 3 utag, 4 body str}
 	lua_newtable(lua_status);

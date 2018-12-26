@@ -1,6 +1,7 @@
 #ifndef PROTO_MANAGE_H__
 #define PROTO_MANAGE_H__
 
+#include "google/protobuf/message.h"
 #include <string.h>
 #include <unordered_map>
 struct recv_msg;
@@ -13,6 +14,7 @@ public:
 	static unsigned char* encode_cmd_msg(recv_msg* msg,int * out_len);
 	static const std::string get_cmmand_protoname(int cmd);
 	static void msg_free(recv_msg* msg);
+	static google::protobuf::Message* create_message_by_name(const std::string& type_name);
 private:
 	static std::unordered_map<int, std::string> _cmd_map;
 	

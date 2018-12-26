@@ -12,6 +12,7 @@ extern "C" {
 #endif
 
 #define MAX_SEND_PKG 2048
+class export_session;
 
 struct session {
 	char c_ip[32];
@@ -31,6 +32,7 @@ struct session {
 	int is_server_session;
 	struct session* next;
 	unsigned char send_buf[MAX_SEND_PKG];
+	export_session* lua_session;
 };
 
 void init_session_manager(int socket_type, int protocal_type);

@@ -91,12 +91,12 @@ void on_bin_protocal_recv_entry(struct session* s, unsigned char* data, int len)
 	if (msg) {
 #ifdef USE_LUA
 		//test echo收到的数据包
-		int out_len = 0;
-		unsigned char* send_pkg = proroManager::encode_cmd_msg(msg,&out_len);
-		//send
-		session_send(s, send_pkg, out_len);
-		//free
-		free(send_pkg);
+		//int out_len = 0;
+		//unsigned char* send_pkg = proroManager::encode_cmd_msg(msg,&out_len);
+		////send
+		//session_send(s, send_pkg, out_len);
+		////free
+		//free(send_pkg);
 		//////////////////////////
 		server_manage::get_instance().on_session_recv_cmd(s, msg);
 		proroManager::msg_free(msg);
