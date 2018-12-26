@@ -6,6 +6,7 @@
 struct session;
 class service;
 struct recv_msg;
+struct session_base;
 
 class server_manage {
 public:
@@ -15,7 +16,7 @@ public:
 	static server_manage& get_instance();
 	
 	void register_service(int service_type, service* s);
-	bool on_session_recv_cmd(struct session* s, recv_msg* msg);
+	bool on_session_recv_cmd(struct session_base* s, recv_msg* msg);
 	void on_session_disconnect(int service_type,struct session* s);
 private:
 	static server_manage* _instance;

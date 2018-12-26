@@ -227,6 +227,7 @@
     <ClInclude Include="..\moduel\session\export_tcpsession.h" />
     <ClInclude Include="..\moduel\session\export_udpsession.h" />
     <ClInclude Include="..\moduel\session\export_session.h" />
+    <ClInclude Include="..\moduel\session\session_base.h" />
     <ClInclude Include="..\moduel\session\tcp_session.h" />
     <ClInclude Include="..\moduel\session\udp_session.h" />
     <ClInclude Include="..\protocal_cmd.h" />

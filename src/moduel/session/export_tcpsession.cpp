@@ -6,11 +6,11 @@
 #include "tcp_session.h"
 #include "../../proto/proto_manage.h"
 void export_tcp_session::close() {
-	close_session(_session);
+	close_session((session*)_tcp_session);
 }
 
 void export_tcp_session::send_data(unsigned char* pkg, int pkg_len) {
-	session_send(_session, pkg, pkg_len);
+	session_send((session*)_tcp_session, pkg, pkg_len);
 }
 
 void export_tcp_session::send_msg(recv_msg* msg) {
@@ -21,9 +21,9 @@ void export_tcp_session::send_msg(recv_msg* msg) {
 		//log
 		return;
 	}
-	session_send(_session, pkg, pkg_len);
+	session_send((session*)_tcp_session, pkg, pkg_len);
 }
 
-session* export_tcp_session::get_inner_session() {
-	return _session;
+session_base* export_tcp_session::get_inner_session() {
+	return _tcp_session;
 }

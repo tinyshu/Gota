@@ -4,6 +4,7 @@
 #include "../../3rd/mjson/json.h"
 extern struct timer_list* NETBUS_TIMER_LIST;
 #define MAX_SERVICES 512
+struct session_base;
 
 struct service_module  {
 	int stype;
@@ -23,7 +24,7 @@ struct service_module  {
 
 void exit_server_netbus();
 void init_server_netbus();
-void on_bin_protocal_recv_entry(struct session* s, unsigned char* data, int len);
+void on_bin_protocal_recv_entry(struct session_base* s, unsigned char* data, int len);
 void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len);
 void register_services(int stype, struct service_module* module);
 

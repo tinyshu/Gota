@@ -40,7 +40,7 @@ public:
 		on_session_disconnect_handle = 0;
 	}
 
-	virtual bool on_session_recv_cmd(struct session* s, recv_msg* msg);
+	virtual bool on_session_recv_cmd(struct session_base*s, recv_msg* msg);
 	virtual void on_session_disconnect(struct session* s);
 public:
 	int on_session_recv_cmd_handle;
@@ -174,7 +174,8 @@ static void push_pb_message_tolua(const Message* pb_msg) {
 }
 
 //当收到消息会根据stype来调用对应的函数,然后把协议数据放入栈，调用lua函数
-bool lua_service_module::on_session_recv_cmd(struct session* s, recv_msg* msg) {
+//bool lua_service_module::on_session_recv_cmd(struct session_base* s, recv_msg* msg) {
+bool lua_service_module::on_session_recv_cmd(struct session_base* s, recv_msg* msg) {
 	
 	if (s==NULL || msg==NULL) {
 		return false;
@@ -182,7 +183,7 @@ bool lua_service_module::on_session_recv_cmd(struct session* s, recv_msg* msg) {
 	lua_State* lua_status = lua_wrapper::get_luastatus();
 	int idx = 1;
 	//C++网络底层使用struct session
-	tolua_pushuserdata(lua_status,s->lua_session);
+	tolua_pushuserdata(lua_status,s->get_lua_session());
 
 	//创建一个表，存入{1: stype, 2 ctype, 3 utag, 4 body str}
 	lua_newtable(lua_status);

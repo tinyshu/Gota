@@ -14,6 +14,8 @@ extern "C" {
 #include "../../moduel/netbus/service_manger.h"
 #include "../../proto/proto_manage.h"
 #include "../../moduel/session/tcp_session.h"
+#include "../../moduel/session/session_base.h"
+
 #define my_malloc malloc
 #define my_free free
 
@@ -71,18 +73,8 @@ void on_connect_lost(struct session* s) {
 }
 
 //二进制协议处理,由网络底层解析到一个完整的package后调用
-void on_bin_protocal_recv_entry(struct session* s, unsigned char* data, int len) {
-	/*int stype = ((data[0]) | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
-	if (gateway_services.services[stype] && gateway_services.services[stype]->on_bin_protocal_data) {
-		int ret = gateway_services.services[stype]->on_bin_protocal_data(gateway_services.services[stype]->moduel_data,s, data, len);
-		if (ret < 0) {
-			close_session(s);
-		}
-	}
-#if _DEBUG
-	printf("stype:%d", stype);
-#endif*/
-
+//void on_bin_protocal_recv_entry(struct session* s, unsigned char* data, int len) {
+void on_bin_protocal_recv_entry(struct session_base* s, unsigned char* data, int len) {
 	recv_msg* msg = NULL;
 	if(false==proroManager::decode_cmd_msg(data, len, &msg)){
 		proroManager::msg_free(msg);

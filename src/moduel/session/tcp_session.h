@@ -11,10 +11,13 @@ extern "C" {
 }
 #endif
 
+#include "session_base.h"
+
 #define MAX_SEND_PKG 2048
 class export_session;
 
-struct session {
+struct session:public session_base {
+
 	char c_ip[32];
 	int c_port;
 #ifdef USE_LIBUV
@@ -33,6 +36,8 @@ struct session {
 	struct session* next;
 	unsigned char send_buf[MAX_SEND_PKG];
 	export_session* lua_session;
+public:
+	virtual export_session* get_lua_session();
 };
 
 void init_session_manager(int socket_type, int protocal_type);

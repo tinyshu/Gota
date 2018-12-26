@@ -10,9 +10,9 @@ public:
 	virtual void close();
 	virtual void send_data(unsigned char* pkg, int pkg_len);
 	virtual void send_msg(recv_msg* msg);
-	session* get_inner_session();
+	session_base* get_inner_session();
 public:
-	struct session* _session;
+	struct session_base* _tcp_session;
 };
 
 #endif

@@ -18,6 +18,10 @@
 
 #define MAX_RECV_BUFFER 8096
 
+export_session* session::get_lua_session() {
+	return lua_session;
+}
+
 extern void on_connect_lost(struct session* s);
 
 struct {

@@ -741,6 +741,9 @@
     <ClInclude Include="..\moduel\session\export_session.h">
       <Filter>src\moduel\session</Filter>
     </ClInclude>
+    <ClInclude Include="..\moduel\session\session_base.h">
+      <Filter>src\moduel\session</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\proto\message.proto">

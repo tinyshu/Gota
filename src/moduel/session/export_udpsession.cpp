@@ -1,5 +1,6 @@
 #include <string.h>
 #include "export_udpsession.h"
+#include "udp_session.h"
 
 void export_udp_session::close() {
 
@@ -12,6 +13,6 @@ void export_udp_session::send_msg(recv_msg* msg) {
 
  }
 
-session* export_udp_session::get_inner_session() {
-	return NULL;
+session_base* export_udp_session::get_inner_session() {
+	return _udp_session;
 }
