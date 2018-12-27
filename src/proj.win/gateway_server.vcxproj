@@ -122,8 +122,6 @@
     <ClCompile Include="..\moduel\netbus\session_key_mgr.cpp" />
     <ClCompile Include="..\moduel\net\net_iocp_win.c" />
     <ClCompile Include="..\moduel\net\net_uv.cpp" />
-    <ClCompile Include="..\moduel\session\export_tcpsession.cpp" />
-    <ClCompile Include="..\moduel\session\export_udpsession.cpp" />
     <ClCompile Include="..\moduel\session\tcp_session.cpp" />
     <ClCompile Include="..\moduel\session\udp_session.cpp" />
     <ClCompile Include="..\proto\game.pb.cc" />
@@ -224,9 +222,6 @@
     <ClInclude Include="..\moduel\netbus\service_manger.h" />
     <ClInclude Include="..\moduel\netbus\session_key_mgr.h" />
     <ClInclude Include="..\moduel\net\net_uv.h" />
-    <ClInclude Include="..\moduel\session\export_tcpsession.h" />
-    <ClInclude Include="..\moduel\session\export_udpsession.h" />
-    <ClInclude Include="..\moduel\session\export_session.h" />
     <ClInclude Include="..\moduel\session\session_base.h" />
     <ClInclude Include="..\moduel\session\tcp_session.h" />
     <ClInclude Include="..\moduel\session\udp_session.h" />

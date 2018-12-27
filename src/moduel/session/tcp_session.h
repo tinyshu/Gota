@@ -18,6 +18,17 @@ class export_session;
 
 struct session:public session_base {
 
+	session() {
+		memset(c_ip,0,sizeof(c_ip));
+		c_port = 0;
+		c_sock = 0;
+		removed = 0;
+		is_shake_hand = 0;
+		socket_type = 0;
+		uid = 0;
+		is_server_session = 0;
+		next = NULL;
+	}
 	char c_ip[32];
 	int c_port;
 #ifdef USE_LIBUV
@@ -35,9 +46,12 @@ struct session:public session_base {
 	int is_server_session;
 	struct session* next;
 	unsigned char send_buf[MAX_SEND_PKG];
-	export_session* lua_session;
+
 public:
-	virtual export_session* get_lua_session();
+	
+	virtual void close();
+	virtual void send_data(unsigned char* pkg, int pkg_len);
+	virtual void send_msg(recv_msg* msg);
 };
 
 void init_session_manager(int socket_type, int protocal_type);

@@ -11,6 +11,8 @@
 #include "../net/net_uv.h"
 #include "../../3rd/mjson/json_extends.h"
 #include "../netbus/netbus.h"
+#include "../../moduel/netbus/recv_msg.h"
+#include "../../proto/proto_manage.h"
 
 #define MAX_SESSION_NUM 6000
 #define my_malloc malloc
@@ -18,10 +20,26 @@
 
 #define MAX_RECV_BUFFER 8096
 
-export_session* session::get_lua_session() {
-	return lua_session;
+//////////////////////////////////////////////////////////
+//实现session_base接口
+void session::close() {
+	close_session(this);
 }
 
+void session::send_data(unsigned char* pkg, int pkg_len) {
+	session_send(this, pkg, pkg_len);
+}
+
+void session::send_msg(recv_msg* msg) {
+	int pkg_len = 0;
+	unsigned char* pkg = proroManager::encode_cmd_msg(msg, &pkg_len);
+	if (pkg == NULL || pkg_len == 0) {
+		//log
+		return;
+	}
+	session_send(this, pkg, pkg_len);
+}
+///////////////////////////////////////////////////////
 extern void on_connect_lost(struct session* s);
 
 struct {
@@ -29,11 +47,7 @@ struct {
 
 	struct session* cache_mem;
 	struct session* free_list;
-
-
-	//char recv_buffer[MAX_RECV_BUFFER];
 	int readed; // 当前已经从socket里面读取的数据;
-
 	int has_removed;
 	int socket_type;  //0 tcp_socket 1表示websocket
 	int protocal_type;// 0 表示二进制协议，size + 数据的模式
@@ -47,10 +61,9 @@ static struct session* cache_alloc() {
 		session_manager.free_list = s->next;
 	}
 	else { // 调用系统的函数 malloc
-		s = (struct session*)my_malloc(sizeof(struct session));
+		s = new (struct session);
 	}
-	memset(s, 0, sizeof(struct session));
-
+	
 	return s;
 }
 
@@ -61,7 +74,7 @@ static void cache_free(struct session* s) {
 		session_manager.free_list = s;
 	}
 	else { 
-		my_free(s);
+		delete s;
 	}
 	
 }
@@ -79,8 +92,8 @@ void init_session_manager(int socket_type,int protocal_type) {
 	session_manager.socket_type = socket_type;
 	session_manager.protocal_type = protocal_type; //本次框架使用的协议类型
 	// 将6000个session一次分配出来。
-	session_manager.cache_mem = (struct session*)my_malloc(MAX_SESSION_NUM * sizeof(struct session));
-	memset(session_manager.cache_mem, 0, MAX_SESSION_NUM * sizeof(struct session));
+	session_manager.cache_mem = new struct session[MAX_SESSION_NUM];
+	
 	// end 
 
 	for (int i = 0; i < MAX_SESSION_NUM; i++) {

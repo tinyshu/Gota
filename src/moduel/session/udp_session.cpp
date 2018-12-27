@@ -2,14 +2,23 @@
 #include <string.h>
 #include <stdlib.h>
 #include "uv.h"
+#include "../../moduel/net/net_uv.h"
 #include "udp_session.h"
-#include "export_udpsession.h"
 #include "../../moduel/netbus/netbus.h"
+#include "../../moduel/netbus/recv_msg.h"
 udp_recv_buf udp_session::_recv_buf;
 udp_session g_udp_session;
 
-export_session* udp_session::get_lua_session() {
-	return _udp_session;
+void udp_session::close() {
+
+}
+
+void udp_session::send_data(unsigned char* pkg, int pkg_len) {
+
+}
+
+void udp_session::send_msg(recv_msg* msg) {
+
 }
 
 static void udp_uv_alloc_buf(uv_handle_t* handle,
@@ -46,9 +55,6 @@ static void after_uv_udp_recv(uv_udp_t* handle,
 	udp_s.addr = addr;
 	uv_ip4_name((struct sockaddr_in*)addr, udp_s.c_address, 32);
 	udp_s.c_port = ntohs(((struct sockaddr_in*)addr)->sin_port);*/
-	export_udp_session udp_session;
-	udp_session._udp_session = &g_udp_session;
-	//udp_session._udp_session = (session_base*)&udp_session;
 	on_bin_protocal_recv_entry(&g_udp_session, (unsigned char*)buf->base, nread);
 }
 
@@ -56,7 +62,7 @@ void udp_session::start_udp_server() {
 	uv_udp_t* udp_server = (uv_udp_t*)malloc(sizeof(uv_udp_t));
 	memset(udp_server, 0, sizeof(uv_udp_t));
 
-	uv_udp_init(uv_default_loop(), udp_server);
+	uv_udp_init(get_uv_loop(), udp_server);
 
 	struct sockaddr_in addr;
 	uv_ip4_addr("0.0.0.0", 8802, &addr);

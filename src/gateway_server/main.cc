@@ -27,6 +27,7 @@ extern "C" {
 #include "../database/center_db.h"
 #include "./src/server_session_mgr.h"
 #include "../proto/pb_cmd_map.h"
+#include "../moduel/session/udp_session.h"
 //#include "../proto/message.pb.h"
 //28
 int main(int argc, char** argv) {
@@ -78,6 +79,7 @@ int main(int argc, char** argv) {
 	LOGINFO("start gateway server at %s:%d\n", GW_CONFIG.ip, GW_CONFIG.port);
 	//tcp+protobuf格式
 	start_server(GW_CONFIG.ip, GW_CONFIG.port, socket_type, proto_type);
+	//udp_session::start_udp_server();
 	//websocket+jsob格式
 	//start_server(GW_CONFIG.ip, GW_CONFIG.port, WEB_SOCKET_IO, JSON_PROTOCAL);
 
