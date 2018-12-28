@@ -79,6 +79,9 @@
     <Filter Include="src\proto">
       <UniqueIdentifier>{75b65332-6f50-440d-b762-b9b67fd2e582}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\export_module">
+      <UniqueIdentifier>{298db50c-10a7-40a1-922d-92e66223774f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\crypt\base64_encoder.c">
@@ -418,6 +421,12 @@
     <ClCompile Include="..\moduel\session\udp_session.cpp">
       <Filter>src\moduel\session</Filter>
     </ClCompile>
+    <ClCompile Include="..\utils\timer_uv_list.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\export_module\timer_export_to_lua.cpp">
+      <Filter>src\export_module</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h">
@@ -728,6 +737,12 @@
     </ClInclude>
     <ClInclude Include="..\moduel\session\session_base.h">
       <Filter>src\moduel\session</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\timer_uv_list.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\export_module\timer_export_to_lua.h">
+      <Filter>src\export_module</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

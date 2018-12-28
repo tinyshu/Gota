@@ -28,6 +28,7 @@ struct session:public session_base {
 		uid = 0;
 		is_server_session = 0;
 		next = NULL;
+		memset(send_buf,0,sizeof(send_buf));
 	}
 	char c_ip[32];
 	int c_port;
@@ -48,7 +49,6 @@ struct session:public session_base {
 	unsigned char send_buf[MAX_SEND_PKG];
 
 public:
-	
 	virtual void close();
 	virtual void send_data(unsigned char* pkg, int pkg_len);
 	virtual void send_msg(recv_msg* msg);

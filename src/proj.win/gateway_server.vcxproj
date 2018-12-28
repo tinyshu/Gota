@@ -109,6 +109,7 @@
     <ClCompile Include="..\database\redis_warpper.cpp" />
     <ClCompile Include="..\database\service_export_to_lua.cpp" />
     <ClCompile Include="..\database\session_export_to_lua.cpp" />
+    <ClCompile Include="..\export_module\timer_export_to_lua.cpp" />
     <ClCompile Include="..\game_server\src\game_config.c" />
     <ClCompile Include="..\gateway_server\main.cc" />
     <ClCompile Include="..\gateway_server\src\from_client.cpp" />
@@ -132,6 +133,7 @@
     <ClCompile Include="..\utils\log.c" />
     <ClCompile Include="..\utils\logger.cc" />
     <ClCompile Include="..\utils\timer_list.c" />
+    <ClCompile Include="..\utils\timer_uv_list.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h" />
@@ -210,6 +212,7 @@
     <ClInclude Include="..\database\service_export_to_lua.h" />
     <ClInclude Include="..\database\session_export_to_lua.h" />
     <ClInclude Include="..\error_command.h" />
+    <ClInclude Include="..\export_module\timer_export_to_lua.h" />
     <ClInclude Include="..\game_server\src\game_config.h" />
     <ClInclude Include="..\gateway_server\src\from_client.h" />
     <ClInclude Include="..\gateway_server\src\gw_config.h" />
@@ -237,6 +240,7 @@
     <ClInclude Include="..\utils\logger.h" />
     <ClInclude Include="..\utils\timer.h" />
     <ClInclude Include="..\utils\timer_list.h" />
+    <ClInclude Include="..\utils\timer_uv_list.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\proto\message.proto" />
