@@ -16,7 +16,7 @@ void udp_session::close() {
 
 static void udp_send_cb(uv_udp_send_t* req, int status) {
 	if (status!=0) {
-		log_error("udp_send_cb status=%d", status);
+		log_error("udp_send_cb status=%d error=%s", status, uv_strerror(status));
 	}
 
 	free(req);
@@ -71,12 +71,23 @@ static void after_uv_udp_recv(uv_udp_t* handle,
 	const struct sockaddr* addr,
 	unsigned flags) {
 
+	/*The receive callback will be called with nread == 0 and addr == NULL when there is nothing to read, 
+	and with nread == 0 and addr != NULL when an empty UDP packet is received.*/
+	if (nread < 0 ) {
+		log_error("after_uv_udp_recv nread=%d\n", nread);
+		return;
+	}
+	if (nread ==0 && addr == NULL) {
+		log_error(" nread == 0 and addr == NULL when there is nothing to read!\n");
+		return;
+	}
+
 	udp_session session;
 	session.udp_handle = handle;
 	session.sock_addr = (const sockaddr_in*)addr;
 	uv_ip4_name((const sockaddr_in*)session.sock_addr, session.address,sizeof(session.address));
 	session.port = ntohs(session.sock_addr->sin_port);
-	//udp是数据报协议
+	//udp是数据报协议,没有2字节长度的定义
 	on_bin_protocal_recv_entry(&session, (unsigned char*)buf->base, nread);
 }
 
@@ -88,7 +99,7 @@ void udp_session::start_udp_server() {
 
 	struct sockaddr_in addr;
 	uv_ip4_addr("0.0.0.0", 8002, &addr);
-	uv_udp_bind(udp_server, (const struct sockaddr*)&addr, 0);
+	uv_udp_bind(udp_server, (const struct sockaddr*)&addr, UV_UDP_REUSEADDR);
 
 	memset(&_recv_buf,0,sizeof(udp_recv_buf));
 	udp_server->data = (void*)&_recv_buf;
