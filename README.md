@@ -12,9 +12,11 @@
 
 - 支持异步redis
 
-- 支持内嵌lua，逻辑层使用lua开发
+- 支持内嵌lua，导出底层接口，上层业务使用lua开发
 
-- 支持多协议(tcp+二进制 ,tcp+json websocket+二进制，websocket+json)
+- 网络层支持TCP UDP WebSocket协议
+
+- 应用层多协议支持(protobuf ,json)
 
 - 支持部署和调试两种模式
 
