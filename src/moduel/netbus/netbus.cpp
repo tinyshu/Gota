@@ -77,7 +77,6 @@ void on_connect_lost(struct session* s) {
 void on_bin_protocal_recv_entry(struct session_base* s, unsigned char* data, int len) {
 	recv_msg* msg = NULL;
 	if(false==proroManager::decode_cmd_msg(data, len, &msg)){
-		proroManager::msg_free(msg);
 		return;
 	}
 	if (msg) {

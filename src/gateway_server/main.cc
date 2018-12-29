@@ -76,10 +76,13 @@ int main(int argc, char** argv) {
 	//启动服务
 	//start_server("127.0.0.1",8000,TCP_SOCKET_IO,BIN_PROTOCAL);
 	//start_server("127.0.0.1", 8000, TCP_SOCKET_IO, JSON_PROTOCAL);
-	LOGINFO("start gateway server at %s:%d\n", GW_CONFIG.ip, GW_CONFIG.port);
+	
 	//tcp+protobuf格式
+	LOGINFO("start gateway server udp at %s:%d\n", GW_CONFIG.ip, 8802);
+	udp_session::start_udp_server();
+	LOGINFO("start gateway server tcp at %s:%d\n", GW_CONFIG.ip, GW_CONFIG.port);
 	start_server(GW_CONFIG.ip, GW_CONFIG.port, socket_type, proto_type);
-	//udp_session::start_udp_server();
+	
 	//websocket+jsob格式
 	//start_server(GW_CONFIG.ip, GW_CONFIG.port, WEB_SOCKET_IO, JSON_PROTOCAL);
 

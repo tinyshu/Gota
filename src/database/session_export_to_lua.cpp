@@ -277,7 +277,6 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 
 // {1: stype, 2: ctype, 3: utag, 4 body}
 int lua_send_msg(lua_State* tolua_s) {
-	//export_session* s = (export_session*)lua_touserdata(tolua_s, 1);
 	session_base* s = (session_base*)lua_touserdata(tolua_s, 1);
 	if (s == NULL) {
 		return 0;

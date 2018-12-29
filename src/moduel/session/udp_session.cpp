@@ -1,24 +1,45 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "../../utils/logger.h"
 #include "uv.h"
 #include "../../moduel/net/net_uv.h"
 #include "udp_session.h"
 #include "../../moduel/netbus/netbus.h"
 #include "../../moduel/netbus/recv_msg.h"
-udp_recv_buf udp_session::_recv_buf;
-udp_session g_udp_session;
+#include "../../proto/proto_manage.h"
 
+udp_recv_buf udp_session::_recv_buf;
 void udp_session::close() {
 
 }
 
+static void udp_send_cb(uv_udp_send_t* req, int status) {
+	if (status!=0) {
+		log_error("udp_send_cb status=%d", status);
+	}
+
+	free(req);
+}
+
 void udp_session::send_data(unsigned char* pkg, int pkg_len) {
 
+	uv_udp_send_t* req = (uv_udp_send_t*)malloc(sizeof(uv_udp_send_t));
+	uv_buf_t uv_buf;
+	uv_buf.base = (char*)pkg;
+	uv_buf.len = pkg_len;
+	uv_udp_send(req,this->udp_handle,&uv_buf,1, (const sockaddr*)this->sock_addr, udp_send_cb);
 }
 
 void udp_session::send_msg(recv_msg* msg) {
-
+	int pkg_len = 0;
+	unsigned char* pkg = proroManager::encode_cmd_msg(msg, &pkg_len);
+	if (pkg == NULL || pkg_len == 0) {
+		//log
+		return;
+	}
+	send_data(pkg, pkg_len);
+	free(pkg);
 }
 
 static void udp_uv_alloc_buf(uv_handle_t* handle,
@@ -38,9 +59,9 @@ static void udp_uv_alloc_buf(uv_handle_t* handle,
 			return;
 		}
 		recv_buf->max_recv_len = need_malloc;
-		buf->base = (char*)recv_buf->recv_buf;
-		buf->len = recv_buf->max_recv_len;
 	}
+	buf->base = (char*)recv_buf->recv_buf;
+	buf->len = recv_buf->max_recv_len;
 }
 
 
@@ -50,12 +71,13 @@ static void after_uv_udp_recv(uv_udp_t* handle,
 	const struct sockaddr* addr,
 	unsigned flags) {
 
-	/*udp_session udp_s;
-	udp_s.udp_handler = handle;
-	udp_s.addr = addr;
-	uv_ip4_name((struct sockaddr_in*)addr, udp_s.c_address, 32);
-	udp_s.c_port = ntohs(((struct sockaddr_in*)addr)->sin_port);*/
-	on_bin_protocal_recv_entry(&g_udp_session, (unsigned char*)buf->base, nread);
+	udp_session session;
+	session.udp_handle = handle;
+	session.sock_addr = (const sockaddr_in*)addr;
+	uv_ip4_name((const sockaddr_in*)session.sock_addr, session.address,sizeof(session.address));
+	session.port = ntohs(session.sock_addr->sin_port);
+	//udp是数据报协议
+	on_bin_protocal_recv_entry(&session, (unsigned char*)buf->base, nread);
 }
 
 void udp_session::start_udp_server() {
@@ -65,7 +87,7 @@ void udp_session::start_udp_server() {
 	uv_udp_init(get_uv_loop(), udp_server);
 
 	struct sockaddr_in addr;
-	uv_ip4_addr("0.0.0.0", 8802, &addr);
+	uv_ip4_addr("0.0.0.0", 8002, &addr);
 	uv_udp_bind(udp_server, (const struct sockaddr*)&addr, 0);
 
 	memset(&_recv_buf,0,sizeof(udp_recv_buf));

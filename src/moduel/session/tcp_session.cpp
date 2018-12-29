@@ -38,6 +38,7 @@ void session::send_msg(recv_msg* msg) {
 		return;
 	}
 	session_send(this, pkg, pkg_len);
+	my_free(pkg);
 }
 ///////////////////////////////////////////////////////
 extern void on_connect_lost(struct session* s);

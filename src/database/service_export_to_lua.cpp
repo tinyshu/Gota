@@ -311,6 +311,7 @@ int register_service(lua_State* tolua_s) {
 	if (lua_module == NULL) {
 		return -1;
 	}
+	//根据stype调用不同的service_module
 	lua_module->stype = stype;
 	lua_module->on_session_recv_cmd_handle = on_session_recv_cmd_handle;
 	lua_module->on_session_disconnect_handle = on_session_disconnect_handle;

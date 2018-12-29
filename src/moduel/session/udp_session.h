@@ -15,13 +15,18 @@ typedef struct udp_recv_buf {
 }udp_recv_buf;
 
 struct udp_session : public session_base {
-	
-	static void start_udp_server();
-	static udp_recv_buf _recv_buf;
+	udp_session():sock_addr(NULL){}
 public:
 	virtual void close();
 	virtual void send_data(unsigned char* pkg, int pkg_len);
 	virtual void send_msg(recv_msg* msg);
+public:
+	static void start_udp_server();
+	static udp_recv_buf _recv_buf;
+	uv_udp_t * udp_handle;
+	char address[32];
+	int port;
+	const sockaddr_in* sock_addr;
 };
 
 
