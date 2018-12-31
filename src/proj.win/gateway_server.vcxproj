@@ -132,6 +132,7 @@
     <ClCompile Include="..\utils\hash_map_int.c" />
     <ClCompile Include="..\utils\log.c" />
     <ClCompile Include="..\utils\logger.cc" />
+    <ClCompile Include="..\utils\mem_manger.cpp" />
     <ClCompile Include="..\utils\timer_list.c" />
     <ClCompile Include="..\utils\timer_uv_list.cpp" />
   </ItemGroup>
@@ -238,6 +239,9 @@
     <ClInclude Include="..\utils\hash_map_int.h" />
     <ClInclude Include="..\utils\log.h" />
     <ClInclude Include="..\utils\logger.h" />
+    <ClInclude Include="..\utils\mem_alloc.h" />
+    <ClInclude Include="..\utils\mem_block.h" />
+    <ClInclude Include="..\utils\mem_manger.h" />
     <ClInclude Include="..\utils\timer.h" />
     <ClInclude Include="..\utils\timer_list.h" />
     <ClInclude Include="..\utils\timer_uv_list.h" />

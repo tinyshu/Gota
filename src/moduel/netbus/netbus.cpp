@@ -15,6 +15,7 @@ extern "C" {
 #include "../../proto/proto_manage.h"
 #include "../../moduel/session/tcp_session.h"
 #include "../../moduel/session/session_base.h"
+#include "../../utils/mem_manger.h"
 
 #define my_malloc malloc
 #define my_free free
@@ -90,7 +91,8 @@ void on_bin_protocal_recv_entry(struct session_base* s, unsigned char* data, int
 		//free(send_pkg);
 		//////////////////////////
 		server_manage::get_instance().on_session_recv_cmd(s, msg);
-		proroManager::msg_free(msg);
+		memory_mgr::get_instance().free_memory(msg);
+		//proroManager::msg_free(msg);
 #else
 #endif
 	}
@@ -125,7 +127,8 @@ void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len
 	int cmd = atoi(jcmd->text);
 
 	//创建一个recv_msg,可以考虑使用内存池
-	recv_msg* msg = (recv_msg*)my_malloc(sizeof(recv_msg));
+	//recv_msg* msg = (recv_msg*)my_malloc(sizeof(recv_msg));
+	recv_msg* msg = (recv_msg*)memory_mgr::get_instance().alloc_memory(sizeof(recv_msg));
 	if (msg==NULL) {
 		return;
 	}
@@ -154,6 +157,6 @@ void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len
 #endif
 	
 	json_free_value(&root);
-	my_free(msg);
-	
+	//my_free(msg);
+	memory_mgr::get_instance().free_memory(msg);
 }

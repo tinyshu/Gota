@@ -427,6 +427,9 @@
     <ClCompile Include="..\export_module\timer_export_to_lua.cpp">
       <Filter>src\export_module</Filter>
     </ClCompile>
+    <ClCompile Include="..\utils\mem_manger.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h">
@@ -743,6 +746,15 @@
     </ClInclude>
     <ClInclude Include="..\export_module\timer_export_to_lua.h">
       <Filter>src\export_module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\mem_manger.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\mem_block.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\mem_alloc.h">
+      <Filter>src\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,8 @@
 #include "../moduel/netbus/recv_msg.h"
 #include "../moduel/session/tcp_session.h"
 #include "../moduel/net/net_uv.h"
+#include "../utils/mem_manger.h"
+
 using namespace google::protobuf;
 
 std::unordered_map<int, std::string> proroManager::_cmd_map;
@@ -60,7 +62,8 @@ bool proroManager::decode_cmd_msg(unsigned char* pkg, int pkg_len, struct recv_m
 	}
 
 	//先解码包头
-	recv_msg* msg = (recv_msg*)malloc(sizeof(recv_msg));
+	//recv_msg* msg = (recv_msg*)malloc(sizeof(recv_msg));
+	recv_msg* msg = (recv_msg*)memory_mgr::get_instance().alloc_memory(sizeof(recv_msg));
 	if (msg==NULL) {
 		return false;
 	}
