@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "mysql_export_to_lua.h"
+#include "../export_module/mysql_export_to_lua.h"
 #include "../utils/logger.h"
 #include "hiredis.h"
 #ifdef __cplusplus
@@ -16,8 +16,8 @@ extern "C" {
 #include "../moduel/net/net_uv.h"
 #include "../lua_wrapper/lua_wrapper.h"
 #include "../3rd/tolua/tolua_fix.h"
-#include "redis_warpper.h"
-#include "query_callback.h"
+#include "../database/redis_warpper.h"
+#include "../database/query_callback.h"
 
 const char * redist_moduel_name = "redis_wrapper";
 

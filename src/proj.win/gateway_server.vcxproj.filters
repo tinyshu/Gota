@@ -358,16 +358,7 @@
     <ClCompile Include="..\3rd\tolua\tolua_to.c">
       <Filter>src\3rd\tolua</Filter>
     </ClCompile>
-    <ClCompile Include="..\database\mysql_export_to_lua.cpp">
-      <Filter>src\database</Filter>
-    </ClCompile>
     <ClCompile Include="..\database\redis_warpper.cpp">
-      <Filter>src\database</Filter>
-    </ClCompile>
-    <ClCompile Include="..\database\redis_export_to_lua.cpp">
-      <Filter>src\database</Filter>
-    </ClCompile>
-    <ClCompile Include="..\database\service_export_to_lua.cpp">
       <Filter>src\database</Filter>
     </ClCompile>
     <ClCompile Include="..\moduel\netbus\service_interface.cpp">
@@ -415,9 +406,6 @@
     <ClCompile Include="..\proto\game.pb.cc">
       <Filter>src\proto</Filter>
     </ClCompile>
-    <ClCompile Include="..\database\session_export_to_lua.cpp">
-      <Filter>src\database</Filter>
-    </ClCompile>
     <ClCompile Include="..\moduel\session\udp_session.cpp">
       <Filter>src\moduel\session</Filter>
     </ClCompile>
@@ -429,6 +417,18 @@
     </ClCompile>
     <ClCompile Include="..\utils\mem_manger.cpp">
       <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\export_module\mysql_export_to_lua.cpp">
+      <Filter>src\export_module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\export_module\redis_export_to_lua.cpp">
+      <Filter>src\export_module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\export_module\service_export_to_lua.cpp">
+      <Filter>src\export_module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\export_module\session_export_to_lua.cpp">
+      <Filter>src\export_module</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -693,16 +693,7 @@
     <ClInclude Include="..\3rd\tolua\tolua++.h">
       <Filter>src\3rd\tolua</Filter>
     </ClInclude>
-    <ClInclude Include="..\database\mysql_export_to_lua.h">
-      <Filter>src\database</Filter>
-    </ClInclude>
     <ClInclude Include="..\database\redis_warpper.h">
-      <Filter>src\database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\database\redis_export_to_lua.h">
-      <Filter>src\database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\database\service_export_to_lua.h">
       <Filter>src\database</Filter>
     </ClInclude>
     <ClInclude Include="..\moduel\netbus\service_interface.h">
@@ -732,9 +723,6 @@
     <ClInclude Include="..\utils\conver.h">
       <Filter>src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\database\session_export_to_lua.h">
-      <Filter>src\database</Filter>
-    </ClInclude>
     <ClInclude Include="..\moduel\session\udp_session.h">
       <Filter>src\moduel\session</Filter>
     </ClInclude>
@@ -755,6 +743,18 @@
     </ClInclude>
     <ClInclude Include="..\utils\mem_alloc.h">
       <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\export_module\mysql_export_to_lua.h">
+      <Filter>src\export_module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\export_module\redis_export_to_lua.h">
+      <Filter>src\export_module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\export_module\service_export_to_lua.h">
+      <Filter>src\export_module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\export_module\session_export_to_lua.h">
+      <Filter>src\export_module</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

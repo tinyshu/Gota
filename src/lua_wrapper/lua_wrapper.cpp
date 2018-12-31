@@ -4,10 +4,10 @@
 #include "lua_wrapper.h"
 #include "../../utils/logger.h"
 #include "../3rd/tolua/tolua_fix.h"
-#include "../database/mysql_export_to_lua.h"
-#include "../database/redis_export_to_lua.h"
-#include "../database/service_export_to_lua.h"
-#include "../database/session_export_to_lua.h"
+#include "../export_module/mysql_export_to_lua.h"
+#include "../export_module/redis_export_to_lua.h"
+#include "../export_module/service_export_to_lua.h"
+#include "../export_module/session_export_to_lua.h"
 #include "../export_module/timer_export_to_lua.h"
 
 lua_State* g_lua_state = NULL;
