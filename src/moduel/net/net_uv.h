@@ -4,6 +4,7 @@
 #include "uv.h"
 
 struct session;
+struct session_base;
 //µ×²ã´«ÊäÐ­Òé
 enum {
 	TCP_SOCKET_IO = 0,  // tcp
@@ -28,6 +29,6 @@ void init_uv();
 extern uv_loop_t* get_uv_loop();
 
 extern struct session* netbus_connect(char* server_ip, int port);
-
+extern void tcp_connect(char* server_ip,int port,void(*connect_cb)(const char* err,session_base* s,void* udata),void* udata);
 #endif
 

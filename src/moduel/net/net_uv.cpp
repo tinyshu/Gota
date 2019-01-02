@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<string.h>
 #include <stdlib.h>
-
+#include "../../utils/logger.h"
 #include "net_uv.h"
 
 
@@ -18,13 +18,14 @@
 #endif
 
 extern "C" {
-#include "../../utils/log.h"
+//#include "../../utils/log.h"
 #include "../../utils/timer_list.h"
 #include "../../3rd/http_parser/http_parser.h"
 #include "../../3rd/crypt/sha1.h"
 #include "../../3rd/crypt/base64_encoder.h"
 #include "../../3rd/mjson/json.h"
 }
+
 #include "../session/tcp_session.h"
 #include "../netbus/netbus.h"
 #include "../session/session_base.h"
@@ -203,7 +204,7 @@ static void on_json_protocal_recved(struct session* s, struct io_package* io_dat
 		//获取缓存区指针
 		unsigned char* pkg_data = io_data->long_pkg;
 		if (pkg_data == NULL) {
-			LOGERROR("get io_data buffer error\n");
+			log_error("get io_data buffer error\n");
 			return;
 		}
 
@@ -264,7 +265,7 @@ static void after_write(uv_write_t* req, int status) {
 		return;
 	}
 
-	LOGERROR("uv_write error: %s - %s\n", uv_err_name(status), uv_strerror(status));
+	log_error("uv_write error: %s - %s\n", uv_err_name(status), uv_strerror(status));
 }
 
 void uv_send_data(void* stream, char* pkg, unsigned int pkg_len) {
@@ -274,14 +275,14 @@ void uv_send_data(void* stream, char* pkg, unsigned int pkg_len) {
 
 	write_req_t* wr = (write_req_t*)my_malloc(sizeof(write_req_t));
 	if (wr == NULL) {
-		LOGERROR("malloc faild in uv_send_data\n");
+		log_error("malloc faild in uv_send_data\n");
 		return;
 	}
 
 	unsigned char* send_buf = (unsigned char*)my_malloc(pkg_len + 1);
 	if (send_buf == NULL) {
 		my_free(wr);
-		LOGERROR("malloc send_buf faild in uv_send_data\n");
+		log_error("malloc send_buf faild in uv_send_data\n");
 		return;
 	}
 	memcpy(send_buf,pkg, pkg_len);
@@ -289,7 +290,7 @@ void uv_send_data(void* stream, char* pkg, unsigned int pkg_len) {
 	if (uv_write(&wr->req, (uv_stream_t*)stream, &wr->buf, 1, after_write)) {
 		my_free(send_buf);
 		my_free(wr);
-		LOGERROR("uv_write failed");
+		log_error("uv_write failed");
 	}
 }
 //读取一个完整的帧
@@ -592,18 +593,38 @@ failed:
 	return;
 }
 
+typedef struct connect_context {
+	void(*on_connected)(const char* err, session_base* s, void* udata);
+	void* udata;
+}connect_context;
+
 static void on_after_connect(uv_connect_t* handle, int status) {
+	connect_context* context = (connect_context*)handle->data;
 	if (status) {
-		LOGERROR("connect error");
+		const char* uv_error = uv_strerror(status);
+		log_error("connect error",);
+		if (context->on_connected != NULL) {
+			context->on_connected(uv_error, NULL, context->udata);
+		}
+
 		uv_close((uv_handle_t*)handle->handle, on_close_stream);
+		free(handle->data); //connect_context
+		free(handle);
 		return;
+	}
+	
+	if (context->on_connected!=NULL) {
+		context->on_connected(NULL, (session_base*)handle->handle->data, context->udata);
 	}
 
 	int iret = uv_read_start(handle->handle, on_read_alloc_buff, on_after_read);
 	if (iret) {
-		LOGERROR("uv_read_start error");
+		log_error("uv_read_start error");
 		return;
 	}
+
+	free(handle->data); //connect_context
+	free(handle);
 }
 
 struct session* netbus_connect(char* server_ip, int port) {
@@ -631,11 +652,44 @@ struct session* netbus_connect(char* server_ip, int port) {
 	s->is_server_session = 1;
 
 	connect_req = (uv_connect_t*)my_malloc(sizeof(uv_connect_t));
+	
 	iret = uv_tcp_connect(connect_req, stream, (struct sockaddr*)&bind_addr, on_after_connect);
 	if (iret) {
-		LOGERROR("uv_tcp_connect error!!!");
+		log_error("uv_tcp_connect error!!!");
 		return NULL;
 	}
 
 	return s;
+}
+
+void tcp_connect(char* server_ip, int port, 
+				void(*connect_cb)(const char* err, session_base* s, void* udata), 
+				void* udata) {
+	struct sockaddr_in bind_addr;
+	int ret = uv_ip4_addr(server_ip, port, &bind_addr);
+	if (ret) {
+		return;
+	}
+	struct io_package* io_data;
+	io_data = (struct io_package*)my_malloc(sizeof(struct io_package));
+	memset(io_data, 0, sizeof(struct io_package));
+	
+	connect_req = (uv_connect_t*)my_malloc(sizeof(uv_connect_t));
+	uv_tcp_t* stream = (uv_tcp_t*)my_malloc(sizeof(uv_tcp_t));
+	stream->data = io_data;
+	uv_tcp_init(loop, stream);
+
+	struct session* s = save_session(stream, server_ip, port);
+	io_data->max_pkg_len = 0;
+	io_data->s = s;
+	io_data->long_pkg = NULL;
+	s->socket_type = TCP_SOCKET_IO;
+	s->is_server_session = 1;
+
+	connect_context* context = (connect_context*)my_malloc(sizeof(connect_context));
+	context->on_connected = connect_cb;
+	context->udata = udata;
+	connect_req->data = context;
+
+	uv_tcp_connect(connect_req, stream, (struct sockaddr*)&bind_addr, on_after_connect);
 }

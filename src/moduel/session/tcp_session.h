@@ -42,9 +42,9 @@ struct session:public session_base {
 	//websocket是否握手成功
 	int is_shake_hand;
 	//用于区分前后端session协议类型
-	int socket_type;
+	
 	unsigned int uid;
-	int is_server_session;
+	//int is_server_session;
 	struct session* next;
 	unsigned char send_buf[MAX_SEND_PKG];
 
