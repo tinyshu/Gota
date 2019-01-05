@@ -5,7 +5,8 @@
 
 #define ALLOC_SIZE_32 32
 #define ALLOC_SIZE_64 64
-#define MAX_ALLOC_SIZE 128
+#define ALLOC_SIZE_128 128
+#define MAX_ALLOC_SIZE 1024
 
 class memory_mgr {
 	memory_mgr();
@@ -18,8 +19,8 @@ public:
 private:
 	//可以根据业务场景配置多个大小的内存池
 	memory_alloctor<ALLOC_SIZE_32, 100000> _mem32;
-	//mem_alloc<64, 100000> _mem64;
-	//mem_alloc<128, 100000> _mem128;	
+	memory_alloctor<ALLOC_SIZE_64, 100000> _mem64;
+	memory_alloctor<MAX_ALLOC_SIZE, 100000> _mem128;
 };
 
 #endif

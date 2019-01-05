@@ -13,6 +13,7 @@
 #include "../netbus/netbus.h"
 #include "../../moduel/netbus/recv_msg.h"
 #include "../../proto/proto_manage.h"
+#include "../../utils/mem_manger.h"
 
 #define MAX_SESSION_NUM 6000
 #define my_malloc malloc
@@ -188,16 +189,15 @@ void clear_offline_session() {
 }
 
 static int send_tcp_data(struct session* s, unsigned char* data, int len) {
-	//int long_pkg = 0;
 	unsigned char* pkg_ptr = NULL;
 
 	if (len + 2 > MAX_SEND_PKG) {
-		pkg_ptr = (unsigned char*)my_malloc(len + 2); //2字节头部长度
-		//long_pkg = 1;
+		//pkg_ptr = (unsigned char*)my_malloc(len + 2); //2字节头部长度
+		pkg_ptr = (unsigned char*)memory_mgr::get_instance().alloc_memory(len + 2);
 	}
 	else {
-		//pkg_ptr = s->send_buf;
-		pkg_ptr = (unsigned char*)my_malloc(MAX_SEND_PKG);
+		//pkg_ptr = (unsigned char*)my_malloc(MAX_SEND_PKG);
+		pkg_ptr = (unsigned char*)memory_mgr::get_instance().alloc_memory(MAX_SEND_PKG);
 	}
 	int ssize = 0;
 	if (session_manager.protocal_type == JSON_PROTOCAL) {
@@ -214,7 +214,8 @@ static int send_tcp_data(struct session* s, unsigned char* data, int len) {
 		uv_send_data(s->c_sock, (char*)pkg_ptr, len + 2);
 	}
 	if (pkg_ptr != NULL) {
-		my_free(pkg_ptr);
+		//my_free(pkg_ptr);
+		memory_mgr::get_instance().free_memory(pkg_ptr);
 	}
 
 	return 0;
@@ -239,12 +240,12 @@ static int send_websocket_data(struct session* s, unsigned char* data, int len) 
 
 	if (len + head_len > MAX_SEND_PKG) {
 		//需要动态分配内存
-		pkg_ptr = (unsigned char*)my_malloc(len + head_len);
-		//long_pkg = 1;
+		//pkg_ptr = (unsigned char*)my_malloc(len + head_len);
+		pkg_ptr = (unsigned char*)memory_mgr::get_instance().alloc_memory(len + head_len);
 	}
 	else {
-		//pkg_ptr = s->send_buf;
-		pkg_ptr = (unsigned char*)my_malloc(MAX_SEND_PKG);
+		//pkg_ptr = (unsigned char*)my_malloc(MAX_SEND_PKG);
+		pkg_ptr = (unsigned char*)memory_mgr::get_instance().alloc_memory(MAX_SEND_PKG);
 	}
 
 	//发送格式 固定1字节0x81 + 数据长度(变长) + 数据
@@ -286,8 +287,9 @@ static int send_websocket_data(struct session* s, unsigned char* data, int len) 
 	//int send_bytes = send(s->c_sock, pkg_ptr, send_len, 0);
 	uv_send_data(s->c_sock, (char*)pkg_ptr, send_len);
 	if (pkg_ptr!=NULL){
-		my_free(pkg_ptr);
-		pkg_ptr = NULL;
+		//my_free(pkg_ptr);
+		//pkg_ptr = NULL;
+		memory_mgr::get_instance().free_memory(pkg_ptr);
 	}
 
 	return 0;

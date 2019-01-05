@@ -18,7 +18,6 @@
 #endif
 
 extern "C" {
-//#include "../../utils/log.h"
 #include "../../utils/timer_list.h"
 #include "../../3rd/http_parser/http_parser.h"
 #include "../../3rd/crypt/sha1.h"
@@ -29,6 +28,7 @@ extern "C" {
 #include "../session/tcp_session.h"
 #include "../netbus/netbus.h"
 #include "../session/session_base.h"
+#include "../../utils/mem_manger.h"
 
 #define my_malloc malloc
 #define my_free free
@@ -258,8 +258,10 @@ static int on_header_value(http_parser* p, const char *at,size_t length) {
 //数据发送成功后回调
 static void after_write(uv_write_t* req, int status) {
 	write_req_t* wr =(write_req_t*)req;
-	my_free(wr->buf.base);
-	my_free(wr);
+	memory_mgr::get_instance().free_memory(wr->buf.base);
+	memory_mgr::get_instance().free_memory(wr);
+	//my_free(wr->buf.base);
+	//my_free(wr);
 
 	if (status == 0){
 		return;
@@ -273,23 +275,28 @@ void uv_send_data(void* stream, char* pkg, unsigned int pkg_len) {
 		return;
 	}
 
-	write_req_t* wr = (write_req_t*)my_malloc(sizeof(write_req_t));
+	//write_req_t* wr = (write_req_t*)my_malloc(sizeof(write_req_t));
+	write_req_t* wr = (write_req_t*)memory_mgr::get_instance().alloc_memory(sizeof(write_req_t));
 	if (wr == NULL) {
 		log_error("malloc faild in uv_send_data\n");
 		return;
 	}
 
-	unsigned char* send_buf = (unsigned char*)my_malloc(pkg_len + 1);
+	//unsigned char* send_buf = (unsigned char*)my_malloc(pkg_len + 1);
+	unsigned char* send_buf = (unsigned char*)memory_mgr::get_instance().alloc_memory(pkg_len + 1);
 	if (send_buf == NULL) {
-		my_free(wr);
+		//my_free(wr);
+		memory_mgr::get_instance().free_memory(wr);
 		log_error("malloc send_buf faild in uv_send_data\n");
 		return;
 	}
 	memcpy(send_buf,pkg, pkg_len);
 	wr->buf = uv_buf_init((char*)send_buf, pkg_len);
 	if (uv_write(&wr->req, (uv_stream_t*)stream, &wr->buf, 1, after_write)) {
-		my_free(send_buf);
-		my_free(wr);
+		//my_free(send_buf);
+		//my_free(wr);
+		memory_mgr::get_instance().free_memory(send_buf);
+		memory_mgr::get_instance().free_memory(wr);
 		log_error("uv_write failed");
 	}
 }
@@ -563,8 +570,6 @@ static void on_connection(uv_stream_t* server, int status) {
 	io_data->long_pkg = NULL;
 	//给新连接绑定关心的事件和回调
 	uv_read_start((uv_stream_t*)new_client, on_read_alloc_buff, on_after_read);
-	
-	
 }
 
 void start_server(char* ip, int port) {
