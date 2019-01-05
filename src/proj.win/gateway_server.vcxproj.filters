@@ -82,6 +82,9 @@
     <Filter Include="src\export_module">
       <UniqueIdentifier>{298db50c-10a7-40a1-922d-92e66223774f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\script">
+      <UniqueIdentifier>{46428f10-f049-47c7-bcb4-4713e4e7830d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\crypt\base64_encoder.c">
@@ -321,7 +324,6 @@
     <ClCompile Include="..\lua_wrapper\lua_wrapper.cpp">
       <Filter>src\lua_wrapper</Filter>
     </ClCompile>
-    <ClCompile Include="..\gateway_server\main.cc" />
     <ClCompile Include="..\utils\logger.cc">
       <Filter>src\utils</Filter>
     </ClCompile>
@@ -429,6 +431,15 @@
     </ClCompile>
     <ClCompile Include="..\export_module\session_export_to_lua.cpp">
       <Filter>src\export_module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\export_module\netbus_export_to_lua.cpp">
+      <Filter>src\export_module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\export_module\proto_mgr_export_to_lua.cpp">
+      <Filter>src\export_module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\main.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -756,10 +767,25 @@
     <ClInclude Include="..\export_module\session_export_to_lua.h">
       <Filter>src\export_module</Filter>
     </ClInclude>
+    <ClInclude Include="..\export_module\netbus_export_to_lua.h">
+      <Filter>src\export_module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\export_module\proto_mgr_export_to_lua.h">
+      <Filter>src\export_module</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\proto\message.proto">
       <Filter>src\proto</Filter>
+    </None>
+    <None Include="..\script\main.lua">
+      <Filter>src\script</Filter>
+    </None>
+    <None Include="..\script\main_test.lua">
+      <Filter>src\script</Filter>
+    </None>
+    <None Include="..\script\cmd_name_map.lua">
+      <Filter>src\script</Filter>
     </None>
   </ItemGroup>
 </Project>

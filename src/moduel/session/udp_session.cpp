@@ -33,7 +33,7 @@ void udp_session::send_data(unsigned char* pkg, int pkg_len) {
 
 void udp_session::send_msg(recv_msg* msg) {
 	int pkg_len = 0;
-	unsigned char* pkg = proroManager::encode_cmd_msg(msg, &pkg_len);
+	unsigned char* pkg = protoManager::encode_cmd_msg(msg, &pkg_len);
 	if (pkg == NULL || pkg_len == 0) {
 		//log
 		return;
@@ -91,14 +91,14 @@ static void after_uv_udp_recv(uv_udp_t* handle,
 	on_bin_protocal_recv_entry(&session, (unsigned char*)buf->base, nread);
 }
 
-void udp_session::start_udp_server() {
+void udp_session::start_udp_server(const char* ip,int port) {
 	uv_udp_t* udp_server = (uv_udp_t*)malloc(sizeof(uv_udp_t));
 	memset(udp_server, 0, sizeof(uv_udp_t));
 
 	uv_udp_init(get_uv_loop(), udp_server);
 
 	struct sockaddr_in addr;
-	uv_ip4_addr("0.0.0.0", 8002, &addr);
+	uv_ip4_addr(ip, port, &addr);
 	uv_udp_bind(udp_server, (const struct sockaddr*)&addr, UV_UDP_REUSEADDR);
 
 	memset(&_recv_buf,0,sizeof(udp_recv_buf));

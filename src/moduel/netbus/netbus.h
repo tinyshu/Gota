@@ -28,4 +28,7 @@ void on_bin_protocal_recv_entry(struct session_base* s, unsigned char* data, int
 void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len);
 void register_services(int stype, struct service_module* module);
 
+void tcp_listen(char* ip,int port);
+void udp_listen(char* ip, int port);
+void run_loop();
 #endif

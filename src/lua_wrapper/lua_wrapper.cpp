@@ -9,6 +9,8 @@
 #include "../export_module/service_export_to_lua.h"
 #include "../export_module/session_export_to_lua.h"
 #include "../export_module/timer_export_to_lua.h"
+#include "../export_module/netbus_export_to_lua.h"
+#include "../export_module/proto_mgr_export_to_lua.h"
 
 lua_State* g_lua_state = NULL;
 
@@ -32,6 +34,23 @@ static void print_debug(const char* filename, int line_num, const char* msg) {
 
 
 //lua只能导出这样签名的C函数
+static int lua_init_log(lua_State* L) {
+	int argc = lua_gettop(L);
+	if (argc!=2) {
+		return 0;
+	}
+
+	const char* log_path = lua_tostring(L,1);
+	if (log_path==NULL) {
+		return 0;
+	}
+	const char* prefix = lua_tostring(L, 1);
+	if (log_path == NULL) {
+		return 0;
+	}
+	logger::init(log_path, prefix);
+}
+
 int lua_logdebug(lua_State* L) {
 	//去栈顶string类型的元素
 	
@@ -185,6 +204,21 @@ int test_func_res(lua_State* pState) {
 }
 //函数返回table类型返回值
 /////////////////////////////////////////////
+static int register_log_export_to_lua(lua_State* tolua_s) {
+	//_G是lua中全局table
+	lua_getglobal(tolua_s, "_G");
+	if (lua_istable(tolua_s, -1)) {
+		tolua_open(tolua_s);
+		//注册一个导出模块
+		tolua_module(tolua_s, "Logger_wrapper", 0);
+		//开始导出模块接口
+		tolua_beginmodule(tolua_s, "Logger_wrapper");
+		tolua_function(tolua_s, "init", lua_init_log);
+		tolua_endmodule(tolua_s);
+	}
+	lua_pop(tolua_s, 1);
+	return 0;
+}
 
 void lua_wrapper::init_lua() {
 	g_lua_state = luaL_newstate();
@@ -194,17 +228,21 @@ void lua_wrapper::init_lua() {
 	//tolua++初始化
 	toluafix_open(g_lua_state);
 	//注册导出函数
+	register_log_export_to_lua(g_lua_state);
 	register_mysql_export_tolua(g_lua_state);
 	register_redis_export_tolua(g_lua_state);
 	register_service_export_tolua(g_lua_state);
 	register_session_export_tolua(g_lua_state);
 	register_timer_export_tolua(g_lua_state);
+	register_betbus_export_tolua(g_lua_state);
+	register_proto_export_tolua(g_lua_state);
 	/////////////////////////////////////////////////
 
 	//导出框架接口
 	reg_func2lua("LOGDEBUG", lua_logdebug);
 	reg_func2lua("LOGWARNING", lua_logwarning);
 	reg_func2lua("LOGERROR", lua_logerror);
+	
 	//test
 	//reg_func2lua("Add", add);
 	//reg_func2lua("print_array", print_array);
@@ -379,4 +417,10 @@ void remove_serivce_fun_by_refid(lua_State* L, int refid)
 int lua_wrapper::remove_service_fun_by_handle(int handle_id) {
 	remove_serivce_fun_by_refid(g_lua_state, handle_id);
 	return 0;
+}
+
+void lua_wrapper::add_search_path(const char* path) {
+	char strPath[1024] = { 0 };
+	sprintf(strPath, "local path = string.match([[%s]],[[(.*)/[^/]*$]])\n package.path = package.path .. [[;]] .. path .. [[/?.lua;]] .. path .. [[/?/init.lua]]\n", path);
+	luaL_dostring(g_lua_state, strPath);
 }

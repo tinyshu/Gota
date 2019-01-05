@@ -538,6 +538,9 @@ static void on_after_read(uv_stream_t* stream, ssize_t nread, const uv_buf_t* bu
 
 //新连接回调函数
 static void on_connection(uv_stream_t* server, int status) {
+	if (status<0) {
+		return;
+	}
 	uv_tcp_t* new_client = (uv_tcp_t*)my_malloc(sizeof(uv_tcp_t));
 	if (NULL == new_client) {
 		return;
@@ -564,7 +567,7 @@ static void on_connection(uv_stream_t* server, int status) {
 	
 }
 
-void start_server(char* ip, int port, int socket_type, int protocal_type) {
+void start_server(char* ip, int port) {
 	//创建一个事件循环对象
 	if (loop==NULL) {
 		loop = uv_default_loop();
@@ -575,7 +578,7 @@ void start_server(char* ip, int port, int socket_type, int protocal_type) {
 	//uv_ip4_addr(ip, port, &addr);
 	strncpy(ip_address,ip,strlen(ip));
 	ip_port = port;
-	uv_ip4_addr("0.0.0.0", port, &addr);
+	uv_ip4_addr(ip, port, &addr);
 	int ret = uv_tcp_bind(&l_server, (const struct sockaddr*)&addr, 0);
 	if (ret != 0) {
 		goto failed;
@@ -587,10 +590,14 @@ void start_server(char* ip, int port, int socket_type, int protocal_type) {
 	}
 
 	//进入事件循环
-	uv_run(loop, UV_RUN_DEFAULT);
+	//uv_run(loop, UV_RUN_DEFAULT);
 failed:
-	
+
 	return;
+}
+
+void run() {
+	uv_run(loop, UV_RUN_DEFAULT);
 }
 
 typedef struct connect_context {

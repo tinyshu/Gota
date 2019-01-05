@@ -6,13 +6,13 @@
 
 using namespace google::protobuf;
 
-std::unordered_map<int, std::string> proroManager::_cmd_map;
+std::unordered_map<int, std::string> protoManager::_cmd_map;
 
-void proroManager::register_cmd(int cmd_id, char* cmd) {
-
+void protoManager::register_cmd(int cmd_id, const char* cmd) {
+	_cmd_map[cmd_id] = std::string(cmd);
 }
 
-void proroManager::register_cmd(char** cmd_array, int cmd_count) {
+void protoManager::register_cmd(char** cmd_array, int cmd_count) {
 	if (cmd_count <=0) {
 		return;
 	}
@@ -22,7 +22,7 @@ void proroManager::register_cmd(char** cmd_array, int cmd_count) {
 	}
 }
 
-const std::string proroManager::get_cmmand_protoname(int cmd) {
+const std::string protoManager::get_cmmand_protoname(int cmd) {
 	std::unordered_map<int, std::string>::iterator it = _cmd_map.find(cmd);
 	if (it!= _cmd_map.end()) {
 		return it->second;
@@ -32,7 +32,7 @@ const std::string proroManager::get_cmmand_protoname(int cmd) {
 }
 
 //使用pb的反射机制创建对应的message对象 14
-Message* proroManager::create_message_by_name(const std::string& type_name) {
+Message* protoManager::create_message_by_name(const std::string& type_name) {
 	if (type_name.empty()) {
 		return NULL;
 	}
@@ -51,7 +51,7 @@ Message* proroManager::create_message_by_name(const std::string& type_name) {
 	return message;
 }
 //解析到完成二进制包调用
-bool proroManager::decode_cmd_msg(unsigned char* pkg, int pkg_len, struct recv_msg** out_msg) {
+bool protoManager::decode_cmd_msg(unsigned char* pkg, int pkg_len, struct recv_msg** out_msg) {
 	if (pkg==NULL || pkg_len<=0) {
 		return false;
 	}
@@ -77,22 +77,25 @@ bool proroManager::decode_cmd_msg(unsigned char* pkg, int pkg_len, struct recv_m
 		
 		return true;
 	}
-	const std::string type_name = proroManager::get_cmmand_protoname(msg->ctype);
+	const std::string type_name = protoManager::get_cmmand_protoname(msg->ctype);
 	if (type_name.empty()) {
-		free(msg);
+		//free(msg);
+		memory_mgr::get_instance().free_memory(msg);
 		msg = NULL;
 		return false;
 	}
 
 	Message* pb_msg = create_message_by_name(type_name);
 	if (pb_msg ==NULL) {
-		free(msg);
+		//free(msg);
+		memory_mgr::get_instance().free_memory(msg);
 		msg = NULL;
 		return false;
 	}
 
 	if (false==pb_msg->ParseFromArray(pkg+ BIN_HEAD_LEN, pkg_len- BIN_HEAD_LEN)) {
-		free(msg);
+		//free(msg);
+		memory_mgr::get_instance().free_memory(msg);
 		msg = NULL;
 		delete pb_msg;
 		return false;
@@ -103,7 +106,7 @@ bool proroManager::decode_cmd_msg(unsigned char* pkg, int pkg_len, struct recv_m
 	return true;
 }
 
-unsigned char* proroManager::encode_cmd_msg(recv_msg* msg, int * out_len) {
+unsigned char* protoManager::encode_cmd_msg(recv_msg* msg, int * out_len) {
 	if (msg==NULL) {
 		*out_len = 0;
 		return NULL;
@@ -140,7 +143,7 @@ unsigned char* proroManager::encode_cmd_msg(recv_msg* msg, int * out_len) {
 	return package;
 }
 
-void proroManager::msg_free(recv_msg* msg) {
+void protoManager::msg_free(recv_msg* msg) {
 	if (msg==NULL) {
 		return;
 	}

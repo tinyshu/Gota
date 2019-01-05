@@ -32,7 +32,7 @@ void session::send_data(unsigned char* pkg, int pkg_len) {
 
 void session::send_msg(recv_msg* msg) {
 	int pkg_len = 0;
-	unsigned char* pkg = proroManager::encode_cmd_msg(msg, &pkg_len);
+	unsigned char* pkg = protoManager::encode_cmd_msg(msg, &pkg_len);
 	if (pkg == NULL || pkg_len == 0) {
 		//log
 		return;
@@ -88,10 +88,15 @@ int get_proto_type() {
 	return session_manager.protocal_type;
 }
 
-void init_session_manager(int socket_type,int protocal_type) {
-	memset(&session_manager, 0, sizeof(session_manager));
+void init_socket_and_proto_type(int socket_type, int protocal_type) {
 	session_manager.socket_type = socket_type;
 	session_manager.protocal_type = protocal_type; //本次框架使用的协议类型
+}
+
+void init_session_manager() {
+	memset(&session_manager, 0, sizeof(session_manager));
+	//session_manager.socket_type = socket_type;
+	//session_manager.protocal_type = protocal_type; //本次框架使用的协议类型
 	// 将6000个session一次分配出来。
 	session_manager.cache_mem = new struct session[MAX_SESSION_NUM];
 	

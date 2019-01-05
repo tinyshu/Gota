@@ -54,7 +54,7 @@ public:
 	virtual void send_msg(recv_msg* msg);
 };
 
-void init_session_manager(int socket_type, int protocal_type);
+void init_session_manager();
 void exit_session_manager();
 
 
@@ -78,5 +78,6 @@ extern void session_json_send(struct session* s, json_t* object);
 
 extern int get_proto_type();
 extern int get_socket_type();
+void init_socket_and_proto_type(int socket_type, int protocal_type);
 #endif
 

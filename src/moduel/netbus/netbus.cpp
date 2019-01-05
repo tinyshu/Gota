@@ -11,11 +11,15 @@ extern "C" {
 #ifdef GAME_DEVLOP
 #include "../session/tcp_session.h"
 #endif
+#include "../../utils/logger.h"
 #include "../../moduel/netbus/service_manger.h"
 #include "../../proto/proto_manage.h"
 #include "../../moduel/session/tcp_session.h"
 #include "../../moduel/session/session_base.h"
 #include "../../utils/mem_manger.h"
+#include "../net/net_uv.h"
+#include "../session/udp_session.h"
+
 
 #define my_malloc malloc
 #define my_free free
@@ -77,14 +81,14 @@ void on_connect_lost(struct session* s) {
 //void on_bin_protocal_recv_entry(struct session* s, unsigned char* data, int len) {
 void on_bin_protocal_recv_entry(struct session_base* s, unsigned char* data, int len) {
 	recv_msg* msg = NULL;
-	if(false==proroManager::decode_cmd_msg(data, len, &msg)){
+	if(false==protoManager::decode_cmd_msg(data, len, &msg)){
 		return;
 	}
 	if (msg) {
 #ifdef USE_LUA
 		//test echo收到的数据包
 		//int out_len = 0;
-		//unsigned char* send_pkg = proroManager::encode_cmd_msg(msg,&out_len);
+		//unsigned char* send_pkg = protoManager::encode_cmd_msg(msg,&out_len);
 		////send
 		//session_send(s, send_pkg, out_len);
 		////free
@@ -92,7 +96,7 @@ void on_bin_protocal_recv_entry(struct session_base* s, unsigned char* data, int
 		//////////////////////////
 		server_manage::get_instance().on_session_recv_cmd(s, msg);
 		memory_mgr::get_instance().free_memory(msg);
-		//proroManager::msg_free(msg);
+		//protoManager::msg_free(msg);
 #else
 #endif
 	}
@@ -159,4 +163,24 @@ void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len
 	json_free_value(&root);
 	//my_free(msg);
 	memory_mgr::get_instance().free_memory(msg);
+}
+
+void tcp_listen(char* ip, int port) {
+	if (ip == NULL) {
+		ip = "0.0.0.0";
+	}
+	start_server(ip, port);
+	log_debug("start server tcp at %s:%d\n", ip, port);
+}
+
+void udp_listen(char* ip, int port) {
+	if (ip == NULL) {
+		ip = "0.0.0.0";
+	}
+	udp_session::start_udp_server(ip,port);
+	log_debug("start server udp at %s:%d\n", ip, port);
+}
+
+void run_loop() {
+	run();
 }

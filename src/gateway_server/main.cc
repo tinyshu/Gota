@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
 	
 	//tcp+protobuf格式
 	LOGINFO("start gateway server udp at %s:%d\n", GW_CONFIG.ip, 8802);
-	udp_session::start_udp_server();
+	//udp_session::start_udp_server();
 	LOGINFO("start gateway server tcp at %s:%d\n", GW_CONFIG.ip, GW_CONFIG.port);
 	start_server(GW_CONFIG.ip, GW_CONFIG.port, socket_type, proto_type);
 	

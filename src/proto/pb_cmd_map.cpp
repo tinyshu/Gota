@@ -9,5 +9,5 @@ char* g_pb_cmd_map[] = {
 };
 
 void init_pb_cmd_map() {
-	proroManager::register_cmd(g_pb_cmd_map,2);
+	protoManager::register_cmd(g_pb_cmd_map,2);
 }

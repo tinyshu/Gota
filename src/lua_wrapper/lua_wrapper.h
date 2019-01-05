@@ -12,7 +12,7 @@ public:
 	static void exit_lua();
 
 	static int exce_lua_file(const char* lua_file_path);
-
+	static void add_search_path(const char* path);
 	//static lua_wrapper& get_instance();
 
 	static void reg_func2lua(const char* func_name, int (*lua_function)(lua_State* L));

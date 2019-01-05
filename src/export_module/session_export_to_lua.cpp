@@ -48,7 +48,7 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 	通过名称创建对应的Message,返回父类指针，实际创建的
 	是和名字对应的类实例
 	*/
-	Message* message = proroManager::create_message_by_name(type_name);
+	Message* message = protoManager::create_message_by_name(type_name);
 	if (message==NULL) {
 		return NULL;
 	}
@@ -305,7 +305,7 @@ int lua_send_msg(lua_State* tolua_s) {
 			s->send_msg(&msg);
 		}
 		else {
-			string type_name = proroManager::get_cmmand_protoname(msg.ctype);
+			string type_name = protoManager::get_cmmand_protoname(msg.ctype);
 			if (type_name.empty()) {
 				msg.body = NULL;
 				s->send_msg(&msg);
@@ -328,6 +328,58 @@ int lua_send_msg(lua_State* tolua_s) {
 	return 0;
 }
 
+int lua_set_utag(lua_State* tolua_s) {
+	session_base* s = (session_base*)tolua_touserdata(tolua_s,1,NULL);
+	if (s==NULL) {
+		return 0;
+	}
+
+	int utag = tolua_tonumber(tolua_s,2,0);
+	s->set_utag(utag);
+	return 0;
+}
+
+int lua_get_utag(lua_State* tolua_s) {
+	session_base* s = (session_base*)tolua_touserdata(tolua_s, 1, NULL);
+	if (s == NULL) {
+		return 0;
+	}
+
+	tolua_pushnumber(tolua_s,s->get_utag());
+	return 1;
+}
+
+int lua_get_session_type(lua_State* tolua_s) {
+	session_base* s = (session_base*)tolua_touserdata(tolua_s, 1, NULL);
+	if (s == NULL) {
+		return 0;
+	}
+
+	tolua_pushnumber(tolua_s, s->get_is_server_session());
+	return 1;
+}
+
+static int lua_get_socket_type(lua_State* tolua_s) {
+	lua_pushnumber(tolua_s, get_socket_type());
+	return 1;
+}
+
+static int lua_get_proto_type(lua_State* tolua_s) {
+
+	lua_pushnumber(tolua_s, get_proto_type());
+	return 1;
+}
+
+static int lua_set_socket_and_proto_type(lua_State* tolua_s) {
+	int argc = lua_gettop(tolua_s);
+	if (argc!=2) {
+		return 0;
+	}
+
+	int socket_type = lua_tonumber(tolua_s,1);
+	int proto_type =  lua_tonumber(tolua_s, 2);
+	init_socket_and_proto_type(socket_type, proto_type);
+}
 
 int register_session_export_tolua(lua_State*tolua_s) {
 	lua_getglobal(tolua_s, "_G");
@@ -340,6 +392,12 @@ int register_session_export_tolua(lua_State*tolua_s) {
 		tolua_beginmodule(tolua_s, session_moduel_name);
 		tolua_function(tolua_s, "close_session", lua_close_session);
 		tolua_function(tolua_s, "send_msg", lua_send_msg);
+		tolua_function(tolua_s, "set_utag", lua_set_utag);
+		tolua_function(tolua_s, "get_utag", lua_get_utag);
+		tolua_function(tolua_s, "get_session_type", lua_get_session_type);
+		tolua_function(tolua_s, "get_socket_type", lua_get_socket_type);
+		tolua_function(tolua_s, "get_proto_type", lua_get_proto_type);
+		tolua_function(tolua_s, "set_socket_and_proto_type", lua_set_socket_and_proto_type);
 		tolua_endmodule(tolua_s);
 	}
 	lua_pop(tolua_s, 1);

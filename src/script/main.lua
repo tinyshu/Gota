@@ -1,22 +1,3 @@
---lua测试文件，vs里调试需要放在bin目录下
---连接mysql redis需要填自己对应的mysql redis连接信息
---LOGDEBUG("hello")
---myname = "tinyshu"
---a=2
---b=5
---local sum = Add(a+b)
---print(sum)
-
---arr={"a001","a002","a003"}
---print_array(arr)
-
---table1 = {name="tiny",age=28,id="10086"}
-
---print_table(table1)
-
---local info_table = re_table()
---print(info_table["name"]..info_table["age"])
-
 function print_r ( t )  
     local print_r_cache={}
     local function sub_print_r(t,indent)
@@ -51,80 +32,48 @@ function print_r ( t )
     print()
 end
 
-function PrintTable(table , level)
-  print("call PrintTable")
-  level = level or 1
-  local indent = ""
-  for i = 1, level do
-    indent = indent.."  "
-  end
+--��ʼ����־ģ��
+Logger_wrapper.init("logger/gateway/", "gateway", true)
 
-  if key ~= "" then
-    print(indent..key.." ".."=".." ".."{")
-  else
-    print(indent .. "{")
-  end
+local socket_type = {
+	TCP_SOCKET = 0,  --tcp
+	WEB_SOCKET = 1,  --websocket
+}
 
-  key = ""
-  for k,v in pairs(table) do
-     if type(v) == "table" then
-        key = k
-        PrintTable(v, level + 1)
-     else
-        local content = string.format("%s%s = %s", indent .. "  ",tostring(k), tostring(v))
-      print(content)  
-      end
-  end
-  print(indent .. "}")
+local proto_type = {
+    PROTO_BUF = 0,
+	PROTO_JSON = 1,
+}
 
+session_wrapper.set_socket_and_proto_type(socket_type.TCP_SOCKET,proto_type.PROTO_BUF)
+--protobufЭ�飬ע��cmd
+if session_wrapper.get_proto_type() == proto_type.PROTO_BUF then
+   local cmd_name_map = require("cmd_name_map")
+   if cmd_name_map then
+	proto_mgr_wrapper.register_protobuf_cmd(cmd_name_map)
+   end
 end
 
---connect(const char* ip, int port, const char* db_name, const char* user_name,const char* passwd, cb_connect_db connect_db)
+--�������
+netbus_wrapper.tcp_listen("0.0.0.0",6080)
+netbus_wrapper.udp_listen("0.0.0.0",8002)
 
-mysql_wrapper.connect("ip",port,"user_center","root","123321",function(err, context) 
---	log_debug("event call");
+print("start gateway service success tcp:6080 udp:8002!!!!")
 
-	if(err)  then
-		print(err)
-		return
-	end
+--local trm_server = require("trm_server")
+local my_service = {
+-- msg {1: stype, 2 ctype, 3 utag, 4 body_table_or_str}
+on_session_recv_cmd = function(session, msg)
+	print_r(msg)
+	--table1 = {name="tiny",age=28,id="10086"}
+	local t = {stype=1,ctype=1,utag=1001,body={name="shuyi",age=29,email="2654551@qq.com",int_set=10}}
+	--local t = {1=1,2=0,3=1001,{name="shuyi",age=29,email="2654551@qq.com",int_set=10}}
+	--session_wrapper.close_session(session)
+    session_wrapper.send_msg(session,t)
+end,
 
-    mysql_wrapper.query(context, "select * from t_user_info", function (err, ret)
-		if err then 
-			print(err)
-			return;
-		end
+on_session_disconnect = function(session)
+end
+}
 
-		print("success")
-		--print(ret)
-		print_r(ret)
-	end)
-	
-	mysql_wrapper.close(context);
-end)
-
---读写redis
---redis_wrapper.connect("ip",port,5,function(err, context)
-	--print("redis call");
-
---	if(err) then
---		print(err)
---		return
---	end
-	
---	redis_wrapper.query(context, "get name1", function (err, result)
---		if(err) then
---			print(err)
---			return
---		end
---		print(result)
-		
---		redis_wrapper.query(context, "set name tiny", function (err, result)
---		    redis_wrapper.close(context)
---		end)
-		
---		print("return")
-		
---	end)
---end);
-
+local ret = service_wrapper.register_service(1, my_service)

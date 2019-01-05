@@ -21,7 +21,7 @@ enum {
 const char* conver_socket_type_str(int socket_type);
 const char* conver_protocal_str(int protocal_type);
 
-void start_server(char* ip,int port ,int socket_type ,int proto_type);
+void start_server(char* ip,int port);
 
 void uv_send_data(void* stream, char* pkg, unsigned int pkg_len);
 
@@ -30,5 +30,6 @@ extern uv_loop_t* get_uv_loop();
 
 extern struct session* netbus_connect(char* server_ip, int port);
 extern void tcp_connect(char* server_ip,int port,void(*connect_cb)(const char* err,session_base* s,void* udata),void* udata);
+void run();
 #endif
 
