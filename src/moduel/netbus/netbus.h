@@ -30,5 +30,6 @@ void register_services(int stype, struct service_module* module);
 
 void tcp_listen(char* ip,int port);
 void udp_listen(char* ip, int port);
+void tcp_connection(const char* server_ip, int port, void(*connect_cb)(const char* err, session_base* s, void* udata), void* udata);
 void run_loop();
 #endif

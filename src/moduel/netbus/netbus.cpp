@@ -184,3 +184,7 @@ void udp_listen(char* ip, int port) {
 void run_loop() {
 	run();
 }
+
+void tcp_connection(const char* server_ip, int port, void(*connect_cb)(const char* err, session_base* s, void* udata), void* udata) {
+	tcp_connect(server_ip, port, connect_cb,udata);
+}

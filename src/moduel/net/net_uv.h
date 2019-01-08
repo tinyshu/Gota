@@ -29,7 +29,7 @@ void init_uv();
 extern uv_loop_t* get_uv_loop();
 
 extern struct session* netbus_connect(char* server_ip, int port);
-extern void tcp_connect(char* server_ip,int port,void(*connect_cb)(const char* err,session_base* s,void* udata),void* udata);
+extern void tcp_connect(const char* server_ip,int port,void(*connect_cb)(const char* err,session_base* s,void* udata),void* udata);
 void run();
 #endif
 

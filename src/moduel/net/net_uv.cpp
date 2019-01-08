@@ -674,7 +674,7 @@ struct session* netbus_connect(char* server_ip, int port) {
 	return s;
 }
 
-void tcp_connect(char* server_ip, int port, 
+void tcp_connect(const char* server_ip, int port,
 				void(*connect_cb)(const char* err, session_base* s, void* udata), 
 				void* udata) {
 	struct sockaddr_in bind_addr;
@@ -691,7 +691,7 @@ void tcp_connect(char* server_ip, int port,
 	stream->data = io_data;
 	uv_tcp_init(loop, stream);
 
-	struct session* s = save_session(stream, server_ip, port);
+	struct session* s = save_session(stream, const_cast<char*>(server_ip), port);
 	io_data->max_pkg_len = 0;
 	io_data->s = s;
 	io_data->long_pkg = NULL;

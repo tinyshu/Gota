@@ -20,7 +20,7 @@ static uint32_t g_last_second;
 static char g_format_time[64] = { 0 };
 static char* g_log_level[] = { "DEBUG ", "WARNING ", "ERROR "};
 static bool g_std_out = false;
-
+static bool g_is_init = false;
 static void 
 open_file(tm* time_struct) {
 	int result = 0;
@@ -73,6 +73,10 @@ format_time() {
 
 void 
 logger::init(const char* path,const  char* prefix, bool std_output) {
+	if (g_is_init) {
+		return;
+	}
+
 	g_prefix = prefix;
 	g_log_path = path;
 	g_std_out = std_output;
@@ -91,6 +95,7 @@ logger::init(const char* path,const  char* prefix, bool std_output) {
 		find = tmp_path.find("/", find + 1);
 	}
 	uv_fs_req_cleanup(&req);
+	g_is_init = true;
 }
 
 void 
