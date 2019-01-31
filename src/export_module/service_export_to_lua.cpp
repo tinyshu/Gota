@@ -173,8 +173,10 @@ static void push_pb_message_tolua(const Message* pb_msg) {
 
 }
 
+//Lua会清理他的栈，所以，有一个原则：永远不要将指向Lua字符串的指针保存到访问他们的外部函数中
 //当收到消息会根据stype来调用对应的函数,然后把协议数据放入栈，调用lua函数
-//bool lua_service_module::on_session_recv_cmd(struct session_base* s, recv_msg* msg) {
+//函数把msg里的pb对象转成lua的table形式
+//如果body的是json的字符串，就直接发给lua层
 bool lua_service_module::on_session_recv_cmd(struct session_base* s, recv_msg* msg) {
 	
 	if (s==NULL || msg==NULL) {
@@ -182,11 +184,11 @@ bool lua_service_module::on_session_recv_cmd(struct session_base* s, recv_msg* m
 	}
 	lua_State* lua_status = lua_wrapper::get_luastatus();
 	int idx = 1;
-	//C++网络底层使用struct session
+	
 	tolua_pushuserdata(lua_status, s);
-	//创建一个表，存入{1: stype, 2 ctype, 3 utag, 4 body str}
+	//创建一个表2的位置，存入{1: stype, 2 ctype, 3 utag, 4 pb{}或许 json的string}
 	lua_newtable(lua_status);
-
+	//lua_rawseti
 	lua_pushinteger(lua_status, msg->stype);
 	lua_rawseti(lua_status,-2,idx);
 	idx++;
@@ -289,11 +291,13 @@ local ret = service.register(100, my_service)
 int register_service(lua_State* tolua_s) {
 	int stype = (int)tolua_tonumber(tolua_s, 1,0);
 	if (stype <= 0 || stype > MAX_SERVICES) {
-		return -1;
+		lua_pushinteger(tolua_s, 0);
+		return 1;
 	}
 
 	if (tolua_istable(tolua_s,2,0,NULL)==0) {
-		return -1;
+		lua_pushinteger(tolua_s, 0);
+		return 1;
 	}
 
 	//获取lua传入的table的值，就是函数地址 3-4
@@ -304,12 +308,14 @@ int register_service(lua_State* tolua_s) {
 	int on_session_disconnect_handle = save_service_function(tolua_s, 4, 0);
 	
 	if (on_session_recv_cmd_handle ==0 && on_session_disconnect_handle ==0) {
-		return -1;
+		lua_pushinteger(tolua_s, 0);
+		return 1;
 	}
 
 	lua_service_module* lua_module = new lua_service_module;
 	if (lua_module == NULL) {
-		return -1;
+		lua_pushinteger(tolua_s, 0);
+		return 1;
 	}
 	//根据stype调用不同的service_module
 	lua_module->stype = stype;
@@ -317,7 +323,9 @@ int register_service(lua_State* tolua_s) {
 	lua_module->on_session_disconnect_handle = on_session_disconnect_handle;
 	//注册到service管理模块
 	server_manage::get_instance().register_service(stype, lua_module);
-	return 0;
+	lua_pushinteger(tolua_s,1);
+	return 1;
+
 }
 
 int register_service_export_tolua(lua_State*tolua_s) {
@@ -334,6 +342,6 @@ int register_service_export_tolua(lua_State*tolua_s) {
 		tolua_endmodule(tolua_s);
 	}
 	lua_pop(tolua_s, 1);
-
+	
 	return 0;
 }

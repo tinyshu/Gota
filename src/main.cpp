@@ -14,11 +14,11 @@ int main(int argc, char** argv) {
 	init_session_key_map();
 	init_session_manager();
 	lua_wrapper::init_lua();
-	
+	//lua脚本的搜索路径从./script/开始
 	if (argc!=3) {
 		std::string search_path = "./script/";
 		lua_wrapper::add_search_path(search_path.c_str());
-		std::string lua_file = search_path + "main.lua";
+		std::string lua_file = search_path + "auth_server/main.lua";
 		int ret = lua_wrapper::exce_lua_file(lua_file.c_str());
 		if (ret != 0) {
 			exit(0);

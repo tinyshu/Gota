@@ -139,6 +139,7 @@ static int recv_header(unsigned char* pkg, int len, int* pkg_size) {
 static void on_bin_protocal_recved(struct session* s, struct io_package* io_data) {
 	// Step1: 解析数据的头，获取我们游戏的协议包体的大小;
 	while (io_data->recved > 0) {
+		//获取数据包长度
 		int pkg_size = 0;
 		if (recv_header(io_data->long_pkg, io_data->recved, &pkg_size) != 0) { // 继续投递recv请求，知道能否接收一个数据头;
 			break;
@@ -150,23 +151,26 @@ static void on_bin_protocal_recved(struct session* s, struct io_package* io_data
 			break;
 		}
 
-		// 是否收完了一个数据包;
+		// 如果有一个完整的数据包，就解包做逻辑处理
 		if (io_data->recved >= pkg_size) { // 表示我们已经收到至少超过了一个包的数据；
 			unsigned char* pkg_data = io_data->long_pkg;
 
-			//printf("%s", pkg_data + 4);
+			//解包函数pkg_data + 2是去掉2字节包长度
 			on_bin_protocal_recv_entry(s, pkg_data + 2, pkg_size - 2);
 
-			if (io_data->recved > pkg_size) { // 1.5 个包
+			//io_data->recved > pkg_size缓存区里大于一个包数据，数据移动去掉已处理的缓存区的包
+			if (io_data->recved > pkg_size) {
 				memmove(io_data->long_pkg, io_data->long_pkg + pkg_size, io_data->recved - pkg_size);
 			}
 			io_data->recved -= pkg_size;
-
-			if (io_data->recved ==0 && io_data->long_pkg != NULL) {
+			if (io_data->recved<0) {
+				io_data->recved = 0;
+			}
+			/*if (io_data->recved ==0 && io_data->long_pkg != NULL) {
 				my_free(io_data->long_pkg);
 				io_data->long_pkg = NULL;
 				io_data->max_pkg_len = 0;
-			}
+			}*/
 		}
 	}
 }
@@ -526,6 +530,7 @@ static void on_after_read(uv_stream_t* stream, ssize_t nread, const uv_buf_t* bu
 	if (s->socket_type == TCP_SOCKET_IO) {
 		if (protocal_type == BIN_PROTOCAL) {
 			//tcp+二进制协议
+			//包长度(2字节) + 包头(8字节) + body(protobuf)
 			on_bin_protocal_recved(s, io_data);
 		}
 		else if (protocal_type == JSON_PROTOCAL) {

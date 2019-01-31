@@ -77,23 +77,30 @@ void on_connect_lost(struct session* s) {
 	}
 }
 
+static void echo_test(struct session_base* s, recv_msg* msg) {
+	int out_len = 0;
+	unsigned char* send_pkg = protoManager::encode_cmd_msg(msg,&out_len);
+	
+	session_send((struct session*)s, send_pkg, out_len);
+	if (send_pkg!=NULL) {
+		free(send_pkg);
+	}
+	
+}
 //二进制协议处理,由网络底层解析到一个完整的package后调用
-//void on_bin_protocal_recv_entry(struct session* s, unsigned char* data, int len) {
 void on_bin_protocal_recv_entry(struct session_base* s, unsigned char* data, int len) {
+	//根据包头里的type_name字段反射创建pb的message对象
 	recv_msg* msg = NULL;
 	if(false==protoManager::decode_cmd_msg(data, len, &msg)){
 		return;
 	}
 	if (msg) {
 #ifdef USE_LUA
-		//test echo收到的数据包
-		//int out_len = 0;
-		//unsigned char* send_pkg = protoManager::encode_cmd_msg(msg,&out_len);
-		////send
-		//session_send(s, send_pkg, out_len);
-		////free
-		//free(send_pkg);
-		//////////////////////////
+
+		//测试函数，原样返回数据包
+		//echo_test(s, msg);
+		//把收到的数据通过service_type转发到对应的service模块
+		//service模块是lua层注册进来的
 		server_manage::get_instance().on_session_recv_cmd(s, msg);
 		memory_mgr::get_instance().free_memory(msg);
 		//protoManager::msg_free(msg);

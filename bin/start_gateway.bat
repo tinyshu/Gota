@@ -1,0 +1,1 @@
+ServerEngin.exe ../src/script/ gateway_server/main.lua

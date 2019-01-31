@@ -36,7 +36,7 @@ static void print_debug(const char* filename, int line_num, const char* msg) {
 //lua只能导出这样签名的C函数
 static int lua_init_log(lua_State* L) {
 	int argc = lua_gettop(L);
-	if (argc!=2) {
+	if (argc!=3) {
 		return 0;
 	}
 
@@ -44,8 +44,8 @@ static int lua_init_log(lua_State* L) {
 	if (log_path==NULL) {
 		return 0;
 	}
-	const char* prefix = lua_tostring(L, 1);
-	if (log_path == NULL) {
+	const char* prefix = lua_tostring(L, 2);
+	if (prefix == NULL) {
 		return 0;
 	}
 	logger::init(log_path, prefix);

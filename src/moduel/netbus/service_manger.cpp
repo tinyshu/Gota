@@ -22,7 +22,6 @@ server_manage& server_manage::get_instance() {
 }
 
 //网络层的消息先转到这里，在根据stype调用对应的service函数
-//bool server_manage::on_session_recv_cmd(struct session* s, recv_msg* msg) {
 bool server_manage::on_session_recv_cmd(struct session_base* s, recv_msg* msg) {
 	if (msg==NULL || msg->stype == MAX_SERVICES || s==NULL) {
 		return false;

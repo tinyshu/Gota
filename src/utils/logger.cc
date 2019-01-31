@@ -68,6 +68,7 @@ format_time() {
 		sprintf(g_format_time, "%4d%02d%02d %02d:%02d:%02d ",
 			time_struct->tm_year + 1900, time_struct->tm_mon + 1, time_struct->tm_mday,
 			time_struct->tm_hour, time_struct->tm_min, time_struct->tm_sec);
+		
 	}
 }
 
@@ -112,8 +113,13 @@ logger::log(const char* file_name,
 	va_start(args, msg);
 	vsnprintf(msg_content, sizeof(msg_content), msg, args);
 	va_end(args);
-
-	sprintf(msg_meta_info, "%s:%u  ", file_name, line_num);
+	const char * pch = NULL;
+#ifdef WIN32
+	pch = strrchr(file_name,'\\');
+#else
+	pch = strrchr(file_name, '/');
+#endif
+	sprintf(msg_meta_info, "%s:%u  ", pch + 1, line_num);
 	uv_buf_t buf[5]; // time level content fileandline newline
 	buf[0] = uv_buf_init(g_format_time, strlen(g_format_time));
 	buf[1] = uv_buf_init(g_log_level[level], strlen(g_log_level[level]));

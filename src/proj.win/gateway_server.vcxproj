@@ -251,10 +251,18 @@
     <ClInclude Include="..\utils\timer_uv_list.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\proto\game.proto" />
     <None Include="..\proto\message.proto" />
+    <None Include="..\script\auth_server\auth_service.lua" />
+    <None Include="..\script\auth_server\main.lua" />
     <None Include="..\script\cmd_name_map.lua" />
+    <None Include="..\script\cmd_type.lua" />
+    <None Include="..\script\conf.lua" />
+    <None Include="..\script\gateway_server\gateway_service.lua" />
+    <None Include="..\script\gateway_server\main.lua" />
     <None Include="..\script\main.lua" />
     <None Include="..\script\main_test.lua" />
+    <None Include="..\script\service_type.lua" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6096B2BF-BA7E-46EE-B56A-E286DB892614}</ProjectGuid>
@@ -311,6 +319,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\bin\</OutDir>
     <IntDir>$(Configuration)\$(ProjectName)\obj\</IntDir>
+    <TargetName>ServerEngin</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

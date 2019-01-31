@@ -85,6 +85,12 @@
     <Filter Include="src\script">
       <UniqueIdentifier>{46428f10-f049-47c7-bcb4-4713e4e7830d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\script\gateway_server">
+      <UniqueIdentifier>{90da8699-8417-4187-a8b5-118002d4cf55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\script\auth_server">
+      <UniqueIdentifier>{c131acbe-cd08-4252-b84e-4ffca587270f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\crypt\base64_encoder.c">
@@ -786,6 +792,30 @@
     </None>
     <None Include="..\script\cmd_name_map.lua">
       <Filter>src\script</Filter>
+    </None>
+    <None Include="..\script\cmd_type.lua">
+      <Filter>src\script</Filter>
+    </None>
+    <None Include="..\script\service_type.lua">
+      <Filter>src\script</Filter>
+    </None>
+    <None Include="..\proto\game.proto">
+      <Filter>src\proto</Filter>
+    </None>
+    <None Include="..\script\conf.lua">
+      <Filter>src\script</Filter>
+    </None>
+    <None Include="..\script\gateway_server\main.lua">
+      <Filter>src\script\gateway_server</Filter>
+    </None>
+    <None Include="..\script\gateway_server\gateway_service.lua">
+      <Filter>src\script\gateway_server</Filter>
+    </None>
+    <None Include="..\script\auth_server\main.lua">
+      <Filter>src\script\auth_server</Filter>
+    </None>
+    <None Include="..\script\auth_server\auth_service.lua">
+      <Filter>src\script\auth_server</Filter>
     </None>
   </ItemGroup>
 </Project>

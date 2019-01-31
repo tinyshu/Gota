@@ -1,0 +1,1 @@
+ServerEngin.exe ../src/script/ auth_server/main.lua
