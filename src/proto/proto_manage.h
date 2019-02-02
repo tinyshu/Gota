@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unordered_map>
 struct recv_msg;
+struct raw_cmd;
 
 class protoManager {
 public:
@@ -15,6 +16,7 @@ public:
 	static const std::string get_cmmand_protoname(int cmd);
 	static void msg_free(recv_msg* msg);
 	static google::protobuf::Message* create_message_by_name(const std::string& type_name);
+	static bool decode_rwa_cmd_msg(unsigned char* pkg, int pkg_len, raw_cmd* raw_out_msg);
 private:
 	static std::unordered_map<int, std::string> _cmd_map;
 	

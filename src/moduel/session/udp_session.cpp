@@ -42,6 +42,10 @@ void udp_session::send_msg(recv_msg* msg) {
 	free(pkg);
 }
 
+void udp_session::send_raw_msg(raw_cmd* raw_data) {
+	send_data(raw_data->raw_data, raw_data->raw_len);
+}
+
 static void udp_uv_alloc_buf(uv_handle_t* handle,
 	size_t suggested_size,
 	uv_buf_t* buf) {

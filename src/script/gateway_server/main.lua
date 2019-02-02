@@ -32,7 +32,8 @@ print("start gateway service success ip:".. config.gateway_tcp_ip,"port:"..confi
 local servers = config.servers
 local gate_service = require("gateway_server/gateway_service")
 for k,v in pairs(servers) do
-	local ret = service_wrapper.register_service(v.stype, gate_service)
+	--local ret = service_wrapper.register_service(v.stype, gate_service)
+	local ret = service_wrapper.register_raw_service(v.stype, gate_service)
 	if ret then
 		print("register gw_servce:[" .. v.stype.. "] success!!!")
 	else

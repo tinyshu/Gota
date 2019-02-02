@@ -2,6 +2,7 @@
 #define SESSION_BASE_H__
 
 struct recv_msg;
+struct raw_cmd;
 /*
 session模块
 最开始用纯C实现，所以用的struct,
@@ -12,6 +13,7 @@ typedef struct session_base {
 	virtual void close() = 0;
 	virtual void send_data(unsigned char* pkg, int pkg_len) = 0;
 	virtual void send_msg(recv_msg* msg) = 0;
+	virtual void send_raw_msg(raw_cmd* raw_data) = 0;
 
 	void set_utag(int u_tag) { utag = u_tag; }
 	int  get_utag() { return utag; }

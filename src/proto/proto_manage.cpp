@@ -69,15 +69,15 @@ bool protoManager::decode_cmd_msg(unsigned char* pkg, int pkg_len, struct recv_m
 	}
 	memset(msg,0,sizeof(recv_msg));
 	*out_msg = msg;
-	msg->stype = pkg[0] + (pkg[1] << 8);
-	msg->ctype = pkg[2] + (pkg[3] << 8);
-	msg->utag = pkg[4] + (pkg[5] << 8) + (pkg[6] << 16) + (pkg[7] << 24);
+	msg->head.stype = pkg[0] + (pkg[1] << 8);
+	msg->head.ctype = pkg[2] + (pkg[3] << 8);
+	msg->head.utag = pkg[4] + (pkg[5] << 8) + (pkg[6] << 16) + (pkg[7] << 24);
 
 	if (pkg_len==BIN_HEAD_LEN) {
 		
 		return true;
 	}
-	const std::string type_name = protoManager::get_cmmand_protoname(msg->ctype);
+	const std::string type_name = protoManager::get_cmmand_protoname(msg->head.ctype);
 	if (type_name.empty()) {
 		//free(msg);
 		memory_mgr::get_instance().free_memory(msg);
@@ -103,6 +103,24 @@ bool protoManager::decode_cmd_msg(unsigned char* pkg, int pkg_len, struct recv_m
 
 	msg->body = pb_msg;
 	*out_msg = msg;
+	return true;
+}
+
+bool protoManager::decode_rwa_cmd_msg(unsigned char* pkg, int pkg_len, raw_cmd* raw_out_msg) {
+	if (pkg == NULL || pkg_len <= 0 || raw_out_msg==NULL) {
+		return false;
+	}
+
+	if (pkg_len < BIN_HEAD_LEN) {
+		return false;
+	}
+	//只解析包头
+	raw_out_msg->head.stype = pkg[0] + (pkg[1] << 8);
+	raw_out_msg->head.ctype = pkg[2] + (pkg[3] << 8);
+	raw_out_msg->head.utag = pkg[4] + (pkg[5] << 8) + (pkg[6] << 16) + (pkg[7] << 24);
+	raw_out_msg->raw_data = pkg;
+	raw_out_msg->raw_len = pkg_len;
+
 	return true;
 }
 
@@ -134,11 +152,11 @@ unsigned char* protoManager::encode_cmd_msg(recv_msg* msg, int * out_len) {
 	}
 
 	//消息头
-	package[0] = (msg->stype & 0x000000ff);
-	package[1] = ((msg->stype & 0x0000ff00) >> 8);
-	package[2] = (msg->ctype & 0x000000ff);
-	package[3] = ((msg->ctype & 0x0000ff00) >> 8);
-	memcpy(package + 4, &msg->utag, sizeof(msg->utag));
+	package[0] = (msg->head.stype & 0x000000ff);
+	package[1] = ((msg->head.stype & 0x0000ff00) >> 8);
+	package[2] = (msg->head.ctype & 0x000000ff);
+	package[3] = ((msg->head.ctype & 0x0000ff00) >> 8);
+	memcpy(package + 4, &msg->head.utag, sizeof(msg->head.utag));
 	
 	return package;
 }

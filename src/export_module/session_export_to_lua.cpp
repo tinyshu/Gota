@@ -289,9 +289,9 @@ int lua_send_msg(lua_State* tolua_s) {
 	lua_getfield(tolua_s, 2, "body");
 
 	struct recv_msg msg;
-	msg.stype = (int)lua_tointeger(tolua_s,3);
-	msg.ctype = (int)lua_tointeger(tolua_s, 4);
-	msg.utag = (int)lua_tointeger(tolua_s, 5);
+	msg.head.stype = (int)lua_tointeger(tolua_s,3);
+	msg.head.ctype = (int)lua_tointeger(tolua_s, 4);
+	msg.head.utag = (int)lua_tointeger(tolua_s, 5);
 	if (get_proto_type() == JSON_PROTOCAL) {
 		//json数据之君子而获取string然后发送
 		msg.body = (void*)lua_tostring(tolua_s,6);
@@ -305,7 +305,7 @@ int lua_send_msg(lua_State* tolua_s) {
 			s->send_msg(&msg);
 		}
 		else {
-			string type_name = protoManager::get_cmmand_protoname(msg.ctype);
+			string type_name = protoManager::get_cmmand_protoname(msg.head.ctype);
 			if (type_name.empty()) {
 				msg.body = NULL;
 				s->send_msg(&msg);
@@ -379,6 +379,7 @@ static int lua_set_socket_and_proto_type(lua_State* tolua_s) {
 	int socket_type = lua_tonumber(tolua_s,1);
 	int proto_type =  lua_tonumber(tolua_s, 2);
 	init_socket_and_proto_type(socket_type, proto_type);
+	return 0;
 }
 
 int register_session_export_tolua(lua_State*tolua_s) {

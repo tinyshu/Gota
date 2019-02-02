@@ -41,6 +41,13 @@ void session::send_msg(recv_msg* msg) {
 	session_send(this, pkg, pkg_len);
 	my_free(pkg);
 }
+
+void session::send_raw_msg(raw_cmd* raw_data) {
+	if (raw_data==NULL) {
+		return;
+	}
+	session_send(this, raw_data->raw_data, raw_data->raw_len);
+}
 ///////////////////////////////////////////////////////
 extern void on_connect_lost(struct session* s);
 

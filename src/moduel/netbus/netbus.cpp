@@ -90,22 +90,24 @@ static void echo_test(struct session_base* s, recv_msg* msg) {
 //二进制协议处理,由网络底层解析到一个完整的package后调用
 void on_bin_protocal_recv_entry(struct session_base* s, unsigned char* data, int len) {
 	//根据包头里的type_name字段反射创建pb的message对象
-	recv_msg* msg = NULL;
-	if(false==protoManager::decode_cmd_msg(data, len, &msg)){
+	/*recv_msg* msg = NULL;
+	if (false == protoManager::decode_cmd_msg(data, len, &msg)) {
 		return;
 	}
 	if (msg) {
-#ifdef USE_LUA
-
-		//测试函数，原样返回数据包
-		//echo_test(s, msg);
-		//把收到的数据通过service_type转发到对应的service模块
-		//service模块是lua层注册进来的
 		server_manage::get_instance().on_session_recv_cmd(s, msg);
 		memory_mgr::get_instance().free_memory(msg);
-		//protoManager::msg_free(msg);
-#else
-#endif
+	}*/
+
+	raw_cmd rawmsg;
+	if (false == protoManager::decode_rwa_cmd_msg(data, len,&rawmsg)) {
+		//log
+		return;
+	}
+
+	if (false==server_manage::get_instance().on_recv_raw_cmd(s,&rawmsg)) {
+		//log
+		return;
 	}
 
 }
@@ -143,9 +145,9 @@ void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len
 	if (msg==NULL) {
 		return;
 	}
-	msg->stype = stype;
-	msg->ctype = cmd;
-	msg->utag = 0;
+	msg->head.stype = stype;
+	msg->head.ctype = cmd;
+	msg->head.utag = 0;
 	msg->body = (void*)data;
 #ifdef USE_LUA
 	server_manage::get_instance().on_session_recv_cmd(s, msg);

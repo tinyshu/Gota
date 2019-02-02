@@ -49,6 +49,7 @@ static int lua_init_log(lua_State* L) {
 		return 0;
 	}
 	logger::init(log_path, prefix);
+	return 0;
 }
 
 int lua_logdebug(lua_State* L) {

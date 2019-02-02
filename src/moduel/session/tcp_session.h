@@ -15,6 +15,7 @@ extern "C" {
 
 #define MAX_SEND_PKG 2048
 class export_session;
+struct raw_cmd;
 
 struct session:public session_base {
 
@@ -52,6 +53,7 @@ public:
 	virtual void close();
 	virtual void send_data(unsigned char* pkg, int pkg_len);
 	virtual void send_msg(recv_msg* msg);
+	virtual void send_raw_msg(raw_cmd* raw_data);
 };
 
 void init_session_manager();

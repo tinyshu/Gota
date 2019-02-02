@@ -38,13 +38,16 @@ public:
 
 		on_session_recv_cmd_handle = 0;
 		on_session_disconnect_handle = 0;
+		on_session_recv_raw_cmd_handle = 0;
 	}
 
 	virtual bool on_session_recv_cmd(struct session_base*s, recv_msg* msg);
 	virtual void on_session_disconnect(struct session* s);
+	virtual bool on_session_recv_raw_cmd(struct session_base* s, raw_cmd* msg);
 public:
 	int on_session_recv_cmd_handle;
 	int on_session_disconnect_handle;
+	int on_session_recv_raw_cmd_handle;
 };
 
 static void push_pb_message_tolua(const Message* pb_msg) {
@@ -173,6 +176,21 @@ static void push_pb_message_tolua(const Message* pb_msg) {
 
 }
 
+bool lua_service_module::on_session_recv_raw_cmd(struct session_base* s, raw_cmd* msg) {
+	if (s == NULL || msg == NULL) {
+		return false;
+	}
+	lua_State* lua_status = lua_wrapper::get_luastatus();
+	//直接把原始数据推送到lua层
+	tolua_pushuserdata(lua_status, (void*)s);
+	tolua_pushuserdata(lua_status, (void*)msg);
+	if (on_session_recv_raw_cmd_handle!=0 && lua_wrapper::execute_service_fun_by_handle(on_session_recv_raw_cmd_handle, 2) == 0) {
+		lua_wrapper::remove_service_fun_by_handle(on_session_recv_raw_cmd_handle);
+	}
+
+	return true;
+}
+
 //Lua会清理他的栈，所以，有一个原则：永远不要将指向Lua字符串的指针保存到访问他们的外部函数中
 //当收到消息会根据stype来调用对应的函数,然后把协议数据放入栈，调用lua函数
 //函数把msg里的pb对象转成lua的table形式
@@ -189,15 +207,15 @@ bool lua_service_module::on_session_recv_cmd(struct session_base* s, recv_msg* m
 	//创建一个表2的位置，存入{1: stype, 2 ctype, 3 utag, 4 pb{}或许 json的string}
 	lua_newtable(lua_status);
 	//lua_rawseti
-	lua_pushinteger(lua_status, msg->stype);
+	lua_pushinteger(lua_status, msg->head.stype);
 	lua_rawseti(lua_status,-2,idx);
 	idx++;
 
-	lua_pushinteger(lua_status, msg->ctype);
+	lua_pushinteger(lua_status, msg->head.ctype);
 	lua_rawseti(lua_status, -2, idx);
 	idx++;
 
-	lua_pushinteger(lua_status, msg->utag);
+	lua_pushinteger(lua_status, msg->head.utag);
 	lua_rawseti(lua_status, -2, idx);
 	idx++;
 
@@ -318,14 +336,53 @@ int register_service(lua_State* tolua_s) {
 		return 1;
 	}
 	//根据stype调用不同的service_module
+	lua_module->using_direct_cmd = false;
 	lua_module->stype = stype;
 	lua_module->on_session_recv_cmd_handle = on_session_recv_cmd_handle;
 	lua_module->on_session_disconnect_handle = on_session_disconnect_handle;
+	lua_module->on_session_recv_raw_cmd_handle = 0;
 	//注册到service管理模块
 	server_manage::get_instance().register_service(stype, lua_module);
 	lua_pushinteger(tolua_s,1);
 	return 1;
 
+}
+
+int register_raw_service(lua_State* tolua_s) {
+	int stype = (int)tolua_tonumber(tolua_s, 1, 0);
+	if (stype <= 0 || stype > MAX_SERVICES) {
+		lua_pushinteger(tolua_s, 0);
+		return 1;
+	}
+
+	if (tolua_istable(tolua_s, 2, 0, NULL) == 0) {
+		lua_pushinteger(tolua_s, 0);
+		return 1;
+	}
+	//获取lua table的2个函数handle
+	lua_getfield(tolua_s, 2, "on_session_recv_raw_cmd");
+	lua_getfield(tolua_s, 2, "on_session_disconnect");
+	int on_session_recv_raw_cmd = save_service_function(tolua_s, 3, 0);
+	int on_session_disconnect_handle = save_service_function(tolua_s, 4, 0);
+	
+	if (on_session_recv_raw_cmd == 0 && on_session_disconnect_handle == 0) {
+		lua_pushinteger(tolua_s, 0);
+		return 1;
+	}
+	lua_service_module* lua_module = new lua_service_module;
+	if (lua_module == NULL) {
+		lua_pushinteger(tolua_s, 0);
+		return 1;
+	}
+	lua_module->using_direct_cmd = true;
+	lua_module->stype = stype;
+	lua_module->on_session_recv_cmd_handle = 0;
+	lua_module->on_session_disconnect_handle = on_session_disconnect_handle;
+	lua_module->on_session_recv_raw_cmd_handle = on_session_recv_raw_cmd;
+
+	server_manage::get_instance().register_service(stype, lua_module);
+	lua_pushinteger(tolua_s, 1);
+	return 1;
 }
 
 int register_service_export_tolua(lua_State*tolua_s) {
@@ -338,10 +395,14 @@ int register_service_export_tolua(lua_State*tolua_s) {
 
 		//开始导出模块接口
 		tolua_beginmodule(tolua_s, service_moduel_name);
+		//非网关注册service接口
 		tolua_function(tolua_s, "register_service", register_service);
+		//网关注册service接口
+		tolua_function(tolua_s, "register_raw_service", register_raw_service);
 		tolua_endmodule(tolua_s);
 	}
 	lua_pop(tolua_s, 1);
 	
 	return 0;
 }
+
