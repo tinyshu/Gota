@@ -643,7 +643,8 @@ static void on_after_connect(uv_connect_t* handle, int status) {
 	}
 	
 	if (context->on_connected!=NULL) {
-		context->on_connected(NULL, (session_base*)handle->handle->data, context->udata);
+		io_package* package = (io_package*)handle->handle->data;
+		context->on_connected(NULL, (session_base*)package->s, context->udata);
 	}
 
 	int iret = uv_read_start(handle->handle, on_read_alloc_buff, on_after_read);

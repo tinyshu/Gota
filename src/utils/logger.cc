@@ -119,7 +119,13 @@ logger::log(const char* file_name,
 #else
 	pch = strrchr(file_name, '/');
 #endif
-	sprintf(msg_meta_info, "%s:%u  ", pch + 1, line_num);
+	if (pch==NULL) {
+		sprintf(msg_meta_info, "%s:%u  ", file_name, line_num);
+	}
+	else {
+		sprintf(msg_meta_info, "%s:%u  ", pch + 1, line_num);
+	}
+	
 	uv_buf_t buf[5]; // time level content fileandline newline
 	buf[0] = uv_buf_init(g_format_time, strlen(g_format_time));
 	buf[1] = uv_buf_init(g_log_level[level], strlen(g_log_level[level]));

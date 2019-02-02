@@ -18,7 +18,7 @@ public:
 	void register_service(int service_type, service* s);
 	bool on_session_recv_cmd(struct session_base* s, recv_msg* msg);
 	bool on_recv_raw_cmd(struct session_base* s, struct raw_cmd* raw);
-	void on_session_disconnect(int service_type,struct session* s);
+	void on_session_disconnect(struct session_base* s);
 private:
 	static server_manage* _instance;
 	service* _services[MAX_SERVICES];

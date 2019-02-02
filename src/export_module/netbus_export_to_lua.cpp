@@ -90,7 +90,7 @@ int register_betbus_export_tolua(lua_State*tolua_s) {
 		tolua_beginmodule(tolua_s, netbus_moduel_name);
 		tolua_function(tolua_s, "tcp_listen", lua_tcp_listen);
 		tolua_function(tolua_s, "udp_listen", lua_udp_listen);
-		tolua_function(tolua_s, "lua_tcp_connect", lua_tcp_connect);
+		tolua_function(tolua_s, "tcp_connect", lua_tcp_connect);
 		tolua_endmodule(tolua_s);
 	}
 	lua_pop(tolua_s, 1);

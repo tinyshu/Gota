@@ -382,6 +382,19 @@ static int lua_set_socket_and_proto_type(lua_State* tolua_s) {
 	return 0;
 }
 
+static int lua_is_client_session(lua_State* tolua_s) {
+	int argc = lua_gettop(tolua_s);
+	if (argc != 1) {
+		return 0;
+	}
+	session_base* session = (session_base*)lua_touserdata(tolua_s,1);
+	if (session==NULL) {
+		return 0;
+	}
+	lua_pushinteger(tolua_s, session->get_is_server_session());
+	return 1;
+}
+
 int register_session_export_tolua(lua_State*tolua_s) {
 	lua_getglobal(tolua_s, "_G");
 	if (lua_istable(tolua_s, -1)) {
@@ -399,6 +412,7 @@ int register_session_export_tolua(lua_State*tolua_s) {
 		tolua_function(tolua_s, "get_socket_type", lua_get_socket_type);
 		tolua_function(tolua_s, "get_proto_type", lua_get_proto_type);
 		tolua_function(tolua_s, "set_socket_and_proto_type", lua_set_socket_and_proto_type);
+		tolua_function(tolua_s, "is_client_session", lua_is_client_session);
 		tolua_endmodule(tolua_s);
 	}
 	lua_pop(tolua_s, 1);

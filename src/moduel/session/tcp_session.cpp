@@ -14,6 +14,7 @@
 #include "../../moduel/netbus/recv_msg.h"
 #include "../../proto/proto_manage.h"
 #include "../../utils/mem_manger.h"
+#include "../netbus/service_manger.h"
 
 #define MAX_SESSION_NUM 6000
 #define my_malloc malloc
@@ -164,7 +165,9 @@ void foreach_online_session(int(*callback)(struct session* s, void* p), void*p) 
 void close_session(struct session* s) {
 	s->removed = 1;
 	session_manager.has_removed = 1;
-	printf("client %s:%d exit\n", s->c_ip, s->c_port);
+	//通知lua层，调用on_session_disconnect
+	server_manage::get_instance().on_session_disconnect(s);
+	//printf("client %s:%d exit\n", s->c_ip, s->c_port);
 }
 
 void clear_offline_session() {
@@ -179,7 +182,7 @@ void clear_offline_session() {
 			*walk = s->next;
 			s->next = NULL;
 			//通知上层session关闭
-			on_connect_lost(s);
+			//on_connect_lost(s);
 			/*if (s->c_sock != 0) {
 				closesocket(s->c_sock);
 			}*/

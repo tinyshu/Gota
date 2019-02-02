@@ -64,13 +64,13 @@ bool server_manage::on_recv_raw_cmd(struct session_base* s, struct raw_cmd* raw)
 	return ret;
 }
 
-void server_manage::on_session_disconnect(int service_type,struct session* s) {
+void server_manage::on_session_disconnect(struct session_base* s) {
 	for (int i = 0; i < MAX_SERVICES; i++) {
 		if (_services[i] == NULL) {
 			continue;
 		}
 
-		_services[i]->on_session_disconnect(s);
+		_services[i]->on_session_disconnect((session*)s);
 	}
 }
 
