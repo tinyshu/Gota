@@ -1,4 +1,12 @@
 syntax = "proto3"; 
+
+enum Stype{
+	INVALIDI_STYPE = 0;
+	AUTH_STYPE = 1;
+	SYSTEM_STYPE = 2;
+	LOGIC_STYPE =3;
+}
+
 enum Cmd {
 	eLoginReq = 0;
 	eLoginRes = 1;

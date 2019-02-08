@@ -58,7 +58,7 @@ void InitDefaults_game_2eproto() {
 }
 
 ::google::protobuf::Metadata file_level_metadata_game_2eproto[2];
-const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors_game_2eproto[1];
+const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors_game_2eproto[2];
 constexpr ::google::protobuf::ServiceDescriptor const** file_level_service_descriptors_game_2eproto = nullptr;
 
 const ::google::protobuf::uint32 TableStruct_game_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -97,13 +97,15 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 const char descriptor_table_protodef_game_2eproto[] =
   "\n\ngame.proto\"E\n\010LoginReq\022\014\n\004name\030\001 \001(\t\022\013"
   "\n\003age\030\002 \001(\005\022\r\n\005email\030\003 \001(\t\022\017\n\007int_set\030\004 "
-  "\001(\005\"\032\n\010LoginRes\022\016\n\006status\030\001 \001(\005*#\n\003Cmd\022\r"
+  "\001(\005\"\032\n\010LoginRes\022\016\n\006status\030\001 \001(\005*N\n\005Stype"
+  "\022\022\n\016INVALIDI_STYPE\020\000\022\016\n\nAUTH_STYPE\020\001\022\020\n\014"
+  "SYSTEM_STYPE\020\002\022\017\n\013LOGIC_STYPE\020\003*#\n\003Cmd\022\r"
   "\n\teLoginReq\020\000\022\r\n\teLoginRes\020\001b\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_game_2eproto = {
   false, InitDefaults_game_2eproto, 
   descriptor_table_protodef_game_2eproto,
-  "game.proto", &assign_descriptors_table_game_2eproto, 156,
+  "game.proto", &assign_descriptors_table_game_2eproto, 236,
 };
 
 void AddDescriptors_game_2eproto() {
@@ -115,9 +117,25 @@ void AddDescriptors_game_2eproto() {
 
 // Force running AddDescriptors() at dynamic initialization time.
 static bool dynamic_init_dummy_game_2eproto = []() { AddDescriptors_game_2eproto(); return true; }();
-const ::google::protobuf::EnumDescriptor* Cmd_descriptor() {
+const ::google::protobuf::EnumDescriptor* Stype_descriptor() {
   ::google::protobuf::internal::AssignDescriptors(&assign_descriptors_table_game_2eproto);
   return file_level_enum_descriptors_game_2eproto[0];
+}
+bool Stype_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::google::protobuf::EnumDescriptor* Cmd_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&assign_descriptors_table_game_2eproto);
+  return file_level_enum_descriptors_game_2eproto[1];
 }
 bool Cmd_IsValid(int value) {
   switch (value) {

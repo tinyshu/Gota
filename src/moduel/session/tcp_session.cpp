@@ -202,11 +202,9 @@ static int send_tcp_data(struct session* s, unsigned char* data, int len) {
 	unsigned char* pkg_ptr = NULL;
 
 	if (len + 2 > MAX_SEND_PKG) {
-		//pkg_ptr = (unsigned char*)my_malloc(len + 2); //2字节头部长度
 		pkg_ptr = (unsigned char*)memory_mgr::get_instance().alloc_memory(len + 2);
 	}
 	else {
-		//pkg_ptr = (unsigned char*)my_malloc(MAX_SEND_PKG);
 		pkg_ptr = (unsigned char*)memory_mgr::get_instance().alloc_memory(MAX_SEND_PKG);
 	}
 	int ssize = 0;
@@ -220,15 +218,13 @@ static int send_tcp_data(struct session* s, unsigned char* data, int len) {
 		memcpy(pkg_ptr + 2, data, len);
 		pkg_ptr[0] = ((len + 2)) & 0x000000ff;
 		pkg_ptr[1] = (((len + 2)) & 0x0000ff00) >> 8;
-		//ssize = send(s->c_sock, pkg_ptr, len + 2, 0);
 		uv_send_data(s->c_sock, (char*)pkg_ptr, len + 2);
 	}
 	if (pkg_ptr != NULL) {
-		//my_free(pkg_ptr);
 		memory_mgr::get_instance().free_memory(pkg_ptr);
 	}
 
-	return 0;
+	return (len+2);
 }
 
 //发送websocket数据

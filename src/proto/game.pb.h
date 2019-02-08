@@ -62,6 +62,29 @@ template<> ::LoginRes* Arena::CreateMaybeMessage<::LoginRes>(Arena*);
 }  // namespace protobuf
 }  // namespace google
 
+enum Stype {
+  INVALIDI_STYPE = 0,
+  AUTH_STYPE = 1,
+  SYSTEM_STYPE = 2,
+  LOGIC_STYPE = 3,
+  Stype_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
+  Stype_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
+};
+bool Stype_IsValid(int value);
+const Stype Stype_MIN = INVALIDI_STYPE;
+const Stype Stype_MAX = LOGIC_STYPE;
+const int Stype_ARRAYSIZE = Stype_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* Stype_descriptor();
+inline const ::std::string& Stype_Name(Stype value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    Stype_descriptor(), value);
+}
+inline bool Stype_Parse(
+    const ::std::string& name, Stype* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<Stype>(
+    Stype_descriptor(), name, value);
+}
 enum Cmd {
   eLoginReq = 0,
   eLoginRes = 1,
@@ -517,6 +540,11 @@ inline void LoginRes::set_status(::google::protobuf::int32 value) {
 namespace google {
 namespace protobuf {
 
+template <> struct is_proto_enum< ::Stype> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Stype>() {
+  return ::Stype_descriptor();
+}
 template <> struct is_proto_enum< ::Cmd> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::Cmd>() {
