@@ -38,7 +38,7 @@ end
 -- {stype, ctype, utag, body}
 function on_auth_recv_cmd(s, msg)
 	--print(msg[1],msg[2],msg[3])
-	--print_r(msg)
+	print_r(msg)
 	--直接返回msg[3]就是网关生成的utag
 	local ret_msg = {stype=stype.AuthSerser,ctype=2,utag=msg[3],body={status=200}}
 	session_wrapper.send_msg(s,ret_msg)

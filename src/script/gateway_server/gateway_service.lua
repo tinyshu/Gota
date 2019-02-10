@@ -96,7 +96,8 @@ function send_to_client(server_session,raw_data)
 	    print("not fonud client session")
 	end
 
-	 session_wrapper.set_utag(client_session,0)
+	--把协议里的utag重置为0 
+	proto_mgr_wrapper.set_raw_utag(raw_data,0)
 	if client_session ~= nil then
 	   --转发数据给客户端
 	   --print("send_raw_msg client session")
@@ -126,6 +127,8 @@ end
 
 --session断开回调函数
 function on_gw_session_disconnect(s) 
+	print("on_gw_session_disconnect!!")
+    --这个是网关连接其他服务器的session
 	if session_wrapper.is_client_session(s)==1 then
 	--网关连接的session断开回调函数
 		--print(s)
@@ -138,6 +141,25 @@ function on_gw_session_disconnect(s)
 				return
 			end
 		end
+		return
+	end
+	--print("on_gw_session_disconnect BBB!!")
+	--客户端连接到网关的session,这里是为登录前
+	local utag = session_wrapper.get_utag(s)
+	--print("on_gw_session_disconnect BBB!!"..utag)
+	if client_session_utag[utag] ~= nil then
+	   print("client_session_utag[utag] remove!!")
+	   client_session_utag[utag] = nil
+	   session_wrapper.set_utag(s,0)
+	   table.remove(client_session_utag,utag)	
+	end
+
+	--客户端连接到网关，已经是登录后
+	local uid = session_wrapper.get_uid(s)
+	if client_session_uid[uid] ~= nil then
+	   print("client_session_uid[uid] remove!!")
+	   client_session_uid[uid] = nil
+	   table.remove(client_session_uid,uid)
 	end
 end
 
