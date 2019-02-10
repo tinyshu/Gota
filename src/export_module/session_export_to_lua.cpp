@@ -282,6 +282,12 @@ int lua_send_msg(lua_State* tolua_s) {
 		return 0;
 	}
 
+	if (!lua_istable(tolua_s, 2)) {
+		return 0;
+	}
+
+	//local ret_msg = {stype=stype.AuthSerser,ctype=2,utag=msg[3],body={status=1}}
+	//必须要使用这样的格式构造数据
 	//获取表value值,并放入栈上3-6的位置
 	lua_getfield(tolua_s, 2,"stype");
 	lua_getfield(tolua_s, 2, "ctype");

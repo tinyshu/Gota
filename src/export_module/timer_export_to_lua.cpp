@@ -40,11 +40,12 @@ static void on_lua_time(void* udata) {
 int lua_create_timer(lua_State* tolua_s) {
 	//定时器回调函数
 	int s_function_ref_id = toluafix_ref_function(tolua_s, 1, NULL);
+	
 	if (s_function_ref_id <= 0) {
 		toluafix_remove_function_by_refid(tolua_s, s_function_ref_id);
 		lua_pushnil(tolua_s);
 		return 1;
-	}
+	} 
 	//重复执行次数，-1为无限次
 	int repeat = tolua_tonumber(tolua_s, 2, 0);
 	if (repeat < -1) {

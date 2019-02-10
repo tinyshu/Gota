@@ -27,8 +27,9 @@ public:
 	static int execute_service_fun_by_handle(int handle_id, int args_num);
 	static int push_service_fun_by_handle(int handle_id);
 	static int remove_service_fun_by_handle(int handle_id);
-private:
 	static int push_function_by_handle(int handle_id);
+private:
+	
 	static int execute_function(int args_num);
 };
 

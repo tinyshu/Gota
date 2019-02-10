@@ -80,7 +80,30 @@ function send_to_server(client_session,raw_data)
 	 session_wrapper.send_raw_msg(server_session,raw_data)
 end
 
+--服务器发过来的信息，转给对应的客户端
 function send_to_client(server_session,raw_data)
+	local stype, ctype, utag = proto_mgr_wrapper.read_msg_head(raw_data)
+	print(utag)
+	local client_session = nil
+	--根据登录前，还是登陆后获取client_session
+	if client_session_utag[utag] ~= nil then
+		print("client_session_utag")
+		client_session = client_session_utag[utag]
+	elseif client_session_uid[utag] ~= nil then
+	    print("client_session_uid")
+		client_session = client_session_uid[utag]
+	else 
+	    print("not fonud client session")
+	end
+
+	 session_wrapper.set_utag(client_session,0)
+	if client_session ~= nil then
+	   --转发数据给客户端
+	   --print("send_raw_msg client session")
+	   session_wrapper.send_raw_msg(client_session,raw_data)
+	else
+		print("send_to_client: not found clcient session")
+	end
 end
 
 -- raw_data由C++测那个推送的完整数据包
@@ -92,9 +115,11 @@ function on_gw_recv_raw_cmd(s, raw_data)
 	is_client_session = session_wrapper.is_client_session(s)
 	if is_client_session==0 then 
 	   --来自客户端数据
+	   --print("send_to_server")
 	   send_to_server(s,raw_data)
 	else
 	   --来自服务器
+	  --print("send_to_client")
 	   send_to_client(s,raw_data)
 	end
 end
