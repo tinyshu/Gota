@@ -40,7 +40,11 @@ void session::send_msg(recv_msg* msg) {
 		return;
 	}
 	session_send(this, pkg, pkg_len);
-	my_free(pkg);
+	if (pkg!=NULL) {
+		memory_mgr::get_instance().free_memory(pkg);
+		//my_free(pkg);
+	}
+	
 }
 
 void session::send_raw_msg(raw_cmd* raw_data) {
@@ -89,10 +93,12 @@ static void cache_free(struct session* s) {
 	
 }
 
+//tcp or websocket
 int get_socket_type() {
 	return session_manager.socket_type;
 }
 
+//统一包头(8字节：2字节长度+2字节stype+2字节cmd+4字节utag ) +body(protobuf or json)
 int get_proto_type() {
 	return session_manager.protocal_type;
 }
@@ -257,7 +263,10 @@ static int send_websocket_data(struct session* s, unsigned char* data, int len) 
 	//发送格式 固定1字节0x81 + 数据长度(变长) + 数据
 	//发送写入的位置
 	unsigned int send_len = 0;
-	pkg_ptr[0] = 0x81;
+	//websocket协议第一个字节0x81或者0x82
+	//这里约定websocket协议二进制头的json协议第一个字节为0x82
+	//pkg_ptr[0] = 0x81;
+	pkg_ptr[0] = 0x82;
 	if (len <= 125) {
 		pkg_ptr[1] = len;
 		send_len = 2;
@@ -298,7 +307,7 @@ static int send_websocket_data(struct session* s, unsigned char* data, int len) 
 		memory_mgr::get_instance().free_memory(pkg_ptr);
 	}
 
-	return 0;
+	return send_len;
 }
 
 void session_send(struct session* s, unsigned char* body, int len) {

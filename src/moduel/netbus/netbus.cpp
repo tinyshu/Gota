@@ -79,99 +79,102 @@ void on_connect_lost(struct session* s) {
 
 static void echo_test(struct session_base* s, recv_msg* msg) {
 	int out_len = 0;
-	unsigned char* send_pkg = protoManager::encode_cmd_msg(msg,&out_len);
+	unsigned char* pkg = protoManager::encode_cmd_msg(msg,&out_len);
 	
-	session_send((struct session*)s, send_pkg, out_len);
-	if (send_pkg!=NULL) {
-		free(send_pkg);
+	session_send((struct session*)s, pkg, out_len);
+	if (pkg !=NULL) {
+		memory_mgr::get_instance().free_memory(pkg);
+		//free(send_pkg);
 	}
 	
+}
+
+static void protocal_recv(struct session_base* s, unsigned char* data, int len) {
+	//解析包头
+	raw_cmd rawmsg;
+	if (false == protoManager::decode_rwa_cmd_msg(data, len, &rawmsg)) {
+		//log
+		return;
+	}
+
+	if (false == server_manage::get_instance().on_recv_raw_cmd(s, &rawmsg)) {
+		//log
+		return;
+	}
 }
 //二进制协议处理,由网络底层解析到一个完整的package后调用
 void on_bin_protocal_recv_entry(struct session_base* s, unsigned char* data, int len) {
-	//根据包头里的type_name字段反射创建pb的message对象
-	/*recv_msg* msg = NULL;
-	if (false == protoManager::decode_cmd_msg(data, len, &msg)) {
-		return;
-	}
-	if (msg) {
-		server_manage::get_instance().on_session_recv_cmd(s, msg);
-		memory_mgr::get_instance().free_memory(msg);
-	}*/
+	protocal_recv(s, data, len);
+}
 
-	raw_cmd rawmsg;
-	if (false == protoManager::decode_rwa_cmd_msg(data, len,&rawmsg)) {
-		//log
-		return;
-	}
-
-	if (false==server_manage::get_instance().on_recv_raw_cmd(s,&rawmsg)) {
-		//log
-		return;
-	}
-
+void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len) {
+	protocal_recv(s, data, len);
 }
 
 //json协议格式处理，由网络底层解析到一个完整的package后调用
-void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len) {
-	if (0 == len || NULL == data) {
-		return;
-	}
-	data[len] = 0;
-	json_t* root = NULL;
-	int ret = json_parse_document(&root, (const char*)data);
-	if (ret != JSON_OK || root == NULL) { // 不是一个正常的json包;
-		return;
-	}
+//{"stype": 1,"ctype":1,"utag":0 ,"body": "ABMDIFGHIJKLMNOPQRSTUVWXYZ"}
+//void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len) {
+//	if (0 == len || NULL == data) {
+//		return;
+//	}
+//	data[len] = 0;
+//	json_t* root = NULL;
+//	int ret = json_parse_document(&root, (const char*)data);
+//	if (ret != JSON_OK || root == NULL) { // 不是一个正常的json包;
+//		return;
+//	}
+//
+//	json_t* server_type = json_find_first_label(root, "stype");
+//	server_type = server_type->child;
+//	if (server_type == NULL || server_type->type != JSON_NUMBER) {
+//		json_free_value(&root);
+//		return;
+//	}
+//
+//	int stype = atoi(server_type->text);
+//
+//	json_t* jcmd = json_object_at(root, "ctype");
+//	if (jcmd == NULL || jcmd->type != JSON_NUMBER) {
+//		return;
+//	}
+//	int cmd = atoi(jcmd->text);
+//
+//
+//	json_t* jutag = json_object_at(root, "utag");
+//	if (jutag == NULL || jutag->type != JSON_NUMBER) {
+//		return;
+//	}
+//	int utag = atoi(jutag->text);
+//	//创建一个recv_msg,可以考虑使用内存池
+//	//recv_msg* msg = (recv_msg*)my_malloc(sizeof(recv_msg));
+//	/*recv_msg* msg = (recv_msg*)memory_mgr::get_instance().alloc_memory(sizeof(recv_msg));
+//	if (msg==NULL) {
+//		return;
+//	}
+//	msg->head.stype = stype;
+//	msg->head.ctype = cmd;
+//	msg->head.utag = 0;
+//	msg->body = (void*)data;*/
+//
+//	//server_manage::get_instance().on_session_recv_cmd(s, msg);
+//
+//	raw_cmd rawmsg;
+//	rawmsg.head.stype = stype;
+//	rawmsg.head.ctype = cmd;
+//	rawmsg.head.utag = utag;
+//	rawmsg.raw_data = data;
+//	rawmsg.raw_len = len;
+//	server_manage::get_instance().on_recv_raw_cmd(s, &rawmsg);
+//	json_free_value(&root);
+//	//memory_mgr::get_instance().free_memory(msg);
+//}
 
-	json_t* server_type = json_find_first_label(root, "0");
-	server_type = server_type->child;
-	if (server_type == NULL || server_type->type != JSON_NUMBER) {
-		json_free_value(&root);
-		return;
+void ws_listen(char* ip, int port) {
+	if (ip == NULL) {
+		ip = "0.0.0.0";
 	}
-
-	int stype = atoi(server_type->text);
-
-	json_t* jcmd = json_object_at(root, "1");
-	if (jcmd == NULL || jcmd->type != JSON_NUMBER) {
-		return;
-	}
-	int cmd = atoi(jcmd->text);
-
-	//创建一个recv_msg,可以考虑使用内存池
-	//recv_msg* msg = (recv_msg*)my_malloc(sizeof(recv_msg));
-	recv_msg* msg = (recv_msg*)memory_mgr::get_instance().alloc_memory(sizeof(recv_msg));
-	if (msg==NULL) {
-		return;
-	}
-	msg->head.stype = stype;
-	msg->head.ctype = cmd;
-	msg->head.utag = 0;
-	msg->body = (void*)data;
-#ifdef USE_LUA
-	server_manage::get_instance().on_session_recv_cmd(s, msg);
-#else
-	if (gateway_services.services[stype] && gateway_services.services[stype]->on_json_protocal_data) {
-#ifdef GAME_DEVLOP
-		//调试模式调用本地模块，单进程模式
-		//from_client打包进json二个字段uid,skey在这里写入
-		if (0 == s->is_server_session) {
-			unsigned int uid = 123;
-			//uid = s->uid;
-			//获取一个随机key和session绑定
-			unsigned int session_key = get_session_key();
-			save_session_by_key(session_key, s);
-			json_object_push_number(root, "uid", uid);
-			json_object_push_number(root, "skey", session_key); //后端服务需要透明传回这个值
-		}
-#endif
-	gateway_services.services[stype]->on_json_protocal_data(gateway_services.services[stype]->moduel_data, s, root, data, len);
-#endif
-	
-	json_free_value(&root);
-	//my_free(msg);
-	memory_mgr::get_instance().free_memory(msg);
+	start_server_ws(ip, port);
+	log_debug("start server websocket at %s:%d\n", ip, port);
 }
 
 void tcp_listen(char* ip, int port) {

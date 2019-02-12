@@ -581,12 +581,33 @@ static void on_connection(uv_stream_t* server, int status) {
 	io_data->max_pkg_len = MAX_RECV_SIZE;
 	struct session* s = save_session(new_client, "127.0.0.1", 100);
 	
-	s->socket_type = get_socket_type();
+	//s->socket_type = get_socket_type();
+	s->socket_type = (int)(server->data);
 	io_data->s = s;
 	io_data->long_pkg = NULL;
 	//给新连接绑定关心的事件和回调
 	//on_read_alloc_buff 当有读事件触发，该函数会被回调
 	uv_read_start((uv_stream_t*)new_client, on_read_alloc_buff, on_after_read);
+}
+
+void start_server_ws(char* ip, int port) {
+	uv_tcp_t* listen = (uv_tcp_t*)malloc(sizeof(uv_tcp_t));
+	memset(listen, 0, sizeof(uv_tcp_t));
+
+	uv_tcp_init(uv_default_loop(), listen);
+
+	struct sockaddr_in addr;
+	uv_ip4_addr("0.0.0.0", port, &addr);
+
+	int ret = uv_tcp_bind(listen, (const struct sockaddr*) &addr, 0);
+	if (ret != 0) {
+		// printf("bind error\n");
+		free(listen);
+		return;
+	}
+
+	uv_listen((uv_stream_t*)listen, SOMAXCONN, on_connection);
+	listen->data = (void*)WEB_SOCKET_IO;
 }
 
 void start_server(char* ip, int port) {
@@ -610,7 +631,7 @@ void start_server(char* ip, int port) {
 	if (ret != 0) {
 		goto failed;
 	}
-
+	l_server.data = (void*)TCP_SOCKET_IO;
 	//进入事件循环
 	//uv_run(loop, UV_RUN_DEFAULT);
 failed:

@@ -62,46 +62,65 @@ bool protoManager::decode_cmd_msg(unsigned char* pkg, int pkg_len, struct recv_m
 	}
 
 	//先解码包头
-	//recv_msg* msg = (recv_msg*)malloc(sizeof(recv_msg));
 	recv_msg* msg = (recv_msg*)memory_mgr::get_instance().alloc_memory(sizeof(recv_msg));
-	if (msg==NULL) {
+	if (msg == NULL) {
 		return false;
 	}
-	memset(msg,0,sizeof(recv_msg));
+	memset(msg, 0, sizeof(recv_msg));
 	*out_msg = msg;
 	msg->head.stype = pkg[0] + (pkg[1] << 8);
 	msg->head.ctype = pkg[2] + (pkg[3] << 8);
 	msg->head.utag = pkg[4] + (pkg[5] << 8) + (pkg[6] << 16) + (pkg[7] << 24);
 
-	if (pkg_len==BIN_HEAD_LEN) {
-		
+	if (pkg_len == BIN_HEAD_LEN) {
 		return true;
 	}
-	const std::string type_name = protoManager::get_cmmand_protoname(msg->head.ctype);
-	if (type_name.empty()) {
-		//free(msg);
-		memory_mgr::get_instance().free_memory(msg);
-		msg = NULL;
-		return false;
-	}
 
-	Message* pb_msg = create_message_by_name(type_name);
-	if (pb_msg ==NULL) {
-		//free(msg);
-		memory_mgr::get_instance().free_memory(msg);
-		msg = NULL;
-		return false;
-	}
+	if (get_proto_type() == BIN_PROTOCAL) {
+		const std::string type_name = protoManager::get_cmmand_protoname(msg->head.ctype);
+		if (type_name.empty()) {
+			//free(msg);
+			memory_mgr::get_instance().free_memory(msg);
+			msg = NULL;
+			return false;
+		}
 
-	if (false==pb_msg->ParseFromArray(pkg+ BIN_HEAD_LEN, pkg_len- BIN_HEAD_LEN)) {
-		//free(msg);
-		memory_mgr::get_instance().free_memory(msg);
-		msg = NULL;
-		delete pb_msg;
-		return false;
-	}
+		Message* pb_msg = create_message_by_name(type_name);
+		if (pb_msg == NULL) {
+			//free(msg);
+			memory_mgr::get_instance().free_memory(msg);
+			msg = NULL;
+			return false;
+		}
 
-	msg->body = pb_msg;
+		if (false == pb_msg->ParseFromArray(pkg + BIN_HEAD_LEN, pkg_len - BIN_HEAD_LEN)) {
+			//free(msg);
+			memory_mgr::get_instance().free_memory(msg);
+			msg = NULL;
+			delete pb_msg;
+			return false;
+		}
+
+		msg->body = pb_msg;
+		
+	}
+	else if(get_proto_type() == JSON_PROTOCAL) {
+		
+		int json_data_len = pkg_len - BIN_HEAD_LEN;
+		int alloc_len = json_data_len + 1;
+		unsigned char* json_msg = (unsigned char*)memory_mgr::get_instance().alloc_memory(alloc_len);
+		
+		if (json_msg==NULL) {
+			memory_mgr::get_instance().free_memory(msg);
+			msg = NULL;
+			return false;
+		}
+
+		memcpy_s(json_msg, alloc_len, pkg+ BIN_HEAD_LEN, pkg_len- BIN_HEAD_LEN);
+		json_msg[json_data_len] = 0;
+		msg->body = json_msg;
+	}
+	
 	*out_msg = msg;
 	return true;
 }
@@ -124,6 +143,8 @@ bool protoManager::decode_rwa_cmd_msg(unsigned char* pkg, int pkg_len, raw_cmd* 
 	return true;
 }
 
+//把recv_msg结构体序列化为字节流
+//返回值为buff缓存首地址，out_len为数据长度
 unsigned char* protoManager::encode_cmd_msg(recv_msg* msg, int * out_len) {
 	if (msg==NULL) {
 		*out_len = 0;
@@ -135,20 +156,40 @@ unsigned char* protoManager::encode_cmd_msg(recv_msg* msg, int * out_len) {
 	if (get_proto_type() == BIN_PROTOCAL) {
 		Message* pb_msg = (Message*)msg->body;
 		total_len = BIN_HEAD_LEN + pb_msg->ByteSize();
-		package = (unsigned char*)malloc(total_len);
+		//package = (unsigned char*)malloc(total_len);
+		package = (unsigned char*)memory_mgr::get_instance().alloc_memory(total_len);
 		if (package==NULL) {
 			*out_len = 0;
 			return NULL;
 		}
 		if (false==pb_msg->SerializePartialToArray(package+ BIN_HEAD_LEN,pb_msg->ByteSize())) {
+			//如果失败就在内部把申请的内存释放掉
+			if (package!=NULL) {
+				memory_mgr::get_instance().free_memory(package);
+			}
 			*out_len = 0;
 			return NULL;
 		}
 
 		*out_len = BIN_HEAD_LEN + pb_msg->ByteSize();
 	}
-	else{
-		//json
+	else if(get_proto_type() == JSON_PROTOCAL){
+		char* json_str = NULL;
+		int json_len = 0;
+		if (msg->body!=NULL) {
+			json_str = (char*)msg->body;
+			json_len = strlen(json_str);
+		}
+
+		//package = (unsigned char*)malloc(BIN_HEAD_LEN + json_len);
+		package = (unsigned char*)memory_mgr::get_instance().alloc_memory(BIN_HEAD_LEN + json_len);
+		if (package==NULL) {
+			*out_len = 0;
+			return NULL;
+		}
+
+		memcpy(package+ BIN_HEAD_LEN, json_str, json_len);
+		*out_len = (BIN_HEAD_LEN + json_len);
 	}
 
 	//消息头

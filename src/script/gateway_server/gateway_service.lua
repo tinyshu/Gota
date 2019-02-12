@@ -45,8 +45,11 @@ function server_session_init()
 	timer_wrapper.create_timer(check_session_connect,-1,1000,1000)
 end
 
-
+--local socket_type = WEB_SOCKET
+--local proto_type =  PROTO_JSON
 function send_to_server(client_session,raw_data)
+	
+
 	local stype,cmd,utag = proto_mgr_wrapper.read_msg_head(raw_data)
 	print(stype,cmd,utag)
 	local uid = session_wrapper.get_uid(client_session)

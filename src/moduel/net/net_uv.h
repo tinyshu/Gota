@@ -22,7 +22,7 @@ const char* conver_socket_type_str(int socket_type);
 const char* conver_protocal_str(int protocal_type);
 
 void start_server(char* ip,int port);
-
+void start_server_ws(char* ip, int port);
 void uv_send_data(void* stream, char* pkg, unsigned int pkg_len);
 
 void init_uv();

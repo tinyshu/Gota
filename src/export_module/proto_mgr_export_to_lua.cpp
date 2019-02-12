@@ -59,6 +59,22 @@ static int lua_read_msg_head(lua_State*tolua_s) {
 	return 3;
 }
 
+//static int lua_read_json_msg_head(lua_State*tolua_s) {
+//	int argc = lua_gettop(tolua_s);
+//	if (argc != 1) {
+//		return 0;
+//	}
+//	raw_cmd* raw_data = (raw_cmd*)lua_touserdata(tolua_s, -1);
+//	if (raw_data == NULL) {
+//		lua_pushinteger(tolua_s, 0);
+//		lua_pushinteger(tolua_s, 0);
+//		lua_pushinteger(tolua_s, 0);
+//		return 3;
+//	}
+//
+//
+//}
+
 static int lua_set_utag(lua_State*tolua_s) {
 	int argc = lua_gettop(tolua_s);
 	if (argc != 2) {
@@ -91,6 +107,7 @@ int register_proto_export_tolua(lua_State*tolua_s) {
 		tolua_beginmodule(tolua_s, proto_moduel_name);
 		tolua_function(tolua_s, "register_protobuf_cmd", lua_register_protobuf_cmd);
 		tolua_function(tolua_s, "read_msg_head", lua_read_msg_head);
+		//tolua_function(tolua_s, "read_json_msg_head", lua_read_json_msg_head);
 		tolua_function(tolua_s, "set_raw_utag", lua_set_utag);
 		tolua_endmodule(tolua_s);
 	}

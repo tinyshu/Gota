@@ -8,6 +8,7 @@
 #include "../../moduel/netbus/netbus.h"
 #include "../../moduel/netbus/recv_msg.h"
 #include "../../proto/proto_manage.h"
+#include "../../utils/mem_manger.h"
 
 udp_recv_buf udp_session::_recv_buf;
 void udp_session::close() {
@@ -39,7 +40,11 @@ void udp_session::send_msg(recv_msg* msg) {
 		return;
 	}
 	send_data(pkg, pkg_len);
-	free(pkg);
+	if (pkg!=NULL) {
+		memory_mgr::get_instance().free_memory(pkg);
+		//free(pkg);
+	}
+	
 }
 
 void udp_session::send_raw_msg(raw_cmd* raw_data) {

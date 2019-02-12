@@ -20,6 +20,18 @@ extern "C" {
 
 const char *  netbus_moduel_name = "netbus_wrapper";
 
+static int lua_websocket_listen(lua_State* tolua_s) {
+	int argc = lua_gettop(tolua_s);
+	if (argc != 2) {
+		return 0;
+	}
+
+	char* ip = (char*)lua_tostring(tolua_s, 1);
+	int port = lua_tonumber(tolua_s, 2);
+	ws_listen(ip, port);
+	return 0;
+}
+
 static int lua_tcp_listen(lua_State* tolua_s) {
 	//返回栈顶元素的索引。 因为索引是从 1 开始编号的， 所以这个结果等于堆栈上的元素个数
 	int argc = lua_gettop(tolua_s);
@@ -89,6 +101,7 @@ int register_betbus_export_tolua(lua_State*tolua_s) {
 		//开始导出模块接口
 		tolua_beginmodule(tolua_s, netbus_moduel_name);
 		tolua_function(tolua_s, "tcp_listen", lua_tcp_listen);
+		tolua_function(tolua_s, "websocket_listen", lua_websocket_listen);
 		tolua_function(tolua_s, "udp_listen", lua_udp_listen);
 		tolua_function(tolua_s, "tcp_connect", lua_tcp_connect);
 		tolua_endmodule(tolua_s);

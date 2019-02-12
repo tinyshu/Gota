@@ -12,6 +12,7 @@ local proto_type = {
 }
 
 session_wrapper.set_socket_and_proto_type(socket_type.TCP_SOCKET,proto_type.PROTO_BUF)
+--session_wrapper.set_socket_and_proto_type(socket_type.TCP_SOCKET,proto_type.PROTO_JSON)
 --protobufÐ­Òé£¬×¢²ácmd
 if session_wrapper.get_proto_type() == proto_type.PROTO_BUF then
    local cmd_name_map = require("cmd_name_map")

@@ -20,7 +20,7 @@ private:
 	//可以根据业务场景配置多个大小的内存池
 	memory_alloctor<ALLOC_SIZE_32, 100000> _mem32;
 	memory_alloctor<ALLOC_SIZE_64, 100000> _mem64;
-	memory_alloctor<MAX_ALLOC_SIZE, 100000> _mem128;
+	memory_alloctor<ALLOC_SIZE_128, 100000> _mem128;
 };
 
 #endif
