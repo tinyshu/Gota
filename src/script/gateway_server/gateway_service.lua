@@ -152,9 +152,9 @@ function on_gw_session_disconnect(s)
 	--print("on_gw_session_disconnect BBB!!"..utag)
 	if client_session_utag[utag] ~= nil then
 	   print("client_session_utag[utag] remove!!")
-	   client_session_utag[utag] = nil
+	   client_session_utag[utag] = nil --这句话能保证utag对应的数据被删除，不在使用remove
 	   session_wrapper.set_utag(s,0)
-	   table.remove(client_session_utag,utag)	
+	   --table.remove(client_session_utag,utag)	
 	end
 
 	--客户端连接到网关，已经是登录后
@@ -162,7 +162,7 @@ function on_gw_session_disconnect(s)
 	if client_session_uid[uid] ~= nil then
 	   print("client_session_uid[uid] remove!!")
 	   client_session_uid[uid] = nil
-	   table.remove(client_session_uid,uid)
+	   --table.remove(client_session_uid,uid)
 	end
 end
 

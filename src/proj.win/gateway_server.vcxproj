@@ -258,6 +258,7 @@
     <None Include="..\script\cmd_name_map.lua" />
     <None Include="..\script\cmd_type.lua" />
     <None Include="..\script\conf.lua" />
+    <None Include="..\script\database\mysql_auth_center.lua" />
     <None Include="..\script\gateway_server\gateway_service.lua" />
     <None Include="..\script\gateway_server\main.lua" />
     <None Include="..\script\main.lua" />

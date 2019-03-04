@@ -29,6 +29,11 @@ local conf = {
 	gateway_ws_port = 6081,
 	--定义远程gateway需要连接的配置信息
 	servers = remote_server,
+	
+	--认证服务器mysql
+	auth_mysql= {
+	  host = "123.206.46.126",      port = 3306,      db_name = "auth_center",      uname = "root",      upwd = "123321",
+	},
 }
 
 return conf

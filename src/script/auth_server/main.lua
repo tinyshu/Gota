@@ -1,6 +1,8 @@
 --初始化日志模块
 Logger_wrapper.init("logger/auth/", "auth", true)
 
+--连接到auth db
+require("database/mysql_auth_center")
 local socket_type = {
 	TCP_SOCKET = 0,  --tcp
 	WEB_SOCKET = 1,  --websocket

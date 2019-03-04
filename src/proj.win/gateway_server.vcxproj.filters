@@ -91,6 +91,9 @@
     <Filter Include="src\script\auth_server">
       <UniqueIdentifier>{c131acbe-cd08-4252-b84e-4ffca587270f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\script\database">
+      <UniqueIdentifier>{7fa135a6-f10b-4c2a-9176-b994c1646e5f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\crypt\base64_encoder.c">
@@ -816,6 +819,9 @@
     </None>
     <None Include="..\script\auth_server\auth_service.lua">
       <Filter>src\script\auth_server</Filter>
+    </None>
+    <None Include="..\script\database\mysql_auth_center.lua">
+      <Filter>src\script\database</Filter>
     </None>
   </ItemGroup>
 </Project>
