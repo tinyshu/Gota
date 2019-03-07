@@ -2,6 +2,7 @@ local config = require("conf")
 local mysql_conn = nil
 
 function mysql_connect_auth_center()
+
 	local auth_conf = config.auth_mysql
 	mysql_wrapper.connect(auth_conf.host,auth_conf.port,auth_conf.db_name,
 							auth_conf.uname,auth_conf.upwd,function(err, conn)
@@ -17,4 +18,4 @@ function mysql_connect_auth_center()
     end)
 end
 --脚本被加载就调用该函数
-mysql_connect_auth_center()
+--mysql_connect_auth_center()

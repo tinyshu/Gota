@@ -38,15 +38,15 @@ end
 -- {stype, ctype, utag, body}
 function on_auth_recv_cmd(s, msg)
 	--解析数据做响应的逻辑
-	print(msg[1],msg[2],msg[3],msg[4])
-
+	--print(msg[1],msg[2],msg[3],msg[4])
+	print_r(msg[4])
 	--print_r(msg)
 	--直接返回msg[3]就是网关生成的utag
 	--pb格式数据返回
 	--local ret_msg = {stype=stype.AuthSerser,ctype=2,utag=msg[3],body={status=200}}
 	--json回数据包 msg[4]直接返回请求的json,正常逻辑需要自己需要响应的json的数据包
-	local ret_msg = {stype=stype.AuthSerser, ctype=Cmd.eLoginRes , utag=msg[3], body=msg[4]}
-	session_wrapper.send_msg(s,ret_msg)
+	--local ret_msg = {stype=stype.AuthSerser, ctype=Cmd.eLoginRes , utag=msg[3], body=msg[4]}
+	--session_wrapper.send_msg(s,ret_msg)
 end
 
 function on_auth_session_disconnect(s) 

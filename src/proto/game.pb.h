@@ -49,16 +49,16 @@ struct TableStruct_game_2eproto {
   static const ::google::protobuf::uint32 offsets[];
 };
 void AddDescriptors_game_2eproto();
-class LoginReq;
-class LoginReqDefaultTypeInternal;
-extern LoginReqDefaultTypeInternal _LoginReq_default_instance_;
-class LoginRes;
-class LoginResDefaultTypeInternal;
-extern LoginResDefaultTypeInternal _LoginRes_default_instance_;
+class GuestLoginReq;
+class GuestLoginReqDefaultTypeInternal;
+extern GuestLoginReqDefaultTypeInternal _GuestLoginReq_default_instance_;
+class GuestLoginRes;
+class GuestLoginResDefaultTypeInternal;
+extern GuestLoginResDefaultTypeInternal _GuestLoginRes_default_instance_;
 namespace google {
 namespace protobuf {
-template<> ::LoginReq* Arena::CreateMaybeMessage<::LoginReq>(Arena*);
-template<> ::LoginRes* Arena::CreateMaybeMessage<::LoginRes>(Arena*);
+template<> ::GuestLoginReq* Arena::CreateMaybeMessage<::GuestLoginReq>(Arena*);
+template<> ::GuestLoginRes* Arena::CreateMaybeMessage<::GuestLoginRes>(Arena*);
 }  // namespace protobuf
 }  // namespace google
 
@@ -86,14 +86,14 @@ inline bool Stype_Parse(
     Stype_descriptor(), name, value);
 }
 enum Cmd {
-  eLoginReq = 0,
-  eLoginRes = 1,
+  INVALID_CMD = 0,
+  eGuestLoginReq = 1,
   Cmd_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   Cmd_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool Cmd_IsValid(int value);
-const Cmd Cmd_MIN = eLoginReq;
-const Cmd Cmd_MAX = eLoginRes;
+const Cmd Cmd_MIN = INVALID_CMD;
+const Cmd Cmd_MAX = eGuestLoginReq;
 const int Cmd_ARRAYSIZE = Cmd_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* Cmd_descriptor();
@@ -108,24 +108,24 @@ inline bool Cmd_Parse(
 }
 // ===================================================================
 
-class LoginReq : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:LoginReq) */ {
+class GuestLoginReq : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GuestLoginReq) */ {
  public:
-  LoginReq();
-  virtual ~LoginReq();
+  GuestLoginReq();
+  virtual ~GuestLoginReq();
 
-  LoginReq(const LoginReq& from);
+  GuestLoginReq(const GuestLoginReq& from);
 
-  inline LoginReq& operator=(const LoginReq& from) {
+  inline GuestLoginReq& operator=(const GuestLoginReq& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  LoginReq(LoginReq&& from) noexcept
-    : LoginReq() {
+  GuestLoginReq(GuestLoginReq&& from) noexcept
+    : GuestLoginReq() {
     *this = ::std::move(from);
   }
 
-  inline LoginReq& operator=(LoginReq&& from) noexcept {
+  inline GuestLoginReq& operator=(GuestLoginReq&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -137,34 +137,34 @@ class LoginReq : public ::google::protobuf::Message /* @@protoc_insertion_point(
   static const ::google::protobuf::Descriptor* descriptor() {
     return default_instance().GetDescriptor();
   }
-  static const LoginReq& default_instance();
+  static const GuestLoginReq& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const LoginReq* internal_default_instance() {
-    return reinterpret_cast<const LoginReq*>(
-               &_LoginReq_default_instance_);
+  static inline const GuestLoginReq* internal_default_instance() {
+    return reinterpret_cast<const GuestLoginReq*>(
+               &_GuestLoginReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     0;
 
-  void Swap(LoginReq* other);
-  friend void swap(LoginReq& a, LoginReq& b) {
+  void Swap(GuestLoginReq* other);
+  friend void swap(GuestLoginReq& a, GuestLoginReq& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline LoginReq* New() const final {
-    return CreateMaybeMessage<LoginReq>(nullptr);
+  inline GuestLoginReq* New() const final {
+    return CreateMaybeMessage<GuestLoginReq>(nullptr);
   }
 
-  LoginReq* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<LoginReq>(arena);
+  GuestLoginReq* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<GuestLoginReq>(arena);
   }
   void CopyFrom(const ::google::protobuf::Message& from) final;
   void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const LoginReq& from);
-  void MergeFrom(const LoginReq& from);
+  void CopyFrom(const GuestLoginReq& from);
+  void MergeFrom(const GuestLoginReq& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -186,7 +186,7 @@ class LoginReq : public ::google::protobuf::Message /* @@protoc_insertion_point(
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(LoginReq* other);
+  void InternalSwap(GuestLoginReq* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return nullptr;
@@ -202,78 +202,49 @@ class LoginReq : public ::google::protobuf::Message /* @@protoc_insertion_point(
 
   // accessors -------------------------------------------------------
 
-  // string name = 1;
-  void clear_name();
-  static const int kNameFieldNumber = 1;
-  const ::std::string& name() const;
-  void set_name(const ::std::string& value);
+  // string guest_key = 1;
+  void clear_guest_key();
+  static const int kGuestKeyFieldNumber = 1;
+  const ::std::string& guest_key() const;
+  void set_guest_key(const ::std::string& value);
   #if LANG_CXX11
-  void set_name(::std::string&& value);
+  void set_guest_key(::std::string&& value);
   #endif
-  void set_name(const char* value);
-  void set_name(const char* value, size_t size);
-  ::std::string* mutable_name();
-  ::std::string* release_name();
-  void set_allocated_name(::std::string* name);
+  void set_guest_key(const char* value);
+  void set_guest_key(const char* value, size_t size);
+  ::std::string* mutable_guest_key();
+  ::std::string* release_guest_key();
+  void set_allocated_guest_key(::std::string* guest_key);
 
-  // string email = 3;
-  void clear_email();
-  static const int kEmailFieldNumber = 3;
-  const ::std::string& email() const;
-  void set_email(const ::std::string& value);
-  #if LANG_CXX11
-  void set_email(::std::string&& value);
-  #endif
-  void set_email(const char* value);
-  void set_email(const char* value, size_t size);
-  ::std::string* mutable_email();
-  ::std::string* release_email();
-  void set_allocated_email(::std::string* email);
-
-  // int32 age = 2;
-  void clear_age();
-  static const int kAgeFieldNumber = 2;
-  ::google::protobuf::int32 age() const;
-  void set_age(::google::protobuf::int32 value);
-
-  // int32 int_set = 4;
-  void clear_int_set();
-  static const int kIntSetFieldNumber = 4;
-  ::google::protobuf::int32 int_set() const;
-  void set_int_set(::google::protobuf::int32 value);
-
-  // @@protoc_insertion_point(class_scope:LoginReq)
+  // @@protoc_insertion_point(class_scope:GuestLoginReq)
  private:
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr name_;
-  ::google::protobuf::internal::ArenaStringPtr email_;
-  ::google::protobuf::int32 age_;
-  ::google::protobuf::int32 int_set_;
+  ::google::protobuf::internal::ArenaStringPtr guest_key_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_game_2eproto;
 };
 // -------------------------------------------------------------------
 
-class LoginRes : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:LoginRes) */ {
+class GuestLoginRes : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GuestLoginRes) */ {
  public:
-  LoginRes();
-  virtual ~LoginRes();
+  GuestLoginRes();
+  virtual ~GuestLoginRes();
 
-  LoginRes(const LoginRes& from);
+  GuestLoginRes(const GuestLoginRes& from);
 
-  inline LoginRes& operator=(const LoginRes& from) {
+  inline GuestLoginRes& operator=(const GuestLoginRes& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  LoginRes(LoginRes&& from) noexcept
-    : LoginRes() {
+  GuestLoginRes(GuestLoginRes&& from) noexcept
+    : GuestLoginRes() {
     *this = ::std::move(from);
   }
 
-  inline LoginRes& operator=(LoginRes&& from) noexcept {
+  inline GuestLoginRes& operator=(GuestLoginRes&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -285,34 +256,34 @@ class LoginRes : public ::google::protobuf::Message /* @@protoc_insertion_point(
   static const ::google::protobuf::Descriptor* descriptor() {
     return default_instance().GetDescriptor();
   }
-  static const LoginRes& default_instance();
+  static const GuestLoginRes& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const LoginRes* internal_default_instance() {
-    return reinterpret_cast<const LoginRes*>(
-               &_LoginRes_default_instance_);
+  static inline const GuestLoginRes* internal_default_instance() {
+    return reinterpret_cast<const GuestLoginRes*>(
+               &_GuestLoginRes_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     1;
 
-  void Swap(LoginRes* other);
-  friend void swap(LoginRes& a, LoginRes& b) {
+  void Swap(GuestLoginRes* other);
+  friend void swap(GuestLoginRes& a, GuestLoginRes& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline LoginRes* New() const final {
-    return CreateMaybeMessage<LoginRes>(nullptr);
+  inline GuestLoginRes* New() const final {
+    return CreateMaybeMessage<GuestLoginRes>(nullptr);
   }
 
-  LoginRes* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<LoginRes>(arena);
+  GuestLoginRes* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<GuestLoginRes>(arena);
   }
   void CopyFrom(const ::google::protobuf::Message& from) final;
   void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const LoginRes& from);
-  void MergeFrom(const LoginRes& from);
+  void CopyFrom(const GuestLoginRes& from);
+  void MergeFrom(const GuestLoginRes& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -334,7 +305,7 @@ class LoginRes : public ::google::protobuf::Message /* @@protoc_insertion_point(
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(LoginRes* other);
+  void InternalSwap(GuestLoginRes* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return nullptr;
@@ -350,18 +321,18 @@ class LoginRes : public ::google::protobuf::Message /* @@protoc_insertion_point(
 
   // accessors -------------------------------------------------------
 
-  // int32 status = 1;
-  void clear_status();
-  static const int kStatusFieldNumber = 1;
-  ::google::protobuf::int32 status() const;
-  void set_status(::google::protobuf::int32 value);
+  // int32 result = 1;
+  void clear_result();
+  static const int kResultFieldNumber = 1;
+  ::google::protobuf::int32 result() const;
+  void set_result(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:LoginRes)
+  // @@protoc_insertion_point(class_scope:GuestLoginRes)
  private:
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::int32 status_;
+  ::google::protobuf::int32 result_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_game_2eproto;
 };
@@ -374,158 +345,77 @@ class LoginRes : public ::google::protobuf::Message /* @@protoc_insertion_point(
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// LoginReq
+// GuestLoginReq
 
-// string name = 1;
-inline void LoginReq::clear_name() {
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// string guest_key = 1;
+inline void GuestLoginReq::clear_guest_key() {
+  guest_key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& LoginReq::name() const {
-  // @@protoc_insertion_point(field_get:LoginReq.name)
-  return name_.GetNoArena();
+inline const ::std::string& GuestLoginReq::guest_key() const {
+  // @@protoc_insertion_point(field_get:GuestLoginReq.guest_key)
+  return guest_key_.GetNoArena();
 }
-inline void LoginReq::set_name(const ::std::string& value) {
+inline void GuestLoginReq::set_guest_key(const ::std::string& value) {
   
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:LoginReq.name)
+  guest_key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:GuestLoginReq.guest_key)
 }
 #if LANG_CXX11
-inline void LoginReq::set_name(::std::string&& value) {
+inline void GuestLoginReq::set_guest_key(::std::string&& value) {
   
-  name_.SetNoArena(
+  guest_key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:LoginReq.name)
+  // @@protoc_insertion_point(field_set_rvalue:GuestLoginReq.guest_key)
 }
 #endif
-inline void LoginReq::set_name(const char* value) {
+inline void GuestLoginReq::set_guest_key(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:LoginReq.name)
+  guest_key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:GuestLoginReq.guest_key)
 }
-inline void LoginReq::set_name(const char* value, size_t size) {
+inline void GuestLoginReq::set_guest_key(const char* value, size_t size) {
   
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  guest_key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:LoginReq.name)
+  // @@protoc_insertion_point(field_set_pointer:GuestLoginReq.guest_key)
 }
-inline ::std::string* LoginReq::mutable_name() {
+inline ::std::string* GuestLoginReq::mutable_guest_key() {
   
-  // @@protoc_insertion_point(field_mutable:LoginReq.name)
-  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:GuestLoginReq.guest_key)
+  return guest_key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* LoginReq::release_name() {
-  // @@protoc_insertion_point(field_release:LoginReq.name)
+inline ::std::string* GuestLoginReq::release_guest_key() {
+  // @@protoc_insertion_point(field_release:GuestLoginReq.guest_key)
   
-  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return guest_key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void LoginReq::set_allocated_name(::std::string* name) {
-  if (name != nullptr) {
+inline void GuestLoginReq::set_allocated_guest_key(::std::string* guest_key) {
+  if (guest_key != nullptr) {
     
   } else {
     
   }
-  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:LoginReq.name)
-}
-
-// int32 age = 2;
-inline void LoginReq::clear_age() {
-  age_ = 0;
-}
-inline ::google::protobuf::int32 LoginReq::age() const {
-  // @@protoc_insertion_point(field_get:LoginReq.age)
-  return age_;
-}
-inline void LoginReq::set_age(::google::protobuf::int32 value) {
-  
-  age_ = value;
-  // @@protoc_insertion_point(field_set:LoginReq.age)
-}
-
-// string email = 3;
-inline void LoginReq::clear_email() {
-  email_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& LoginReq::email() const {
-  // @@protoc_insertion_point(field_get:LoginReq.email)
-  return email_.GetNoArena();
-}
-inline void LoginReq::set_email(const ::std::string& value) {
-  
-  email_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:LoginReq.email)
-}
-#if LANG_CXX11
-inline void LoginReq::set_email(::std::string&& value) {
-  
-  email_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:LoginReq.email)
-}
-#endif
-inline void LoginReq::set_email(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  
-  email_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:LoginReq.email)
-}
-inline void LoginReq::set_email(const char* value, size_t size) {
-  
-  email_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:LoginReq.email)
-}
-inline ::std::string* LoginReq::mutable_email() {
-  
-  // @@protoc_insertion_point(field_mutable:LoginReq.email)
-  return email_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* LoginReq::release_email() {
-  // @@protoc_insertion_point(field_release:LoginReq.email)
-  
-  return email_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void LoginReq::set_allocated_email(::std::string* email) {
-  if (email != nullptr) {
-    
-  } else {
-    
-  }
-  email_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), email);
-  // @@protoc_insertion_point(field_set_allocated:LoginReq.email)
-}
-
-// int32 int_set = 4;
-inline void LoginReq::clear_int_set() {
-  int_set_ = 0;
-}
-inline ::google::protobuf::int32 LoginReq::int_set() const {
-  // @@protoc_insertion_point(field_get:LoginReq.int_set)
-  return int_set_;
-}
-inline void LoginReq::set_int_set(::google::protobuf::int32 value) {
-  
-  int_set_ = value;
-  // @@protoc_insertion_point(field_set:LoginReq.int_set)
+  guest_key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), guest_key);
+  // @@protoc_insertion_point(field_set_allocated:GuestLoginReq.guest_key)
 }
 
 // -------------------------------------------------------------------
 
-// LoginRes
+// GuestLoginRes
 
-// int32 status = 1;
-inline void LoginRes::clear_status() {
-  status_ = 0;
+// int32 result = 1;
+inline void GuestLoginRes::clear_result() {
+  result_ = 0;
 }
-inline ::google::protobuf::int32 LoginRes::status() const {
-  // @@protoc_insertion_point(field_get:LoginRes.status)
-  return status_;
+inline ::google::protobuf::int32 GuestLoginRes::result() const {
+  // @@protoc_insertion_point(field_get:GuestLoginRes.result)
+  return result_;
 }
-inline void LoginRes::set_status(::google::protobuf::int32 value) {
+inline void GuestLoginRes::set_result(::google::protobuf::int32 value) {
   
-  status_ = value;
-  // @@protoc_insertion_point(field_set:LoginRes.status)
+  result_ = value;
+  // @@protoc_insertion_point(field_set:GuestLoginRes.result)
 }
 
 #ifdef __GNUC__

@@ -1,7 +1,7 @@
---和proto文件里定义的协议cmd意义对应
+--和proto文件里定义的协议cmd对应 ,用在消息返回使用协议id应用
 local Cmd = {
-	eLoginReq = 1,
-	eLoginRes = 2,
+	GuestLoginReq = 1,
+	GuestLoginRes = 2,
 }
 
 return Cmd
