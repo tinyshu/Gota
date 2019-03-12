@@ -214,7 +214,8 @@ void on_query_work_cb(uv_work_t* req) {
 		return;
 	}
 	if (mysql_num_rows(res) == 0) {
-		q_req->err = strdup("get store num is zero!");
+		//没有查询到数据，err设置为 NULL
+		q_req->err = NULL;
 		q_req->f_query_cb(q_req->err, NULL,NULL);
 		mysql_free_result(res);
 		uv_mutex_unlock(&(c->mutex));

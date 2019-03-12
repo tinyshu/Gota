@@ -823,5 +823,11 @@
     <None Include="..\script\database\mysql_auth_center.lua">
       <Filter>src\script\database</Filter>
     </None>
+    <None Include="..\script\auth_server\guest.lua">
+      <Filter>src\script\auth_server</Filter>
+    </None>
+    <None Include="..\script\utils.lua">
+      <Filter>src\script</Filter>
+    </None>
   </ItemGroup>
 </Project>
