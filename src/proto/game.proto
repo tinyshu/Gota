@@ -1,5 +1,15 @@
 syntax = "proto3"; 
 
+/*
+添加新协议的规则
+1.在game.proto文件添加新协议和结构
+    enum Cmd添加协议id
+	添加新协议和结构
+2.在cmd_type添加新协议的id
+3.在cmd_name_map.lua添加命令名字,服务引擎在启动
+4.运行proto文件夹下的bat文件，重新生成新协议文件
+5.重新编译服务引擎
+*/
 enum Stype{
 	INVALIDI_STYPE = 0;
 	AUTH_STYPE = 1;
@@ -10,15 +20,26 @@ enum Stype{
 enum Cmd {
 	INVALID_CMD = 0;
 	eGuestLoginReq = 1;
+	eGuestLoginRes = 2;
 }
 
 message GuestLoginReq{
    string guest_key = 1; 
 }
 
-message GuestLoginRes{
-   int32 result = 1;
+message UserCenterInfo{
+	string unick =1;
+	uint32 sex=2;
+	uint32 face=3;
+	uint32 uvip=4;
+	uint32 uid=5;
 }
+
+message GuestLoginRes{
+   int32 status = 1;
+   UserCenterInfo userinfo=2;
+}
+
 
 /*
 message LoginReq {  

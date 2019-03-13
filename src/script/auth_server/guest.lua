@@ -2,8 +2,10 @@
 ---- {stype, ctype, utag, body}
 --游客登录
 
---加载模块时候连接认证服务器
---17min
+--加载模块时候连接认证服务器 --20min
+local stype_module = require("service_type")
+local cmd_module = require("cmd_type")
+local res_module = require("respones")
 mysql_center = require("database/mysql_auth_center")
 utils = require("utils")
 
@@ -16,6 +18,14 @@ function guest_login(s,msg)
 		if err then
 		--返回给客户端错误消息
 		  print(err)
+		  --local ret_msg = {stype=stype.AuthSerser,ctype=2,utag=msg[3],body={status=200}}
+		  local ret_msg = {
+					  stype=stype_module.AuthSerser,ctype=cmd_module.GuestLoginRes,utag=msg[3],
+					  body={
+					      status = res_module.SystemErr
+					    }}
+
+					  session_wrapper.send_msg(s,ret_msg)
 		  return 
 		end
 
@@ -26,6 +36,13 @@ function guest_login(s,msg)
 					if err then
 						--返回给客户端错误消息
 						print(err)
+						local ret_msg = {
+					       stype=stype_module.AuthSerser,ctype=cmd_module.GuestLoginRes,utag=msg[3],
+							body={
+									status = res_module.SystemErr
+							}}
+
+						session_wrapper.send_msg(s,ret_msg)
 						return 
 					 end
 					 --插入成功，重新调用自己
@@ -34,21 +51,50 @@ function guest_login(s,msg)
 			return 
 		end
 		--这里查到了，先判断状态
-		--print_r(user_info)
-		utils.print_table(user_info)
+		--utils.print_table(user_info)
 		if user_info.status ~= 0 then
 		     --状态不正确 ,返回信息给客户端
 			 print("user status error status:"..user_info.status)
+			 local ret_msg = {
+					       stype=stype_module.AuthSerser,ctype=cmd_module.GuestLoginRes,utag=msg[3],
+							body={
+									status = res_module.UserIsFreeze
+							}}
+
+			session_wrapper.send_msg(s,ret_msg)
 		     return
 		end
 		--判断用户是否为游客状态
 		if user_info.is_guest ~=1 then
 		    --不是游客状态无法使用游客key登录
 			print("user is_guest error"..user_info.is_guest)
+			local ret_msg = {
+					       stype=stype_module.AuthSerser,ctype=cmd_module.GuestLoginRes,utag=msg[3],
+							body={
+									status = res_module.UserIsNotGuest
+							}}
+
+			session_wrapper.send_msg(s,ret_msg)
+
 			return 
 		end
 		print("user data"..user_info.uid,user_info.unick,user_info.status)
 		--返回登录成功消息给客户端
+		local ret_msg = {
+					       stype=stype_module.AuthSerser,ctype=cmd_module.GuestLoginRes,utag=msg[3],
+							body={
+									status = res_module.OK,
+									userinfo = {
+									   unick=user_info.unick,
+									   sex=user_info.usex,
+									   face=user_info.uface,
+									   uvip=user_info.uvip,
+									   uid=user_info.uid
+									}
+							}}
+
+		session_wrapper.send_msg(s,ret_msg)
+
     end)
 end
 
