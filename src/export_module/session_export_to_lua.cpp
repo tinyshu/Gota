@@ -262,8 +262,8 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 				}
 				Message* msg = reflection->MutableMessage(message, filedes);
 				msg->CopyFrom(*value);
-				delete msg;
-				msg = NULL;
+				delete value;
+				value = NULL;
 			}
 			break;
 			default:

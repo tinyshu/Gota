@@ -92,7 +92,7 @@ function guest_login(s,msg)
 									   uid=user_info.uid
 									}
 							}}
-
+		--utils.print_table(ret_msg)
 		session_wrapper.send_msg(s,ret_msg)
 
     end)
