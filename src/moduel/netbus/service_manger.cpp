@@ -70,7 +70,9 @@ void server_manage::on_session_disconnect(struct session_base* s) {
 			continue;
 		}
 
-		_services[i]->on_session_disconnect((session*)s);
+		//数组的index就是stype
+		int stype = i;
+		_services[i]->on_session_disconnect((session*)s, stype);
 	}
 }
 
@@ -79,5 +81,6 @@ void server_manage::register_service(int service_type, service* s) {
 		return;
 	}
 
+	//stype做为数组的索引
 	_services[service_type] = s;
 }

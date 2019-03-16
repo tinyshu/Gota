@@ -782,6 +782,9 @@
     <ClInclude Include="..\export_module\proto_mgr_export_to_lua.h">
       <Filter>src\export_module</Filter>
     </ClInclude>
+    <ClInclude Include="..\moduel\net\proto_type.h">
+      <Filter>src\moduel\net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\proto\message.proto">

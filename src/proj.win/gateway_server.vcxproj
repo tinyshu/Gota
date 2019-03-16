@@ -230,6 +230,7 @@
     <ClInclude Include="..\moduel\netbus\service_manger.h" />
     <ClInclude Include="..\moduel\netbus\session_key_mgr.h" />
     <ClInclude Include="..\moduel\net\net_uv.h" />
+    <ClInclude Include="..\moduel\net\proto_type.h" />
     <ClInclude Include="..\moduel\session\session_base.h" />
     <ClInclude Include="..\moduel\session\tcp_session.h" />
     <ClInclude Include="..\moduel\session\udp_session.h" />
@@ -342,7 +343,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;USE_LIBUV;GAME_DEVLOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../3rd/mysql/win/include/;../3rd/libuv/include;../3rd/lua;../3rd/hiredis/win/include/;../3rd/protobuf/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../3rd/protobuf/;../3rd/mysql/win/include/;../3rd/libuv/include;../3rd/lua;../3rd/hiredis/win/include/</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>

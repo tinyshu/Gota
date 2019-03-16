@@ -1,14 +1,15 @@
 #include<stdio.h>
 #include<string.h>
 #include <stdlib.h>
+#include "uv.h"
 #include "../../utils/logger.h"
 #include "net_uv.h"
-
+#include "proto_type.h"
 
 #ifdef WIN32
 #include <WinSock2.h>
 #include <mswsock.h>
-#include <windows.h>
+//#include <windows.h>
 
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "IPHLPAPI.lib")

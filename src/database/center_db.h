@@ -3,7 +3,7 @@
 
 #ifdef WIN32
 #include <winsock.h>
-#include <windows.h>
+//#include <windows.h>
 #include "mysql.h"
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "odbc32.lib")

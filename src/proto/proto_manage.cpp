@@ -1,4 +1,5 @@
 #include "proto_manage.h"
+#include "../moduel/net/proto_type.h"
 #include "../moduel/netbus/recv_msg.h"
 #include "../moduel/session/tcp_session.h"
 #include "../moduel/net/net_uv.h"

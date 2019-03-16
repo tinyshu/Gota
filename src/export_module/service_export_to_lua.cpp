@@ -12,7 +12,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
+#include "../moduel/net/proto_type.h"
 #include "../moduel/netbus/service_interface.h"
 #include "../utils/logger.h"
 #include "../lua_wrapper/lua_wrapper.h"
@@ -42,7 +42,7 @@ public:
 	}
 
 	virtual bool on_session_recv_cmd(struct session_base*s, recv_msg* msg);
-	virtual void on_session_disconnect(struct session* s);
+	virtual void on_session_disconnect(struct session* s,int stype);
 	virtual bool on_session_recv_raw_cmd(struct session_base* s, raw_cmd* msg);
 public:
 	int on_session_recv_cmd_handle;
@@ -247,9 +247,10 @@ bool lua_service_module::on_session_recv_cmd(struct session_base* s, recv_msg* m
 	return true;
 }
 
-void lua_service_module::on_session_disconnect(struct session* s) {
+void lua_service_module::on_session_disconnect(struct session* s,int stype) {
 	tolua_pushuserdata(lua_wrapper::get_luastatus(),s);
-	if (lua_wrapper::execute_service_fun_by_handle(on_session_disconnect_handle, 1) == 0) {
+	tolua_pushnumber(lua_wrapper::get_luastatus(),stype);
+	if (lua_wrapper::execute_service_fun_by_handle(on_session_disconnect_handle, 2) == 0) {
 		lua_wrapper::remove_service_fun_by_handle(on_session_disconnect_handle);
 	}
 }
@@ -293,19 +294,6 @@ static unsigned int save_service_function(lua_State* L, int lo, int def)
 	return s_function_ref_id;
 }
 
-/*lua×¢²áserviceÄ£¿é 
-local my_service = {
--- msg {1: stype, 2 ctype, 3 utag, 4 body_table_or_str}
-on_session_recv_cmd = function(session, msg)
-
-end,
-
-on_session_disconnect = function(session)
-end
-}
-
-local ret = service.register(100, my_service)
-*/
 int register_service(lua_State* tolua_s) {
 	int stype = (int)tolua_tonumber(tolua_s, 1,0);
 	if (stype <= 0 || stype > MAX_SERVICES) {

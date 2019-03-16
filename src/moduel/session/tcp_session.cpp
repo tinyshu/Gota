@@ -4,10 +4,11 @@
 
 #ifdef WIN32
 #include <WinSock2.h>
-#include <Windows.h>
+//#include <Windows.h>
 #endif
 
 #include "tcp_session.h"
+#include "../net/proto_type.h"
 #include "../net/net_uv.h"
 #include "../../3rd/mjson/json_extends.h"
 #include "../netbus/netbus.h"

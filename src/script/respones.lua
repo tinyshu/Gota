@@ -6,6 +6,7 @@ local ResponesCode = {
 	--认证中心
 	UserIsFreeze = -1000,
 	UserIsNotGuest = -1001,
+	UserRelogin = -1002,
 } 
 
 return ResponesCode

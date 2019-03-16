@@ -21,15 +21,15 @@ lua_State* lua_wrapper::get_luastatus() {
 static void do_log_message(void(*log)(const char* file_name, int line_num, const char* msg), 	const char* msg) {	lua_Debug info;	int depth = 0;	while (lua_getstack(g_lua_state, depth, &info)) {		lua_getinfo(g_lua_state, "S", &info);		lua_getinfo(g_lua_state, "n", &info);		lua_getinfo(g_lua_state, "l", &info);		if (info.source[0] == '@') {			log(&info.source[1], info.currentline, msg);			return;		}		++depth;	}	if (depth == 0) {		log("trunk", 0, msg);	}}
 //获取lua的调用信息
 static void print_error(const char* filename,int line_num,const char* msg) {
-	logger::log(filename, line_num,ERROR,msg);
+	logger::log(filename, line_num,LOG_ERROR,msg);
 }
 
 static void print_waring(const char* filename, int line_num, const char* msg) {
-	logger::log(filename, line_num, WARNING, msg);
+	logger::log(filename, line_num, LOG_WARNING, msg);
 }
 
 static void print_debug(const char* filename, int line_num, const char* msg) {
-	logger::log(filename, line_num, DEBUG, msg);
+	logger::log(filename, line_num, LOG_DEBUG, msg);
 }
 
 

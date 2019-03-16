@@ -12,7 +12,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
+#include "../moduel/net/proto_type.h"
 #include "../utils/logger.h"
 #include "../lua_wrapper/lua_wrapper.h"
 #include "../moduel/net/net_uv.h"
@@ -39,6 +39,8 @@ int lua_close_session(lua_State* tolua_s) {
 	return 0;
 }
 
+
+//把protocol的message对象转换成lua的表形式
 static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,const string& type_name) {
 	if (type_name.empty() || !lua_istable(tolua_s,table_idx)) {
 		return NULL;
@@ -150,6 +152,7 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 					{
 						bool value = lua_toboolean(tolua_s, -1);
 						reflection->SetBool(message, filedes, value);
+						
 					}
 					break;
 					case FieldDescriptor::CPPTYPE_MESSAGE:
