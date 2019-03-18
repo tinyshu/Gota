@@ -109,14 +109,23 @@ end
 
 --服务器发过来的信息，转给对应的客户端
 function send_to_client(server_session,raw_data)
-	local stype, ctype, utag = proto_mgr_wrapper.read_msg_head(raw_data)
+	local cmdtype, ctype, utag = proto_mgr_wrapper.read_msg_head(raw_data)
 	print(utag)
 	local client_session = nil
 	
 	--判断是否为登录返回协议
-	if is_login_ctype(cmdtype) == true then
+	print("send_to_client ctype,"..ctype)
+	if is_login_ctype(ctype) == true then
+	    print("is_login_ctype")
 		--登录协议返回，在这里读取认证服务器返回的uid
 		local t_body = proto_mgr_wrapper.read_msg_body(raw_data)
+		if t_body == nil then
+		   return
+		end
+		--if true == true then
+		--    return
+		--end
+
 		client_session = client_session_utag[utag]
 		if client_session==nil then
 			print("client_session is nil")
@@ -147,6 +156,7 @@ function send_to_client(server_session,raw_data)
 		client_session_utag[utag] = nil
 		client_session_uid[login_uid] = client_session
 		--登录成功后，在网关设置uid到底层session对象
+		print("uid="..login_uid)
 		session_wrapper.set_uid(client_session,login_uid)
 		--这里设置为0
 		t_body.uid = 0
@@ -220,7 +230,7 @@ function on_gw_session_disconnect(s,service_stype)
 	if client_session_utag[utag] ~= nil  and client_session_utag[utag] == s then
 	   print("client_session_utag[utag] remove!!")
 	   client_session_utag[utag] = nil --这句话能保证utag对应的数据被删除，不在使用remove
-	   session_wrapper.set_utag(s,0
+	   session_wrapper.set_utag(s,0)
 	end
 
 	--客户端连接到网关，已经是登录后

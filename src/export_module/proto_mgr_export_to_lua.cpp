@@ -192,7 +192,8 @@ void push_proto_message_tolua(const google::protobuf::Message* message) {
 static int lua_msg_read_body(lua_State*tolua_s) {
 	int argc = lua_gettop(tolua_s);
 	if (argc != 1) {
-		return 0;
+		lua_pushinteger(tolua_s, 0);
+		return 1;
 	}
 
 	raw_cmd* raw_data = (raw_cmd*)lua_touserdata(tolua_s, -1);
@@ -219,7 +220,7 @@ static int lua_msg_read_body(lua_State*tolua_s) {
 	if (msg!=NULL) {
 		memory_mgr::get_instance().free_memory(msg);
 	}
-	
+	return 1;
 }
 
 //static int lua_read_json_msg_head(lua_State*tolua_s) {

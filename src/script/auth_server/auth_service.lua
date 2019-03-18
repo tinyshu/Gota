@@ -62,7 +62,7 @@ function on_auth_recv_cmd(s, msg)
 	--session_wrapper.send_msg(s,ret_msg)
 end
 
-function on_auth_session_disconnect(s) 
+function on_auth_session_disconnect(s,ctype) 
 end
 
 local auth_service = {
