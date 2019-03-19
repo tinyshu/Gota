@@ -154,7 +154,8 @@ unsigned char* protoManager::encode_cmd_msg(recv_msg* msg, int * out_len) {
 
 	unsigned char* package = NULL;
 	int total_len = 0;
-	if (get_proto_type() == BIN_PROTOCAL) {
+	*out_len = BIN_HEAD_LEN;
+	if (get_proto_type() == BIN_PROTOCAL  && msg->body!=NULL) {
 		Message* pb_msg = (Message*)msg->body;
 		total_len = BIN_HEAD_LEN + pb_msg->ByteSize();
 		//package = (unsigned char*)malloc(total_len);
@@ -172,9 +173,9 @@ unsigned char* protoManager::encode_cmd_msg(recv_msg* msg, int * out_len) {
 			return NULL;
 		}
 
-		*out_len = BIN_HEAD_LEN + pb_msg->ByteSize();
+		*out_len +=pb_msg->ByteSize();
 	}
-	else if(get_proto_type() == JSON_PROTOCAL){
+	else if(get_proto_type() == JSON_PROTOCAL && msg->body != NULL){
 		char* json_str = NULL;
 		int json_len = 0;
 		if (msg->body!=NULL) {
@@ -190,9 +191,11 @@ unsigned char* protoManager::encode_cmd_msg(recv_msg* msg, int * out_len) {
 		}
 
 		memcpy(package+ BIN_HEAD_LEN, json_str, json_len);
-		*out_len = (BIN_HEAD_LEN + json_len);
+		*out_len += json_len;
 	}
-
+	if (package==NULL && *out_len > 0) {
+		package = (unsigned char*)memory_mgr::get_instance().alloc_memory(*out_len);
+	}
 	//ÏûÏ¢Í·
 	package[0] = (msg->head.stype & 0x000000ff);
 	package[1] = ((msg->head.stype & 0x0000ff00) >> 8);

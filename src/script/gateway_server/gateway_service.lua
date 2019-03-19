@@ -3,6 +3,8 @@ local stype_module = require("service_type")
 
 local cmd_module = require("cmd_type")
 local res_module = require("respones")
+local utils = require("utils")
+
 --47min uid管理写完，还未测试
 --stype到网关连接的session的session映射,存储的连接的服务器的session
 local session_map = {}
@@ -120,6 +122,7 @@ function send_to_client(server_session,raw_data)
 		--登录协议返回，在这里读取认证服务器返回的uid
 		local t_body = proto_mgr_wrapper.read_msg_body(raw_data)
 		if t_body == nil then
+		   print("t_body is nil")
 		   return
 		end
 		--if true == true then
@@ -138,14 +141,16 @@ function send_to_client(server_session,raw_data)
 			  session_wrapper.send_raw_msg(client_session,raw_data)
 			end
 		end
-
+		--local ret_msg = {stype=stype.AuthSerser,ctype=2,utag=msg[3],body={status=200}}
 		local t_userinfo = t_body.userinfo
 		local login_uid = t_userinfo.uid
+		print("login_uid"..login_uid)
 		if login_uid~= 0 then 
 		   --判断是否有session是否已经登录
 		   if client_session_uid[login_uid] ~= nil and client_session_uid[login_uid] ~= client_session then
+		       print("Relogin uid is"..login_uid)
 		       --返回一个重复登录消息,新加一个重复登录协议21
-			  local ret_msg = {stype=stype_module.AuthSerser,ctype=cmd_module.ReLoginRes,0,nil}
+			  local ret_msg = {stype=stype_module.AuthSerser,ctype=cmd_module.ReLoginRes,utag=0,body=nil}
 			  session_wrapper.send_msg(client_session,ret_msg)
 			   --删除已经存在的session
 			   session_wrapper.close_session(client_session)
@@ -153,14 +158,18 @@ function send_to_client(server_session,raw_data)
 		   end 
 		end
 
+		--先把登录前的utag表里的utag对应的值设置为空
 		client_session_utag[utag] = nil
 		client_session_uid[login_uid] = client_session
 		--登录成功后，在网关设置uid到底层session对象
-		print("uid="..login_uid)
+		print("client_session_uid uid="..login_uid)
 		session_wrapper.set_uid(client_session,login_uid)
-		--这里设置为0
-		t_body.uid = 0
-		local ret_msg = {stype=stype_module.AuthSerser,ctype=cmdtype,body=t_body}
+		--这里设置为0,主要是为了不暴露uid给客户端
+		t_body.userinfo.uid = 0
+		--返回登录请求的userinfo信息给前端
+		print("t_body is")
+		utils.print_table(t_body)
+		local ret_msg = {stype=stype_module.AuthSerser,ctype=cmdtype,utag=0,body=t_body}
 		session_wrapper.send_msg(client_session,ret_msg)
 		return
 	end
@@ -248,7 +257,7 @@ function on_gw_session_disconnect(s,service_stype)
 	
 	if uid~=0 then
 	  --广播用户断线的消息给，所有连接的网关
-	  local ret_msg = {stype=service_stype,ctype=cmd_module.eUserLostConn,body=uid,nil}
+	  local ret_msg = {stype=service_stype,ctype=cmd_module.UserLostConn,utag=uid,body=nil}
 	  session_wrapper.send_msg(server_session,ret_msg)
 	end
 end
