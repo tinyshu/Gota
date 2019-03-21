@@ -1,20 +1,18 @@
 local config = require("conf")
 local stype_module = require("service_type")
-
 local cmd_module = require("cmd_type")
 local res_module = require("respones")
 local utils = require("utils")
 
---47min uid管理写完，还未测试
 --stype到网关连接的session的session映射,存储的连接的服务器的session
 local session_map = {}
 --标记正在连接还未成功的session
 local session_connecting = {}
 
 local g_ukey = 1;
---临时utag映射session，这个key有lua生成
+--登录前存储用户的session，表的key用全局变量g_ukey
 local client_session_utag = {}
---uid映射session
+--登陆后使用，登陆后获取uid后使用uid作为表的key
 local client_session_uid = {}
 
 function connect_to_server(stype,server_ip,server_port)
@@ -32,9 +30,11 @@ end
 )
 end
 
+--被定时器调用
 function check_session_connect()
 	--遍历网关需要连接的服务器
 	for k,v in pairs(config.servers) do
+	    --判断 如果没有连接成功，并且也不是正在连接的server，就发起一次连接调用
 		if session_map[v.stype] == nil and session_connecting[v.stype] == false then
 			session_connecting[v.stype] = true
 			print("connecting server["..v.desic.."]"..v.ip..":"..v.port)
@@ -44,11 +44,13 @@ function check_session_connect()
 end
 
 function server_session_init()
+    --获取conf.lua，gateway需要连接的servers配置
 	for k,v in pairs(config.servers) do
+		--在循环中初始化2个map
 		session_map[v.stype] = nil
 		session_connecting[v.stype] = false
 	end
-	--启动连接定时器
+	--启动连接定时器，间隔每1s调用check_session_connect
 	timer_wrapper.create_timer(check_session_connect,-1,1000,1000)
 end
 
@@ -102,7 +104,7 @@ function send_to_server(client_session,raw_data)
 end
 
 --判断是否为登录返回协议
-function is_login_ctype(ctype)
+function is_loginresp_ctype(ctype)
 	if ctype == cmd_module.GuestLoginRes then
 		return true
 	end
@@ -112,28 +114,30 @@ end
 --服务器发过来的信息，转给对应的客户端
 function send_to_client(server_session,raw_data)
 	local cmdtype, ctype, utag = proto_mgr_wrapper.read_msg_head(raw_data)
-	print(utag)
+	--print(utag)
 	local client_session = nil
 	
 	--判断是否为登录返回协议
-	print("send_to_client ctype,"..ctype)
-	if is_login_ctype(ctype) == true then
-	    print("is_login_ctype")
+	--print("send_to_client ctype,"..ctype)
+	--ctype是协议id,判断是否为登录返回协议
+	if is_loginresp_ctype(ctype) == true then
+	    --print("is_login_ctype")
 		--登录协议返回，在这里读取认证服务器返回的uid
 		local t_body = proto_mgr_wrapper.read_msg_body(raw_data)
 		if t_body == nil then
 		   print("t_body is nil")
 		   return
 		end
-		--if true == true then
-		--    return
-		--end
 
+		--client_session_utag在登录前设置了,
+		--client_session_utag[utag] = client_session的对应关系
 		client_session = client_session_utag[utag]
 		if client_session==nil then
+			--如果获取不到就是一个异常
 			print("client_session is nil")
 			return
 		end
+		--判断登录消息是否成功
 		if t_body.status ~= res_module.OK then
 		   
 		   proto_mgr_wrapper.set_raw_utag(raw_data,0)
@@ -141,18 +145,20 @@ function send_to_client(server_session,raw_data)
 			  session_wrapper.send_raw_msg(client_session,raw_data)
 			end
 		end
-		--local ret_msg = {stype=stype.AuthSerser,ctype=2,utag=msg[3],body={status=200}}
+		
+		--下面是登录成功逻辑
 		local t_userinfo = t_body.userinfo
+		--用户uid,uid是在底层创建的
 		local login_uid = t_userinfo.uid
 		print("login_uid"..login_uid)
 		if login_uid~= 0 then 
 		   --判断是否有session是否已经登录
 		   if client_session_uid[login_uid] ~= nil and client_session_uid[login_uid] ~= client_session then
 		       print("Relogin uid is"..login_uid)
-		       --返回一个重复登录消息,新加一个重复登录协议21
+		       --返回一个重复登录消息
 			  local ret_msg = {stype=stype_module.AuthSerser,ctype=cmd_module.ReLoginRes,utag=0,body=nil}
 			  session_wrapper.send_msg(client_session,ret_msg)
-			   --删除已经存在的session
+			   --先关闭底层session，删除已经存在的session
 			   session_wrapper.close_session(client_session)
 			   client_session_uid[login_uid] = nil
 		   end 
@@ -167,26 +173,16 @@ function send_to_client(server_session,raw_data)
 		--这里设置为0,主要是为了不暴露uid给客户端
 		t_body.userinfo.uid = 0
 		--返回登录请求的userinfo信息给前端
-		print("t_body is")
 		utils.print_table(t_body)
 		local ret_msg = {stype=stype_module.AuthSerser,ctype=cmdtype,utag=0,body=t_body}
 		session_wrapper.send_msg(client_session,ret_msg)
 		return
 	end
 
-	--根据登录前，还是登陆后获取client_session
-	if client_session_utag[utag] ~= nil then
-		print("client_session_utag")
-		client_session = client_session_utag[utag]
-	elseif client_session_uid[utag] ~= nil then
-	    print("client_session_uid")
-		client_session = client_session_uid[utag]
-	else 
-	    print("not fonud client session")
-	end
-
 	--把协议里的utag重置为0 
 	proto_mgr_wrapper.set_raw_utag(raw_data,0)
+	--在登录成功以后，协议头的utag就是用户的uid
+	client_session = client_session_uid[utag]
 	if client_session ~= nil then
 	   --转发数据给客户端
 	   --print("send_raw_msg client session")
@@ -196,19 +192,20 @@ function send_to_client(server_session,raw_data)
 	end
 end
 
--- raw_data由C++测那个推送的完整数据包
+-- raw_data是由C++底层推送的完整原始数据包
 --网关可能收到2中session类型数据
 --来自客户端，需要根据stype转发给对应的session
 --来自服务器，根据utag或者uid转发给客户端对应的session
 function on_gw_recv_raw_cmd(s, raw_data)
-	print("on_gw_recv_raw_cmd")
+	--print("on_gw_recv_raw_cmd")
+	--先判断session类型
 	is_client_session = session_wrapper.is_client_session(s)
 	if is_client_session==0 then 
-	   --来自客户端数据
+	   --来自客户端数据，根据协议里的stype来转发
 	   --print("send_to_server")
 	   send_to_server(s,raw_data)
 	else
-	   --来自服务器
+	   --来自服务器的消息，转到到客户端,根据协议里的utag/uid来转发
 	  --print("send_to_client")
 	   send_to_client(s,raw_data)
 	end
@@ -262,11 +259,15 @@ function on_gw_session_disconnect(s,service_stype)
 	end
 end
 
+--导出函数
 local gw_service = {
+    --底层收到数据后调用这个注册函数
 	on_session_recv_raw_cmd = on_gw_recv_raw_cmd,
+	--session断线底层调用(客户端session和server的session都会被调用)
 	on_session_disconnect = on_gw_session_disconnect,
 }
 
+--模块被加载后，函数会被调用
 server_session_init()
 
 return gw_service
