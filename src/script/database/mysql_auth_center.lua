@@ -22,8 +22,8 @@ mysql_connect_auth_center()
 
 function get_guest_user_info(guest_key,cb_handle)
     
-	local sql = "select uid, unick, usex, uface, uvip, status, is_guest from uinfo where guest_key = \"%s\" limit 1";	local sql_cmd = string.format(sql,guest_key)	print(sql_cmd)	if mysql_conn==nil then	   cb_handle("mysql is not connect",nil)	   return 	end	mysql_wrapper.query(mysql_conn,sql_cmd,function(err,t_ret_userinfo)
-			--≤È—Ø¥ÌŒÛ
+	local sql = "select uid, unick, usex, uface, uvip, status ,is_guest from uinfo where guest_key = \"%s\" limit 1";	local sql_cmd = string.format(sql,guest_key)	print(sql_cmd)	if mysql_conn==nil then	   cb_handle("mysql is not connect",nil)	   return 	end	mysql_wrapper.query(mysql_conn,sql_cmd,function(err,t_ret_userinfo)
+			--≤È—Ø¥Ì
 			if err then
 				cb_handle(err,nil)				return 
 			end
@@ -48,7 +48,7 @@ function get_guest_user_info(guest_key,cb_handle)
 					t_userinfo.uvip = result[5]
 					t_userinfo.status = tonumber(result[6])
 					t_userinfo.is_guest = tonumber(result[7])
-					--print(t_userinfo.uid)
+					print_r(t_userinfo)
 				    cb_handle(nil,t_userinfo)
 			end 
 	end)	
@@ -56,7 +56,7 @@ end
 
 function insert_guest_user_info(guest_key, cb_handle)
 	print("insert_guest_user_info call")	if mysql_conn==nil then	   cb_handle("mysql is not connect",nil)	   return 	end
-	local sql =  "insert into uinfo(`guest_key`, `unick`, `uface`, `usex`, `is_guest`)values(\"%s\", \"%s\", %d, %d, 1)";	local unick = "guest"..math.random(100000,999999)
+	local sql =  "insert into uinfo(`guest_key`, `unick`, `uface`, `usex`, `is_guest`,`status`)values(\"%s\", \"%s\", %d, %d, 1,0)";	local unick = "guest"..math.random(100000,999999)
 
 	local ufance = math.random(1,9)
 	local sex = math.random(0,1)

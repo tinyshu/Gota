@@ -7,19 +7,6 @@ require("database/mysql_auth_center")
 local socket_proto_type = require("socket_proto_type")
 local stype = require("service_type")
 local config = require("conf")
---[[
-local socket_type = {
-	TCP_SOCKET = 0,  --tcp
-	WEB_SOCKET = 1,  --websocket
-}
-
-local proto_type = {
-    PROTO_BUF = 0,
-	PROTO_JSON = 1,
-}
-
-]]
-
 
 session_wrapper.set_socket_and_proto_type(socket_proto_type.socket_type.TCP_SOCKET,socket_proto_type.proto_type.PROTO_BUF)
 --session_wrapper.set_socket_and_proto_type(socket_type.TCP_SOCKET,proto_type.PROTO_JSON)

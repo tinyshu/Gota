@@ -173,8 +173,8 @@ function send_to_client(server_session,raw_data)
 		--这里设置为0,主要是为了不暴露uid给客户端
 		t_body.userinfo.uid = 0
 		--返回登录请求的userinfo信息给前端
+		local ret_msg = {stype=stype_module.AuthSerser,ctype=ctype,utag=0,body=t_body}
 		utils.print_table(t_body)
-		local ret_msg = {stype=stype_module.AuthSerser,ctype=cmdtype,utag=0,body=t_body}
 		session_wrapper.send_msg(client_session,ret_msg)
 		return
 	end

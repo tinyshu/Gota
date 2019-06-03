@@ -11,7 +11,7 @@ struct center_config CENTER_CONF = {
 	"123.206.46.126",
 	"root",
 	3306,
-	"123321",
+	"tiny550122",
 	"user_center",
 };
 

@@ -267,6 +267,7 @@
     <None Include="..\script\main_test.lua" />
     <None Include="..\script\respones.lua" />
     <None Include="..\script\service_type.lua" />
+    <None Include="..\script\socket_proto_type.lua" />
     <None Include="..\script\utils.lua" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

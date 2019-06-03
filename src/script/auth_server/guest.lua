@@ -22,7 +22,7 @@ function guest_login(s,msg)
 		  local ret_msg = {
 					  stype=stype_module.AuthSerser,ctype=cmd_module.GuestLoginRes,utag=msg[3],
 					  body={
-					      status = res_module.SystemErr
+					      status = res_module.UserNotFound
 					    }}
 
 					  session_wrapper.send_msg(s,ret_msg)
@@ -92,7 +92,7 @@ function guest_login(s,msg)
 									   uid=user_info.uid
 									}
 							}}
-		--utils.print_table(ret_msg)
+		utils.print_table(ret_msg)
 		session_wrapper.send_msg(s,ret_msg)
 
     end)

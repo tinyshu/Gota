@@ -201,7 +201,7 @@ unsigned char* protoManager::encode_cmd_msg(recv_msg* msg, int * out_len) {
 	package[1] = ((msg->head.stype & 0x0000ff00) >> 8);
 	package[2] = (msg->head.ctype & 0x000000ff);
 	package[3] = ((msg->head.ctype & 0x0000ff00) >> 8);
-	memcpy(package + 4, &msg->head.utag, sizeof(msg->head.utag));
+	memcpy(package + 4, &msg->head.utag, 4);
 	
 	return package;
 }

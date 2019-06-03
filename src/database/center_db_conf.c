@@ -8,6 +8,6 @@ struct center_db_config CENTER_DB_CONFIG = {
 	"123.206.46.126",
 	"root",
 	3306,
-	"123321",
+	"tiny550122",
 	"user_center",
 };

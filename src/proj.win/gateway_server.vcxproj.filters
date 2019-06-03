@@ -835,5 +835,8 @@
     <None Include="..\script\respones.lua">
       <Filter>src\script</Filter>
     </None>
+    <None Include="..\script\socket_proto_type.lua">
+      <Filter>src\script</Filter>
+    </None>
   </ItemGroup>
 </Project>

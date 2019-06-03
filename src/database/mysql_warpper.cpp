@@ -206,32 +206,33 @@ void on_query_work_cb(uv_work_t* req) {
 	}
 	//
 	//获取结果集
-	MYSQL_RES* res = mysql_store_result(mysql_handle);
-	if (res == NULL) {
-		q_req->err = strdup("get store is null");
-		q_req->f_query_cb(q_req->err, NULL,NULL);
-		uv_mutex_unlock(&(c->mutex));
-		return;
-	}
-	if (mysql_num_rows(res) == 0) {
-		//没有查询到数据，err设置为 NULL
-		q_req->err = NULL;
-		q_req->f_query_cb(q_req->err, NULL,NULL);
-		mysql_free_result(res);
-		uv_mutex_unlock(&(c->mutex));
-		return;
-	}
-	
-	int fields_num = mysql_field_count(mysql_handle);
-	if (fields_num<=0) {
-		q_req->f_query_cb(q_req->err, NULL,NULL);
-		mysql_free_result(res);
-		uv_mutex_unlock(&(c->mutex));
-		return;
-	}
-	
-	q_req->res = res;
+	q_req->res = mysql_store_result(mysql_handle);
 	uv_mutex_unlock(&(c->mutex));
+	//if (res == NULL) {
+	//	q_req->err = strdup("get store is null");
+	//	q_req->f_query_cb(q_req->err, NULL,NULL);
+	//	uv_mutex_unlock(&(c->mutex));
+	//	return;
+	//}
+	//if (mysql_num_rows(res) == 0) {
+	//	//没有查询到数据，err设置为 NULL
+	//	q_req->err = NULL;
+	//	q_req->f_query_cb(q_req->err, NULL,NULL);
+	//	mysql_free_result(res);
+	//	uv_mutex_unlock(&(c->mutex));
+	//	return;
+	//}
+	//
+	//int fields_num = mysql_field_count(mysql_handle);
+	//if (fields_num<=0) {
+	//	q_req->f_query_cb(q_req->err, NULL,NULL);
+	//	mysql_free_result(res);
+	//	uv_mutex_unlock(&(c->mutex));
+	//	return;
+	//}
+	//
+	
+	
 }
 
 void on_query_done_cb(uv_work_t* req,int status) {
