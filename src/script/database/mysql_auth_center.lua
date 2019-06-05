@@ -78,6 +78,7 @@ function edit_profile_info(uid,unick,uface,usex,cb_handle)
 
 	local  sql = "UPDATE uinfo SET unick=\"%s\",uface=%d,usex=%d WHERE uid=%d"
 	sql = string.format(sql,unick,uface,usex,uid)
+	print(sql)
 	mysql_wrapper.query(mysql_conn,sql,function(err,t_ret)
 		    if err then
 				cb_handle(err,nil)				return 

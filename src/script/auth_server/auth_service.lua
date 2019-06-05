@@ -41,7 +41,7 @@ end
 --在这里注册auth服务处理的协议和对应得人处理函数
 local auth_service_handles = {}
 auth_service_handles[Cmd.GuestLoginReq] = guest.login
-auth_service_handles[Cmd.EditProfileReq] = edit_profile_modile.editProfile
+auth_service_handles[Cmd.EditProfileReq] = edit_profile_modile.edit
 -----------------------------------------------
 
 -- {stype, ctype, utag, body}
