@@ -838,5 +838,8 @@
     <None Include="..\script\socket_proto_type.lua">
       <Filter>src\script</Filter>
     </None>
+    <None Include="..\script\auth_server\edit_profile.lua">
+      <Filter>src\script\auth_server</Filter>
+    </None>
   </ItemGroup>
 </Project>

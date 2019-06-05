@@ -72,9 +72,25 @@ function insert_guest_user_info(guest_key, cb_handle)
 	
 end
 
+--处理用户资料编辑请求
+function edit_profile_info(uid,unick,uface,usex,cb_handle)
+	print("edit_profile_info call")	if mysql_conn==nil then	   if cb_handle then	      cb_handle("mysql is not connect",nil)	   end	   return 	end
+
+	local  sql = "UPDATE uinfo SET unick=\"%s\",uface=%d,usex=%d WHERE uid=%d"
+	sql = string.format(sql,unick,uface,usex,uid)
+	mysql_wrapper.query(mysql_conn,sql,function(err,t_ret)
+		    if err then
+				cb_handle(err,nil)				return 
+			end
+			cb_handle(nil,nil)
+
+	end)
+end
+
 local mysql_auth_center={
 	get_guest_user_info = get_guest_user_info,
 	insert_guest_user_info = insert_guest_user_info,
+	edit_profile_info = edit_profile_info
 }
 
 return mysql_auth_center

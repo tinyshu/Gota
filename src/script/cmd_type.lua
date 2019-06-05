@@ -4,6 +4,8 @@ local Cmd = {
 	GuestLoginRes = 2,
 	ReLoginRes = 3,
 	UserLostConn =4,
+	EditProfileReq = 5,
+	EditProfileRes = 6,
 }
 
 return Cmd

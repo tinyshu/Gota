@@ -26,6 +26,7 @@ netbus_wrapper.tcp_listen(servers[stype.AuthSerser].ip,servers[stype.AuthSerser]
 
 local auth_service = require("auth_server/auth_service")
 --×¢²áauth·þÎñservicesÄ£¿é
+print("service_wrapper.register_service call!!")
 local ret = service_wrapper.register_service(stype.AuthSerser, auth_service)
 	if ret then
 		print("register auth_servive:[" .. stype.AuthSerser.. "] success!!!")

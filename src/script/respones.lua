@@ -3,6 +3,7 @@
 local ResponesCode = {
 	OK = 1,
 	SystemErr = -100,
+	InvaildErr = -101,
 	--认证中心
 	UserIsFreeze = -1000,
 	UserIsNotGuest = -1001,

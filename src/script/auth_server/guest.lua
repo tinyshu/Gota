@@ -1,8 +1,8 @@
---ÓÎ¿ÍÄ£¿éÂß¼­
+--æ¸¸å®¢æ¨¡å—é€»è¾‘
 ---- {stype, ctype, utag, body}
---ÓÎ¿ÍµÇÂ¼
+--æ¸¸å®¢ç™»å½•
 
---¼ÓÔØÄ£¿éÊ±ºòÁ¬½ÓÈÏÖ¤·þÎñÆ÷ --20min
+--åŠ è½½æ¨¡å—æ—¶å€™è¿žæŽ¥è®¤è¯æœåŠ¡å™¨ --20min
 local stype_module = require("service_type")
 local cmd_module = require("cmd_type")
 local res_module = require("respones")
@@ -13,10 +13,10 @@ function guest_login(s,msg)
 	print(msg[4].guest_key)
 	local guest_key = msg[4].guest_key
 
-	--db²ã½Ó¿Ú·µ»ØµÄÊý¾ÝÊÇluaµÄtableÐÎÊ½
+	--dbå±‚æŽ¥å£è¿”å›žçš„æ•°æ®æ˜¯luaçš„tableå½¢å¼
 	mysql_center.get_guest_user_info(guest_key,function(err,user_info)
 		if err then
-		--·µ»Ø¸ø¿Í»§¶Ë´íÎóÏûÏ¢
+		--è¿”å›žç»™å®¢æˆ·ç«¯é”™è¯¯æ¶ˆæ¯
 		  print(err)
 		  --local ret_msg = {stype=stype.AuthSerser,ctype=2,utag=msg[3],body={status=200}}
 		  local ret_msg = {
@@ -26,15 +26,16 @@ function guest_login(s,msg)
 					    }}
 
 					  session_wrapper.send_msg(s,ret_msg)
-		  return 
+			return 
+		
 		end
 
-		--ÅÐ¶ÏÊÇ·ñÊÇ·ñ´æÔÚ
+		--åˆ¤æ–­æ˜¯å¦æ˜¯å¦å­˜åœ¨
 		if user_info==nil then
-		  --Ã»ÓÐÊý¾ÝÇëÇó²åÈëÊý¾Ý
+		  --æ²¡æœ‰æ•°æ®è¯·æ±‚æ’å…¥æ•°æ®
 		    mysql_center.insert_guest_user_info(guest_key,function (err,ret)
 					if err then
-						--·µ»Ø¸ø¿Í»§¶Ë´íÎóÏûÏ¢
+						--è¿”å›žç»™å®¢æˆ·ç«¯é”™è¯¯æ¶ˆæ¯
 						print(err)
 						local ret_msg = {
 					       stype=stype_module.AuthSerser,ctype=cmd_module.GuestLoginRes,utag=msg[3],
@@ -45,15 +46,15 @@ function guest_login(s,msg)
 						session_wrapper.send_msg(s,ret_msg)
 						return 
 					 end
-					 --²åÈë³É¹¦£¬ÖØÐÂµ÷ÓÃ×Ô¼º
+					 --æ’å…¥æˆåŠŸï¼Œé‡æ–°è°ƒç”¨è‡ªå·?
 					 guest_login(s,msg)
             end)
 			return 
 		end
-		--ÕâÀï²éµ½ÁË£¬ÏÈÅÐ¶Ï×´Ì¬
+		--è¿™é‡ŒæŸ¥åˆ°äº†ï¼Œå…ˆåˆ¤æ–­çŠ¶æ€?
 		--utils.print_table(user_info)
 		if user_info.status ~= 0 then
-		     --×´Ì¬²»ÕýÈ· ,·µ»ØÐÅÏ¢¸ø¿Í»§¶Ë
+		     --çŠ¶æ€ä¸æ­£ç¡® ,è¿”å›žä¿¡æ¯ç»™å®¢æˆ·ç«¯
 			 print("user status error status:"..user_info.status)
 			 local ret_msg = {
 					       stype=stype_module.AuthSerser,ctype=cmd_module.GuestLoginRes,utag=msg[3],
@@ -64,9 +65,9 @@ function guest_login(s,msg)
 			session_wrapper.send_msg(s,ret_msg)
 		     return
 		end
-		--ÅÐ¶ÏÓÃ»§ÊÇ·ñÎªÓÎ¿Í×´Ì¬
+		--åˆ¤æ–­ç”¨æˆ·æ˜¯å¦ä¸ºæ¸¸å®¢çŠ¶æ€?
 		if user_info.is_guest ~=1 then
-		    --²»ÊÇÓÎ¿Í×´Ì¬ÎÞ·¨Ê¹ÓÃÓÎ¿ÍkeyµÇÂ¼
+		    --ä¸æ˜¯æ¸¸å®¢çŠ¶æ€æ— æ³•ä½¿ç”¨æ¸¸å®¢keyç™»å½•
 			print("user is_guest error"..user_info.is_guest)
 			local ret_msg = {
 					       stype=stype_module.AuthSerser,ctype=cmd_module.GuestLoginRes,utag=msg[3],
@@ -79,17 +80,19 @@ function guest_login(s,msg)
 			return 
 		end
 		print("user data"..user_info.uid,user_info.unick,user_info.status)
-		--·µ»ØµÇÂ¼³É¹¦ÏûÏ¢¸ø¿Í»§¶Ë
+		--è¿”å›žç™»å½•æˆåŠŸæ¶ˆæ¯ç»™å®¢æˆ·ç«¯
 		local ret_msg = {
 					       stype=stype_module.AuthSerser,ctype=cmd_module.GuestLoginRes,utag=msg[3],
 							body={
 									status = res_module.OK,
 									userinfo = {
+									   --ÕâÀïµÄkeyÐèÒªºÍpbÐ­ÒéÃû×ÖÒ»Ñù£¬»òÕßÔÚµ×²ã
+									   --×ö·´ÐòÁÐ»¯pbÕÒ²»µ½¶ÔÓ¦×Ö¶Î
 									   unick=user_info.unick,
-									   sex=user_info.usex,
-									   face=user_info.uface,
+									   uface=user_info.uface,
+									   usex=user_info.usex,
 									   uvip=user_info.uvip,
-									   uid=user_info.uid
+									   uid=user_info.uid,
 									}
 							}}
 		utils.print_table(ret_msg)

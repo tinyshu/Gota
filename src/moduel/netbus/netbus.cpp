@@ -92,6 +92,7 @@ static void echo_test(struct session_base* s, recv_msg* msg) {
 static void protocal_recv(struct session_base* s, unsigned char* data, int len) {
 	//½âÎö°üÍ·
 	raw_cmd rawmsg;
+
 	if (false == protoManager::decode_rwa_cmd_msg(data, len, &rawmsg)) {
 		//log
 		return;

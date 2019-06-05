@@ -74,6 +74,8 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 		//把字段数据放到栈顶
 		lua_pushstring(tolua_s, file_name.c_str());
 		//table[栈顶strnig]的值放入栈顶,并弹出string
+		//把 t[k] 值压入堆栈， 这里的 t 是指有效索引 index 指向的值， 而 k 则是栈顶放的值
+		//相当于线获取栈顶string元素值，也就是file_name在传入的table里获取值，在放入栈顶。
 		lua_rawget(tolua_s, table_idx);
 
 		//栈顶元素是否有值
