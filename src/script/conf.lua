@@ -34,6 +34,12 @@ local conf = {
 	auth_mysql= {
 	  host = "123.206.46.126",      port = 3306,      db_name = "auth_center",      uname = "root",      upwd = "tiny550122",
 	},
+
+    center_redis = {
+	host = "123.206.46.126",
+	port = 6379,
+	db_index = 1,
+	},
 }
 
 return conf

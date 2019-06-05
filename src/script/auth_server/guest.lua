@@ -1,14 +1,16 @@
 --游客模块逻辑
 ---- {stype, ctype, utag, body}
 --游客登录
-
+--14min
 --加载模块时候连接认证服务器 --20min
 local stype_module = require("service_type")
 local cmd_module = require("cmd_type")
 local res_module = require("respones")
-mysql_center = require("database/mysql_auth_center")
-utils = require("utils")
+local mysql_center = require("database/mysql_auth_center")
+local redis_center = require("database/redis_auth_center")
+local utils = require("utils")
 
+--guest login process
 function guest_login(s,msg)
 	print(msg[4].guest_key)
 	local guest_key = msg[4].guest_key
@@ -80,6 +82,7 @@ function guest_login(s,msg)
 			return 
 		end
 		print("user data"..user_info.uid,user_info.unick,user_info.status)
+		redis_center.set_userinfo_to_redis(user_info.uid,user_info)
 		--返回登录成功消息给客户端
 		local ret_msg = {
 					       stype=stype_module.AuthSerser,ctype=cmd_module.GuestLoginRes,utag=msg[3],

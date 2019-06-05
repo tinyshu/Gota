@@ -7,5 +7,5 @@ local Cmd = {
 	EditProfileReq = 5,
 	EditProfileRes = 6,
 }
-
+     
 return Cmd
