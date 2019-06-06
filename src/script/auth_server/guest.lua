@@ -81,7 +81,8 @@ function guest_login(s,msg)
 
 			return 
 		end
-		print("user data"..user_info.uid,user_info.unick,user_info.status)
+		print("guest_login user data"..user_info.uid,user_info.unick,user_info.status)
+		--登录成功把用户信息存储到
 		redis_center.set_userinfo_to_redis(user_info.uid,user_info)
 		--杩斿洖鐧诲綍鎴愬姛娑堟伅缁欏鎴风
 		local ret_msg = {

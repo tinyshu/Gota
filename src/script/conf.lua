@@ -32,7 +32,7 @@ local conf = {
 	
 	--认证服务器mysql
 	auth_mysql= {
-	  host = "123.206.46.126",      port = 3306,      db_name = "auth_center",      uname = "root",      upwd = "tiny550122",
+	  host = "cdb-c4iby7gu.bj.tencentcdb.com",      port = 10129,      db_name = "auth_center",      uname = "root",      upwd = "tiny550122ABC",
 	},
 
     center_redis = {

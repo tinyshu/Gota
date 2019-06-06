@@ -3,6 +3,7 @@ local stype_module = require("service_type")
 local cmd_module = require("cmd_type")
 local res_module = require("respones")
 local mysql_center = require("database/mysql_auth_center")
+local redis_center = require("database/redis_auth_center")
 local utils = require("utils")
 
 
@@ -51,6 +52,7 @@ function edit_profile(s,msg)
      end
      print("mysql_center.edit_profile_info call!")
 	 mysql_center.edit_profile_info(uid,edit_profile_req.unick,edit_profile_req.uface,edit_profile_req.usex,ret_handle)
+     redis_center.edit_profile_to_redis(uid,edit_profile_req.unick,edit_profile_req.uface,edit_profile_req.usex) 
 end
 
 --锟斤拷锟斤拷模锟介函锟斤�?
