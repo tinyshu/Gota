@@ -25,6 +25,7 @@ extern uv_loop_t* get_uv_loop();
 typedef struct redis_connect_req {
 	char ip[64];
 	int port;
+	char pwd[64];
 	int timeout;
 
 	cb_connect_db f_connect_db;
@@ -62,21 +63,30 @@ static void on_connect_work_cb(uv_work_t* req) {
 		return;
 	}
 	struct timeval timeout_val;
-	timeout_val.tv_sec = 5;
+	timeout_val.tv_sec = 10;
 	timeout_val.tv_usec = 0;
 
 	
 	redis_lock_context* lock_context = (redis_lock_context*)conn_req->context;
 	uv_mutex_lock(&(lock_context->mutex));
 	redisContext* rc = redisConnectWithTimeout((char*)conn_req->ip, conn_req->port, timeout_val);
-	if (rc->err) {
+	if (rc!=NULL && rc->err) {
 		printf("Connection error: %s\n", rc->errstr);
 		conn_req->err = strdup(rc->errstr);
 		conn_req->context = NULL;
 		redisFree(rc);
 	}
 	else {
-		
+		//ÅÐ¶ÏÊÇ·ñÐèÒª´øÃÜÂëµÇÂ¼
+		if (strlen(conn_req->pwd)>0) {
+			redisReply* reply = (redisReply *)redisCommand(rc, "AUTH %s", conn_req->pwd);
+			if (reply!= NULL && reply->type == REDIS_REPLY_ERROR) {
+				printf("auth faild");
+				redisFree(rc);
+				uv_mutex_unlock(&(lock_context->mutex));
+				return;
+			}
+		}
 		if (lock_context ==NULL) {
 			uv_mutex_unlock(&(lock_context->mutex));
 			return;
@@ -105,7 +115,7 @@ static void on_connect_done_cb(uv_work_t* req, int status) {
 	my_free(req);
 }
 
-void redis_wrapper::rediseconnect(const char* ip, int port, int timeout, cb_connect_db connect_db, void* udata) {
+void redis_wrapper::rediseconnect(const char* ip, int port, const char* pwd,int timeout, cb_connect_db connect_db, void* udata) {
 	uv_work_t* work = (uv_work_t*)malloc(sizeof(uv_work_t));
 	if (work == NULL) {
 		log_error("connect db malloc uv_work_t error\n");
@@ -125,6 +135,10 @@ void redis_wrapper::rediseconnect(const char* ip, int port, int timeout, cb_conn
 	uv_mutex_init(&(lock_context->mutex));
 
 	conn_req->port = port;
+	if (pwd != NULL) {
+		strncpy(conn_req->pwd, pwd, strlen(pwd) + 1);
+	}
+	
 	conn_req->f_connect_db = connect_db;
 	strncpy(conn_req->ip, ip, strlen(ip) + 1);
 	conn_req->u_data = udata; //´æ´¢luaº¯Êýhandleid

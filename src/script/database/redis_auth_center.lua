@@ -8,7 +8,8 @@ function redis_connect_auth_center()
 	local host = redis_auth_conf.host
 	local port = redis_auth_conf.port
 	local db_index = redis_auth_conf.db_index
-	redis_wrapper.connect(host,port,2000,function(err,conn)
+	local pwd = redis_auth_conf.pwd
+	redis_wrapper.connect(host,port,pwd,5000,function(err,conn)
 	  if err ~= nil or conn==nil then
 	     print("connect redis error :"..err)
 		 --重新连接

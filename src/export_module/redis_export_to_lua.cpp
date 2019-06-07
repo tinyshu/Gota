@@ -54,12 +54,15 @@ int lua_redis_connect(lua_State* tolua_s) {
 		return -1;
 	}
 
-	int redis_time = (int)tolua_tonumber(tolua_s, 3, 0);
+	//pwd
+	char* redis_pwd = (char*)tolua_tostring(tolua_s, 3, NULL);
+
+	int redis_time = (int)tolua_tonumber(tolua_s, 4, 0);
 
 	//获取lua的回调函数handle
-	int s_function_ref_id = toluafix_ref_function(tolua_s, 4, 0);
+	int s_function_ref_id = toluafix_ref_function(tolua_s, 5, 0);
 	
-	redis_wrapper::rediseconnect(redis_ip, redis_port, redis_time,connect_redis_cb,(void*)s_function_ref_id);
+	redis_wrapper::rediseconnect(redis_ip, redis_port, redis_pwd, redis_time,connect_redis_cb,(void*)s_function_ref_id);
 	return 0;
 }
 
