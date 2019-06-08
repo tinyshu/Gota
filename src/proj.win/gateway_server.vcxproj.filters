@@ -844,5 +844,8 @@
     <None Include="..\script\database\redis_auth_center.lua">
       <Filter>src\script\database</Filter>
     </None>
+    <None Include="..\script\auth_server\account_upgrade.lua">
+      <Filter>src\script\auth_server</Filter>
+    </None>
   </ItemGroup>
 </Project>

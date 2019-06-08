@@ -1,5 +1,6 @@
 local config = require("conf")
 local mysql_conn = nil
+local utils = require("utils")
 
 function mysql_connect_auth_center()
 
@@ -19,6 +20,45 @@ function mysql_connect_auth_center()
 end
 --脚本被加载就调用该函数
 mysql_connect_auth_center()
+
+function get_userinfo_by_uid(uid,cb_handle)
+	print("get_userinfo_by_uid call")	if mysql_conn==nil then	   cb_handle("mysql is not connect",nil)	   return 	end
+
+	local sql = "select uid, unick, usex, uface, uvip, status ,is_guest from uinfo where uid = %d limit 1";	local sql_cmd = string.format(sql,uid)	print("get_userinfo_by_uid: "..sql_cmd)
+
+	mysql_wrapper.query(mysql_conn,sql_cmd,function(err,t_ret_userinfo)
+            --查询错
+			if err then
+				cb_handle(err,nil)				return 
+			end
+
+			--没有找到数据
+			if t_ret_userinfo==nil or #t_ret_userinfo<=0 then
+				if cb_handle~=nil then
+				    cb_handle(nil,nil)
+				end
+			    --跳出回调函数				return 
+			end
+			
+			--查询到数据
+			local result = t_ret_userinfo[1]
+			if cb_handle~=nil then
+			        --返回一个表给回调函数
+			        local t_userinfo = {}
+					t_userinfo.uid = tonumber(result[1])
+					t_userinfo.unick = result[2]
+					t_userinfo.usex = tonumber(result[3])
+					t_userinfo.uface = tonumber(result[4])
+					t_userinfo.uvip = result[5]
+					t_userinfo.status = tonumber(result[6])
+					t_userinfo.is_guest = tonumber(result[7])
+					print_r(t_userinfo)
+				    cb_handle(nil,t_userinfo)
+			end 
+	end)
+
+end
+
 
 function get_guest_user_info(guest_key,cb_handle)
     
@@ -88,10 +128,58 @@ function edit_profile_info(uid,unick,uface,usex,cb_handle)
 	end)
 end
 
+function check_is_guest()
+	
+end
+
+function check_username_exist(uname,cb_handle)
+	print("check_username_exist")
+	if string.len(uname)<=0 or mysql_conn == nil then
+	   print("uname is empty:")
+	   return
+	end
+
+	--
+	local sql = "SELECT count(*) FROM uinfo WHERE uname=\"%s\""
+    local sql_cmd = string.format(sql,uname)
+	print(sql_cmd)
+	mysql_wrapper.query(mysql_conn,sql_cmd,function(err,t_ret)   
+		    if err then
+				cb_handle(err,nil)				return 
+			end
+			
+			utils.print_table(t_ret)
+			--db里返回的都是表数组，相当于是个二维数组
+			--注意底层推送上来的结果value全部是string类型，在lua层做转换
+		    local local_ret = t_ret[1]
+			print("count:"..local_ret[1])
+			cb_handle(nil,tonumber(local_ret[1]))
+	end)
+
+end
+
+function do_account_upgrade(uid,uname,upwd,cb_handle)
+	
+	print("uid"..uid.." uname:"..uname.." ".." upwd:"..upwd)
+	local sql = "UPDATE uinfo SET uname=\"%s\" , upwd=\"%s\" , is_guest=0 WHERE uid=%d"
+    local sql_cmd = string.format(sql,uname,upwd,uid)
+	print(sql_cmd)
+	mysql_wrapper.query(mysql_conn,sql_cmd,function(err,t_ret)   
+	    if err then
+				cb_handle(err,nil)				return 
+			end
+			print("do_account_upgrade is ok")
+			cb_handle(nil,nil)
+	end)
+end
+
 local mysql_auth_center={
 	get_guest_user_info = get_guest_user_info,
 	insert_guest_user_info = insert_guest_user_info,
-	edit_profile_info = edit_profile_info
+	edit_profile_info = edit_profile_info,
+	check_username_exist = check_username_exist,
+	get_userinfo_by_uid = get_userinfo_by_uid,
+	do_account_upgrade = do_account_upgrade
 }
 
 return mysql_auth_center

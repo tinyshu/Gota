@@ -25,6 +25,8 @@ enum Cmd {
 	eUserLostConn = 4;
 	eEditProfileReq = 5;
 	eEditProfileRes = 6;
+	eAccountUpgradeReq = 7;
+	eAccountUpgradeRes = 8;
 
 }
 
@@ -45,20 +47,6 @@ message GuestLoginRes{
    UserCenterInfo userinfo=2;
 }
 
-
-/*
-message LoginReq {  
-  string name = 1;  
-  int32 age = 2;  
-  string email = 3;  
-  int32 int_set = 4;
-}
-
-message LoginRes {
-  int32 status = 1;	
-}
-*/
-
 message EditProfileReq {
 	 string unick = 1;
 	 int32 uface = 2;
@@ -67,4 +55,13 @@ message EditProfileReq {
 
 message EditProfileRes {
 	 int32 status = 1;
+}
+
+message AccountUpgradeReq {
+     string uname = 1; //登录的用户名，全局唯一，不是unick
+	 string upwd_md5 = 2;
+}
+
+message AccountUpgradeRes {
+     int32 status = 1;
 }

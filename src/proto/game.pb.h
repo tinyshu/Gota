@@ -42,13 +42,19 @@ struct TableStruct_game_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::google::protobuf::internal::ParseTable schema[5]
+  static const ::google::protobuf::internal::ParseTable schema[7]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
 void AddDescriptors_game_2eproto();
+class AccountUpgradeReq;
+class AccountUpgradeReqDefaultTypeInternal;
+extern AccountUpgradeReqDefaultTypeInternal _AccountUpgradeReq_default_instance_;
+class AccountUpgradeRes;
+class AccountUpgradeResDefaultTypeInternal;
+extern AccountUpgradeResDefaultTypeInternal _AccountUpgradeRes_default_instance_;
 class EditProfileReq;
 class EditProfileReqDefaultTypeInternal;
 extern EditProfileReqDefaultTypeInternal _EditProfileReq_default_instance_;
@@ -66,6 +72,8 @@ class UserCenterInfoDefaultTypeInternal;
 extern UserCenterInfoDefaultTypeInternal _UserCenterInfo_default_instance_;
 namespace google {
 namespace protobuf {
+template<> ::AccountUpgradeReq* Arena::CreateMaybeMessage<::AccountUpgradeReq>(Arena*);
+template<> ::AccountUpgradeRes* Arena::CreateMaybeMessage<::AccountUpgradeRes>(Arena*);
 template<> ::EditProfileReq* Arena::CreateMaybeMessage<::EditProfileReq>(Arena*);
 template<> ::EditProfileRes* Arena::CreateMaybeMessage<::EditProfileRes>(Arena*);
 template<> ::GuestLoginReq* Arena::CreateMaybeMessage<::GuestLoginReq>(Arena*);
@@ -105,12 +113,14 @@ enum Cmd {
   eUserLostConn = 4,
   eEditProfileReq = 5,
   eEditProfileRes = 6,
+  eAccountUpgradeReq = 7,
+  eAccountUpgradeRes = 8,
   Cmd_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   Cmd_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool Cmd_IsValid(int value);
 const Cmd Cmd_MIN = INVALID_CMD;
-const Cmd Cmd_MAX = eEditProfileRes;
+const Cmd Cmd_MAX = eAccountUpgradeRes;
 const int Cmd_ARRAYSIZE = Cmd_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* Cmd_descriptor();
@@ -754,6 +764,251 @@ class EditProfileRes : public ::google::protobuf::Message /* @@protoc_insertion_
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_game_2eproto;
 };
+// -------------------------------------------------------------------
+
+class AccountUpgradeReq : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:AccountUpgradeReq) */ {
+ public:
+  AccountUpgradeReq();
+  virtual ~AccountUpgradeReq();
+
+  AccountUpgradeReq(const AccountUpgradeReq& from);
+
+  inline AccountUpgradeReq& operator=(const AccountUpgradeReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  AccountUpgradeReq(AccountUpgradeReq&& from) noexcept
+    : AccountUpgradeReq() {
+    *this = ::std::move(from);
+  }
+
+  inline AccountUpgradeReq& operator=(AccountUpgradeReq&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const AccountUpgradeReq& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const AccountUpgradeReq* internal_default_instance() {
+    return reinterpret_cast<const AccountUpgradeReq*>(
+               &_AccountUpgradeReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  void Swap(AccountUpgradeReq* other);
+  friend void swap(AccountUpgradeReq& a, AccountUpgradeReq& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline AccountUpgradeReq* New() const final {
+    return CreateMaybeMessage<AccountUpgradeReq>(nullptr);
+  }
+
+  AccountUpgradeReq* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<AccountUpgradeReq>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const AccountUpgradeReq& from);
+  void MergeFrom(const AccountUpgradeReq& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(AccountUpgradeReq* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string uname = 1;
+  void clear_uname();
+  static const int kUnameFieldNumber = 1;
+  const ::std::string& uname() const;
+  void set_uname(const ::std::string& value);
+  #if LANG_CXX11
+  void set_uname(::std::string&& value);
+  #endif
+  void set_uname(const char* value);
+  void set_uname(const char* value, size_t size);
+  ::std::string* mutable_uname();
+  ::std::string* release_uname();
+  void set_allocated_uname(::std::string* uname);
+
+  // string upwd_md5 = 2;
+  void clear_upwd_md5();
+  static const int kUpwdMd5FieldNumber = 2;
+  const ::std::string& upwd_md5() const;
+  void set_upwd_md5(const ::std::string& value);
+  #if LANG_CXX11
+  void set_upwd_md5(::std::string&& value);
+  #endif
+  void set_upwd_md5(const char* value);
+  void set_upwd_md5(const char* value, size_t size);
+  ::std::string* mutable_upwd_md5();
+  ::std::string* release_upwd_md5();
+  void set_allocated_upwd_md5(::std::string* upwd_md5);
+
+  // @@protoc_insertion_point(class_scope:AccountUpgradeReq)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr uname_;
+  ::google::protobuf::internal::ArenaStringPtr upwd_md5_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
+// -------------------------------------------------------------------
+
+class AccountUpgradeRes : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:AccountUpgradeRes) */ {
+ public:
+  AccountUpgradeRes();
+  virtual ~AccountUpgradeRes();
+
+  AccountUpgradeRes(const AccountUpgradeRes& from);
+
+  inline AccountUpgradeRes& operator=(const AccountUpgradeRes& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  AccountUpgradeRes(AccountUpgradeRes&& from) noexcept
+    : AccountUpgradeRes() {
+    *this = ::std::move(from);
+  }
+
+  inline AccountUpgradeRes& operator=(AccountUpgradeRes&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const AccountUpgradeRes& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const AccountUpgradeRes* internal_default_instance() {
+    return reinterpret_cast<const AccountUpgradeRes*>(
+               &_AccountUpgradeRes_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  void Swap(AccountUpgradeRes* other);
+  friend void swap(AccountUpgradeRes& a, AccountUpgradeRes& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline AccountUpgradeRes* New() const final {
+    return CreateMaybeMessage<AccountUpgradeRes>(nullptr);
+  }
+
+  AccountUpgradeRes* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<AccountUpgradeRes>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const AccountUpgradeRes& from);
+  void MergeFrom(const AccountUpgradeRes& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(AccountUpgradeRes* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 status = 1;
+  void clear_status();
+  static const int kStatusFieldNumber = 1;
+  ::google::protobuf::int32 status() const;
+  void set_status(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:AccountUpgradeRes)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::int32 status_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
 // ===================================================================
 
 
@@ -1103,9 +1358,141 @@ inline void EditProfileRes::set_status(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:EditProfileRes.status)
 }
 
+// -------------------------------------------------------------------
+
+// AccountUpgradeReq
+
+// string uname = 1;
+inline void AccountUpgradeReq::clear_uname() {
+  uname_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& AccountUpgradeReq::uname() const {
+  // @@protoc_insertion_point(field_get:AccountUpgradeReq.uname)
+  return uname_.GetNoArena();
+}
+inline void AccountUpgradeReq::set_uname(const ::std::string& value) {
+  
+  uname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:AccountUpgradeReq.uname)
+}
+#if LANG_CXX11
+inline void AccountUpgradeReq::set_uname(::std::string&& value) {
+  
+  uname_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:AccountUpgradeReq.uname)
+}
+#endif
+inline void AccountUpgradeReq::set_uname(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  uname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:AccountUpgradeReq.uname)
+}
+inline void AccountUpgradeReq::set_uname(const char* value, size_t size) {
+  
+  uname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:AccountUpgradeReq.uname)
+}
+inline ::std::string* AccountUpgradeReq::mutable_uname() {
+  
+  // @@protoc_insertion_point(field_mutable:AccountUpgradeReq.uname)
+  return uname_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* AccountUpgradeReq::release_uname() {
+  // @@protoc_insertion_point(field_release:AccountUpgradeReq.uname)
+  
+  return uname_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void AccountUpgradeReq::set_allocated_uname(::std::string* uname) {
+  if (uname != nullptr) {
+    
+  } else {
+    
+  }
+  uname_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), uname);
+  // @@protoc_insertion_point(field_set_allocated:AccountUpgradeReq.uname)
+}
+
+// string upwd_md5 = 2;
+inline void AccountUpgradeReq::clear_upwd_md5() {
+  upwd_md5_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& AccountUpgradeReq::upwd_md5() const {
+  // @@protoc_insertion_point(field_get:AccountUpgradeReq.upwd_md5)
+  return upwd_md5_.GetNoArena();
+}
+inline void AccountUpgradeReq::set_upwd_md5(const ::std::string& value) {
+  
+  upwd_md5_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:AccountUpgradeReq.upwd_md5)
+}
+#if LANG_CXX11
+inline void AccountUpgradeReq::set_upwd_md5(::std::string&& value) {
+  
+  upwd_md5_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:AccountUpgradeReq.upwd_md5)
+}
+#endif
+inline void AccountUpgradeReq::set_upwd_md5(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  upwd_md5_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:AccountUpgradeReq.upwd_md5)
+}
+inline void AccountUpgradeReq::set_upwd_md5(const char* value, size_t size) {
+  
+  upwd_md5_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:AccountUpgradeReq.upwd_md5)
+}
+inline ::std::string* AccountUpgradeReq::mutable_upwd_md5() {
+  
+  // @@protoc_insertion_point(field_mutable:AccountUpgradeReq.upwd_md5)
+  return upwd_md5_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* AccountUpgradeReq::release_upwd_md5() {
+  // @@protoc_insertion_point(field_release:AccountUpgradeReq.upwd_md5)
+  
+  return upwd_md5_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void AccountUpgradeReq::set_allocated_upwd_md5(::std::string* upwd_md5) {
+  if (upwd_md5 != nullptr) {
+    
+  } else {
+    
+  }
+  upwd_md5_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), upwd_md5);
+  // @@protoc_insertion_point(field_set_allocated:AccountUpgradeReq.upwd_md5)
+}
+
+// -------------------------------------------------------------------
+
+// AccountUpgradeRes
+
+// int32 status = 1;
+inline void AccountUpgradeRes::clear_status() {
+  status_ = 0;
+}
+inline ::google::protobuf::int32 AccountUpgradeRes::status() const {
+  // @@protoc_insertion_point(field_get:AccountUpgradeRes.status)
+  return status_;
+}
+inline void AccountUpgradeRes::set_status(::google::protobuf::int32 value) {
+  
+  status_ = value;
+  // @@protoc_insertion_point(field_set:AccountUpgradeRes.status)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

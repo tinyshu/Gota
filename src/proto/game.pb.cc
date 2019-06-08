@@ -37,6 +37,14 @@ class EditProfileResDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<EditProfileRes> _instance;
 } _EditProfileRes_default_instance_;
+class AccountUpgradeReqDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<AccountUpgradeReq> _instance;
+} _AccountUpgradeReq_default_instance_;
+class AccountUpgradeResDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<AccountUpgradeRes> _instance;
+} _AccountUpgradeRes_default_instance_;
 static void InitDefaultsGuestLoginReq_game_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -108,15 +116,45 @@ static void InitDefaultsEditProfileRes_game_2eproto() {
 ::google::protobuf::internal::SCCInfo<0> scc_info_EditProfileRes_game_2eproto =
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsEditProfileRes_game_2eproto}, {}};
 
+static void InitDefaultsAccountUpgradeReq_game_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_AccountUpgradeReq_default_instance_;
+    new (ptr) ::AccountUpgradeReq();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::AccountUpgradeReq::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<0> scc_info_AccountUpgradeReq_game_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsAccountUpgradeReq_game_2eproto}, {}};
+
+static void InitDefaultsAccountUpgradeRes_game_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_AccountUpgradeRes_default_instance_;
+    new (ptr) ::AccountUpgradeRes();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::AccountUpgradeRes::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<0> scc_info_AccountUpgradeRes_game_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsAccountUpgradeRes_game_2eproto}, {}};
+
 void InitDefaults_game_2eproto() {
   ::google::protobuf::internal::InitSCC(&scc_info_GuestLoginReq_game_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_UserCenterInfo_game_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_GuestLoginRes_game_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_EditProfileReq_game_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_EditProfileRes_game_2eproto.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_AccountUpgradeReq_game_2eproto.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_AccountUpgradeRes_game_2eproto.base);
 }
 
-::google::protobuf::Metadata file_level_metadata_game_2eproto[5];
+::google::protobuf::Metadata file_level_metadata_game_2eproto[7];
 const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors_game_2eproto[2];
 constexpr ::google::protobuf::ServiceDescriptor const** file_level_service_descriptors_game_2eproto = nullptr;
 
@@ -158,6 +196,19 @@ const ::google::protobuf::uint32 TableStruct_game_2eproto::offsets[] PROTOBUF_SE
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::EditProfileRes, status_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::AccountUpgradeReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::AccountUpgradeReq, uname_),
+  PROTOBUF_FIELD_OFFSET(::AccountUpgradeReq, upwd_md5_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::AccountUpgradeRes, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::AccountUpgradeRes, status_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::GuestLoginReq)},
@@ -165,6 +216,8 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SE
   { 16, -1, sizeof(::GuestLoginRes)},
   { 23, -1, sizeof(::EditProfileReq)},
   { 31, -1, sizeof(::EditProfileRes)},
+  { 37, -1, sizeof(::AccountUpgradeReq)},
+  { 44, -1, sizeof(::AccountUpgradeRes)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -173,12 +226,14 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::_GuestLoginRes_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::_EditProfileReq_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::_EditProfileRes_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::_AccountUpgradeReq_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::_AccountUpgradeRes_default_instance_),
 };
 
 ::google::protobuf::internal::AssignDescriptorsTable assign_descriptors_table_game_2eproto = {
   {}, AddDescriptors_game_2eproto, "game.proto", schemas,
   file_default_instances, TableStruct_game_2eproto::offsets,
-  file_level_metadata_game_2eproto, 5, file_level_enum_descriptors_game_2eproto, file_level_service_descriptors_game_2eproto,
+  file_level_metadata_game_2eproto, 7, file_level_enum_descriptors_game_2eproto, file_level_service_descriptors_game_2eproto,
 };
 
 const char descriptor_table_protodef_game_2eproto[] =
@@ -189,18 +244,21 @@ const char descriptor_table_protodef_game_2eproto[] =
   "atus\030\001 \001(\005\022!\n\010userinfo\030\002 \001(\0132\017.UserCente"
   "rInfo\"<\n\016EditProfileReq\022\r\n\005unick\030\001 \001(\t\022\r"
   "\n\005uface\030\002 \001(\005\022\014\n\004usex\030\003 \001(\005\" \n\016EditProfi"
-  "leRes\022\016\n\006status\030\001 \001(\005*N\n\005Stype\022\022\n\016INVALI"
-  "DI_STYPE\020\000\022\016\n\nAUTH_STYPE\020\001\022\020\n\014SYSTEM_STY"
-  "PE\020\002\022\017\n\013LOGIC_STYPE\020\003*\214\001\n\003Cmd\022\017\n\013INVALID"
-  "_CMD\020\000\022\022\n\016eGuestLoginReq\020\001\022\022\n\016eGuestLogi"
-  "nRes\020\002\022\017\n\013eReLoginRes\020\003\022\021\n\reUserLostConn"
-  "\020\004\022\023\n\017eEditProfileReq\020\005\022\023\n\017eEditProfileR"
-  "es\020\006b\006proto3"
+  "leRes\022\016\n\006status\030\001 \001(\005\"4\n\021AccountUpgradeR"
+  "eq\022\r\n\005uname\030\001 \001(\t\022\020\n\010upwd_md5\030\002 \001(\t\"#\n\021A"
+  "ccountUpgradeRes\022\016\n\006status\030\001 \001(\005*N\n\005Styp"
+  "e\022\022\n\016INVALIDI_STYPE\020\000\022\016\n\nAUTH_STYPE\020\001\022\020\n"
+  "\014SYSTEM_STYPE\020\002\022\017\n\013LOGIC_STYPE\020\003*\274\001\n\003Cmd"
+  "\022\017\n\013INVALID_CMD\020\000\022\022\n\016eGuestLoginReq\020\001\022\022\n"
+  "\016eGuestLoginRes\020\002\022\017\n\013eReLoginRes\020\003\022\021\n\reU"
+  "serLostConn\020\004\022\023\n\017eEditProfileReq\020\005\022\023\n\017eE"
+  "ditProfileRes\020\006\022\026\n\022eAccountUpgradeReq\020\007\022"
+  "\026\n\022eAccountUpgradeRes\020\010b\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_game_2eproto = {
   false, InitDefaults_game_2eproto, 
   descriptor_table_protodef_game_2eproto,
-  "game.proto", &assign_descriptors_table_game_2eproto, 532,
+  "game.proto", &assign_descriptors_table_game_2eproto, 671,
 };
 
 void AddDescriptors_game_2eproto() {
@@ -241,6 +299,8 @@ bool Cmd_IsValid(int value) {
     case 4:
     case 5:
     case 6:
+    case 7:
+    case 8:
       return true;
     default:
       return false;
@@ -2053,6 +2113,654 @@ void EditProfileRes::InternalSwap(EditProfileRes* other) {
 }
 
 
+// ===================================================================
+
+void AccountUpgradeReq::InitAsDefaultInstance() {
+}
+class AccountUpgradeReq::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int AccountUpgradeReq::kUnameFieldNumber;
+const int AccountUpgradeReq::kUpwdMd5FieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+AccountUpgradeReq::AccountUpgradeReq()
+  : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:AccountUpgradeReq)
+}
+AccountUpgradeReq::AccountUpgradeReq(const AccountUpgradeReq& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  uname_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.uname().size() > 0) {
+    uname_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.uname_);
+  }
+  upwd_md5_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.upwd_md5().size() > 0) {
+    upwd_md5_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.upwd_md5_);
+  }
+  // @@protoc_insertion_point(copy_constructor:AccountUpgradeReq)
+}
+
+void AccountUpgradeReq::SharedCtor() {
+  ::google::protobuf::internal::InitSCC(
+      &scc_info_AccountUpgradeReq_game_2eproto.base);
+  uname_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  upwd_md5_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+AccountUpgradeReq::~AccountUpgradeReq() {
+  // @@protoc_insertion_point(destructor:AccountUpgradeReq)
+  SharedDtor();
+}
+
+void AccountUpgradeReq::SharedDtor() {
+  uname_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  upwd_md5_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void AccountUpgradeReq::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const AccountUpgradeReq& AccountUpgradeReq::default_instance() {
+  ::google::protobuf::internal::InitSCC(&::scc_info_AccountUpgradeReq_game_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void AccountUpgradeReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:AccountUpgradeReq)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  uname_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  upwd_md5_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* AccountUpgradeReq::_InternalParse(const char* begin, const char* end, void* object,
+                  ::google::protobuf::internal::ParseContext* ctx) {
+  auto msg = static_cast<AccountUpgradeReq*>(object);
+  ::google::protobuf::uint32 size; (void)size;
+  int depth; (void)depth;
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::ParseFunc parser_till_end; (void)parser_till_end;
+  auto ptr = begin;
+  while (ptr < end) {
+    ptr = Varint::Parse32Inline(ptr, &tag);
+    GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+    switch (tag >> 3) {
+      // string uname = 1;
+      case 1: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 10) goto handle_unusual;
+        ptr = Varint::Parse32Inline(ptr, &size);
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        ctx->extra_parse_data().SetFieldName("AccountUpgradeReq.uname");
+        auto str = msg->mutable_uname();
+        if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
+          object = str;
+          str->clear();
+          str->reserve(size);
+          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
+          goto len_delim_till_end;
+        }
+        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
+        ::google::protobuf::internal::InlineGreedyStringParser(str, ptr, size, ctx);
+        ptr += size;
+        break;
+      }
+      // string upwd_md5 = 2;
+      case 2: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 18) goto handle_unusual;
+        ptr = Varint::Parse32Inline(ptr, &size);
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        ctx->extra_parse_data().SetFieldName("AccountUpgradeReq.upwd_md5");
+        auto str = msg->mutable_upwd_md5();
+        if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
+          object = str;
+          str->clear();
+          str->reserve(size);
+          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
+          goto len_delim_till_end;
+        }
+        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
+        ::google::protobuf::internal::InlineGreedyStringParser(str, ptr, size, ctx);
+        ptr += size;
+        break;
+      }
+      default: {
+      handle_unusual: (void)&&handle_unusual;
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->EndGroup(tag);
+          return ptr;
+        }
+        auto res = UnknownFieldParse(tag, {_InternalParse, msg},
+          ptr, end, msg->_internal_metadata_.mutable_unknown_fields(), ctx);
+        ptr = res.first;
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr != nullptr);
+        if (res.second) return ptr;
+      }
+    }  // switch
+  }  // while
+  return ptr;
+len_delim_till_end: (void)&&len_delim_till_end;
+  return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
+                                 {parser_till_end, object}, size);
+group_continues: (void)&&group_continues;
+  GOOGLE_DCHECK(ptr >= end);
+  GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->StoreGroup({_InternalParse, msg}, {parser_till_end, object}, depth, tag));
+  return ptr;
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool AccountUpgradeReq::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:AccountUpgradeReq)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string uname = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (10 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_uname()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->uname().data(), static_cast<int>(this->uname().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "AccountUpgradeReq.uname"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string upwd_md5 = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (18 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_upwd_md5()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->upwd_md5().data(), static_cast<int>(this->upwd_md5().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "AccountUpgradeReq.upwd_md5"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:AccountUpgradeReq)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:AccountUpgradeReq)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void AccountUpgradeReq::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:AccountUpgradeReq)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string uname = 1;
+  if (this->uname().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->uname().data(), static_cast<int>(this->uname().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "AccountUpgradeReq.uname");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->uname(), output);
+  }
+
+  // string upwd_md5 = 2;
+  if (this->upwd_md5().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->upwd_md5().data(), static_cast<int>(this->upwd_md5().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "AccountUpgradeReq.upwd_md5");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->upwd_md5(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:AccountUpgradeReq)
+}
+
+::google::protobuf::uint8* AccountUpgradeReq::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:AccountUpgradeReq)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string uname = 1;
+  if (this->uname().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->uname().data(), static_cast<int>(this->uname().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "AccountUpgradeReq.uname");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->uname(), target);
+  }
+
+  // string upwd_md5 = 2;
+  if (this->upwd_md5().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->upwd_md5().data(), static_cast<int>(this->upwd_md5().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "AccountUpgradeReq.upwd_md5");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->upwd_md5(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AccountUpgradeReq)
+  return target;
+}
+
+size_t AccountUpgradeReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AccountUpgradeReq)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string uname = 1;
+  if (this->uname().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->uname());
+  }
+
+  // string upwd_md5 = 2;
+  if (this->upwd_md5().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->upwd_md5());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void AccountUpgradeReq::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:AccountUpgradeReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  const AccountUpgradeReq* source =
+      ::google::protobuf::DynamicCastToGenerated<AccountUpgradeReq>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:AccountUpgradeReq)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:AccountUpgradeReq)
+    MergeFrom(*source);
+  }
+}
+
+void AccountUpgradeReq::MergeFrom(const AccountUpgradeReq& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:AccountUpgradeReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.uname().size() > 0) {
+
+    uname_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.uname_);
+  }
+  if (from.upwd_md5().size() > 0) {
+
+    upwd_md5_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.upwd_md5_);
+  }
+}
+
+void AccountUpgradeReq::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:AccountUpgradeReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void AccountUpgradeReq::CopyFrom(const AccountUpgradeReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AccountUpgradeReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AccountUpgradeReq::IsInitialized() const {
+  return true;
+}
+
+void AccountUpgradeReq::Swap(AccountUpgradeReq* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void AccountUpgradeReq::InternalSwap(AccountUpgradeReq* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  uname_.Swap(&other->uname_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  upwd_md5_.Swap(&other->upwd_md5_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+}
+
+::google::protobuf::Metadata AccountUpgradeReq::GetMetadata() const {
+  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_game_2eproto);
+  return ::file_level_metadata_game_2eproto[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void AccountUpgradeRes::InitAsDefaultInstance() {
+}
+class AccountUpgradeRes::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int AccountUpgradeRes::kStatusFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+AccountUpgradeRes::AccountUpgradeRes()
+  : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:AccountUpgradeRes)
+}
+AccountUpgradeRes::AccountUpgradeRes(const AccountUpgradeRes& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  status_ = from.status_;
+  // @@protoc_insertion_point(copy_constructor:AccountUpgradeRes)
+}
+
+void AccountUpgradeRes::SharedCtor() {
+  status_ = 0;
+}
+
+AccountUpgradeRes::~AccountUpgradeRes() {
+  // @@protoc_insertion_point(destructor:AccountUpgradeRes)
+  SharedDtor();
+}
+
+void AccountUpgradeRes::SharedDtor() {
+}
+
+void AccountUpgradeRes::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const AccountUpgradeRes& AccountUpgradeRes::default_instance() {
+  ::google::protobuf::internal::InitSCC(&::scc_info_AccountUpgradeRes_game_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void AccountUpgradeRes::Clear() {
+// @@protoc_insertion_point(message_clear_start:AccountUpgradeRes)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  status_ = 0;
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* AccountUpgradeRes::_InternalParse(const char* begin, const char* end, void* object,
+                  ::google::protobuf::internal::ParseContext* ctx) {
+  auto msg = static_cast<AccountUpgradeRes*>(object);
+  ::google::protobuf::uint32 size; (void)size;
+  int depth; (void)depth;
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::ParseFunc parser_till_end; (void)parser_till_end;
+  auto ptr = begin;
+  while (ptr < end) {
+    ptr = Varint::Parse32Inline(ptr, &tag);
+    GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+    switch (tag >> 3) {
+      // int32 status = 1;
+      case 1: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 8) goto handle_unusual;
+        ::google::protobuf::uint64 val;
+        ptr = Varint::Parse64(ptr, &val);
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        ::google::protobuf::int32 value = val;
+        msg->set_status(value);
+        break;
+      }
+      default: {
+      handle_unusual: (void)&&handle_unusual;
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->EndGroup(tag);
+          return ptr;
+        }
+        auto res = UnknownFieldParse(tag, {_InternalParse, msg},
+          ptr, end, msg->_internal_metadata_.mutable_unknown_fields(), ctx);
+        ptr = res.first;
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr != nullptr);
+        if (res.second) return ptr;
+      }
+    }  // switch
+  }  // while
+  return ptr;
+len_delim_till_end: (void)&&len_delim_till_end;
+  return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
+                                 {parser_till_end, object}, size);
+group_continues: (void)&&group_continues;
+  GOOGLE_DCHECK(ptr >= end);
+  GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->StoreGroup({_InternalParse, msg}, {parser_till_end, object}, depth, tag));
+  return ptr;
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool AccountUpgradeRes::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:AccountUpgradeRes)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int32 status = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (8 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &status_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:AccountUpgradeRes)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:AccountUpgradeRes)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void AccountUpgradeRes::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:AccountUpgradeRes)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 status = 1;
+  if (this->status() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->status(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:AccountUpgradeRes)
+}
+
+::google::protobuf::uint8* AccountUpgradeRes::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:AccountUpgradeRes)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 status = 1;
+  if (this->status() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->status(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AccountUpgradeRes)
+  return target;
+}
+
+size_t AccountUpgradeRes::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AccountUpgradeRes)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 status = 1;
+  if (this->status() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->status());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void AccountUpgradeRes::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:AccountUpgradeRes)
+  GOOGLE_DCHECK_NE(&from, this);
+  const AccountUpgradeRes* source =
+      ::google::protobuf::DynamicCastToGenerated<AccountUpgradeRes>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:AccountUpgradeRes)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:AccountUpgradeRes)
+    MergeFrom(*source);
+  }
+}
+
+void AccountUpgradeRes::MergeFrom(const AccountUpgradeRes& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:AccountUpgradeRes)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.status() != 0) {
+    set_status(from.status());
+  }
+}
+
+void AccountUpgradeRes::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:AccountUpgradeRes)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void AccountUpgradeRes::CopyFrom(const AccountUpgradeRes& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AccountUpgradeRes)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AccountUpgradeRes::IsInitialized() const {
+  return true;
+}
+
+void AccountUpgradeRes::Swap(AccountUpgradeRes* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void AccountUpgradeRes::InternalSwap(AccountUpgradeRes* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(status_, other->status_);
+}
+
+::google::protobuf::Metadata AccountUpgradeRes::GetMetadata() const {
+  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_game_2eproto);
+  return ::file_level_metadata_game_2eproto[kIndexInFileMessages];
+}
+
+
 // @@protoc_insertion_point(namespace_scope)
 namespace google {
 namespace protobuf {
@@ -2070,6 +2778,12 @@ template<> PROTOBUF_NOINLINE ::EditProfileReq* Arena::CreateMaybeMessage< ::Edit
 }
 template<> PROTOBUF_NOINLINE ::EditProfileRes* Arena::CreateMaybeMessage< ::EditProfileRes >(Arena* arena) {
   return Arena::CreateInternal< ::EditProfileRes >(arena);
+}
+template<> PROTOBUF_NOINLINE ::AccountUpgradeReq* Arena::CreateMaybeMessage< ::AccountUpgradeReq >(Arena* arena) {
+  return Arena::CreateInternal< ::AccountUpgradeReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::AccountUpgradeRes* Arena::CreateMaybeMessage< ::AccountUpgradeRes >(Arena* arena) {
+  return Arena::CreateInternal< ::AccountUpgradeRes >(arena);
 }
 }  // namespace protobuf
 }  // namespace google

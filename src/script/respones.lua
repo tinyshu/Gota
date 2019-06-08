@@ -9,6 +9,8 @@ local ResponesCode = {
 	UserIsNotGuest = -1001,
 	UserRelogin = -1002,
 	UserNotFound = -1003,
+	UserNameExist = -1004,
+	UserIsNotGuest = -1005,
 } 
 
 return ResponesCode

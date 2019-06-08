@@ -254,6 +254,7 @@
   <ItemGroup>
     <None Include="..\proto\game.proto" />
     <None Include="..\proto\message.proto" />
+    <None Include="..\script\auth_server\account_upgrade.lua" />
     <None Include="..\script\auth_server\auth_service.lua" />
     <None Include="..\script\auth_server\edit_profile.lua" />
     <None Include="..\script\auth_server\guest.lua" />
