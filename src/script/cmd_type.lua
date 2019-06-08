@@ -11,6 +11,8 @@ local Cmd = {
 	AccountUpgradeRes = 8,
 	UnameLoginReq = 9,
 	UnameLoginRes = 10,
+	LoginOutReq = 11,
+	LoginOutRes = 12,
 }
      
 return Cmd

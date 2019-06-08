@@ -13,6 +13,8 @@ local cmd_name_map = {
 	"AccountUpgradeRes",
 	"UnameLoginReq",
 	"UnameLoginRes",
+	"LoginOutReq",
+	"LoginOutRes",
 }
 
 return cmd_name_map

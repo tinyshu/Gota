@@ -4,6 +4,7 @@ local guest = require("auth_server/guest")
 local edit_profile_modduel = require("auth_server/edit_profile")
 local account_upgrade_moduel = require("auth_server/account_upgrade")
 local uname_login_moduel = require("auth_server/uname_login")
+local login_out_moduel = require("auth_server/login_out")
 
 function print_r ( t )  
     local print_r_cache={}
@@ -46,7 +47,7 @@ auth_service_handles[Cmd.GuestLoginReq] = guest.login
 auth_service_handles[Cmd.EditProfileReq] = edit_profile_modduel.edit
 auth_service_handles[Cmd.AccountUpgradeReq] = account_upgrade_moduel.account_upgrade_process
 auth_service_handles[Cmd.UnameLoginReq] = uname_login_moduel.uname_login_process
-
+auth_service_handles[Cmd.LoginOutReq] = login_out_moduel.login_out_process
 
 -----------------------------------------------
 

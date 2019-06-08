@@ -29,7 +29,8 @@ enum Cmd {
 	eAccountUpgradeRes = 8;
 	eUnameLoginReq = 9;
 	eUnameLoginRes = 10;
-
+	eLoginOutReq = 11;
+	eLoginOutRes = 12;
 
 }
 
@@ -77,5 +78,9 @@ message AccountUpgradeReq {
 }
 
 message AccountUpgradeRes {
+     int32 status = 1;
+}
+
+message LoginOutRes {
      int32 status = 1;
 }

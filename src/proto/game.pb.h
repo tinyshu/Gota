@@ -42,7 +42,7 @@ struct TableStruct_game_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::google::protobuf::internal::ParseTable schema[9]
+  static const ::google::protobuf::internal::ParseTable schema[10]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
@@ -67,6 +67,9 @@ extern GuestLoginReqDefaultTypeInternal _GuestLoginReq_default_instance_;
 class GuestLoginRes;
 class GuestLoginResDefaultTypeInternal;
 extern GuestLoginResDefaultTypeInternal _GuestLoginRes_default_instance_;
+class LoginOutRes;
+class LoginOutResDefaultTypeInternal;
+extern LoginOutResDefaultTypeInternal _LoginOutRes_default_instance_;
 class UnameLoginReq;
 class UnameLoginReqDefaultTypeInternal;
 extern UnameLoginReqDefaultTypeInternal _UnameLoginReq_default_instance_;
@@ -84,6 +87,7 @@ template<> ::EditProfileReq* Arena::CreateMaybeMessage<::EditProfileReq>(Arena*)
 template<> ::EditProfileRes* Arena::CreateMaybeMessage<::EditProfileRes>(Arena*);
 template<> ::GuestLoginReq* Arena::CreateMaybeMessage<::GuestLoginReq>(Arena*);
 template<> ::GuestLoginRes* Arena::CreateMaybeMessage<::GuestLoginRes>(Arena*);
+template<> ::LoginOutRes* Arena::CreateMaybeMessage<::LoginOutRes>(Arena*);
 template<> ::UnameLoginReq* Arena::CreateMaybeMessage<::UnameLoginReq>(Arena*);
 template<> ::UnameLoginRes* Arena::CreateMaybeMessage<::UnameLoginRes>(Arena*);
 template<> ::UserCenterInfo* Arena::CreateMaybeMessage<::UserCenterInfo>(Arena*);
@@ -125,12 +129,14 @@ enum Cmd {
   eAccountUpgradeRes = 8,
   eUnameLoginReq = 9,
   eUnameLoginRes = 10,
+  eLoginOutReq = 11,
+  eLoginOutRes = 12,
   Cmd_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   Cmd_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool Cmd_IsValid(int value);
 const Cmd Cmd_MIN = INVALID_CMD;
-const Cmd Cmd_MAX = eUnameLoginRes;
+const Cmd Cmd_MAX = eLoginOutRes;
 const int Cmd_ARRAYSIZE = Cmd_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* Cmd_descriptor();
@@ -1274,6 +1280,117 @@ class AccountUpgradeRes : public ::google::protobuf::Message /* @@protoc_inserti
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_game_2eproto;
 };
+// -------------------------------------------------------------------
+
+class LoginOutRes : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:LoginOutRes) */ {
+ public:
+  LoginOutRes();
+  virtual ~LoginOutRes();
+
+  LoginOutRes(const LoginOutRes& from);
+
+  inline LoginOutRes& operator=(const LoginOutRes& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  LoginOutRes(LoginOutRes&& from) noexcept
+    : LoginOutRes() {
+    *this = ::std::move(from);
+  }
+
+  inline LoginOutRes& operator=(LoginOutRes&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const LoginOutRes& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const LoginOutRes* internal_default_instance() {
+    return reinterpret_cast<const LoginOutRes*>(
+               &_LoginOutRes_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    9;
+
+  void Swap(LoginOutRes* other);
+  friend void swap(LoginOutRes& a, LoginOutRes& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline LoginOutRes* New() const final {
+    return CreateMaybeMessage<LoginOutRes>(nullptr);
+  }
+
+  LoginOutRes* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<LoginOutRes>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const LoginOutRes& from);
+  void MergeFrom(const LoginOutRes& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(LoginOutRes* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 status = 1;
+  void clear_status();
+  static const int kStatusFieldNumber = 1;
+  ::google::protobuf::int32 status() const;
+  void set_status(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:LoginOutRes)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::int32 status_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
 // ===================================================================
 
 
@@ -1930,9 +2047,29 @@ inline void AccountUpgradeRes::set_status(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:AccountUpgradeRes.status)
 }
 
+// -------------------------------------------------------------------
+
+// LoginOutRes
+
+// int32 status = 1;
+inline void LoginOutRes::clear_status() {
+  status_ = 0;
+}
+inline ::google::protobuf::int32 LoginOutRes::status() const {
+  // @@protoc_insertion_point(field_get:LoginOutRes.status)
+  return status_;
+}
+inline void LoginOutRes::set_status(::google::protobuf::int32 value) {
+  
+  status_ = value;
+  // @@protoc_insertion_point(field_set:LoginOutRes.status)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

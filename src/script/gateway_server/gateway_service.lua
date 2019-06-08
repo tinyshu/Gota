@@ -184,14 +184,24 @@ function send_to_client(server_session,raw_data)
 		return
 	end
 
-	--把协议里的utag重置为0 
-	proto_mgr_wrapper.set_raw_utag(raw_data,0)
+	
+	
 	--在登录成功以后，协议头的utag就是用户的uid
 	client_session = client_session_uid[utag]
 	if client_session ~= nil then
 	   --转发数据给客户端
-	   --print("send_raw_msg client session")
+	   --把协议里的utag重置为0 ,避免暴露uid给客户端
+	   proto_mgr_wrapper.set_raw_utag(raw_data,0)
 	   session_wrapper.send_raw_msg(client_session,raw_data)
+
+	   --判断是否为退出游戏协议，是的话要把client_session_uid对应的客户端session清理掉
+	   if ctype == cmd_module.LoginOutRes then
+	      session_wrapper.set_uid(client_session,0)
+	      client_session_uid[utag] = nil
+
+		  --用户退出后，需要给其他服务发送用户退出的消息，在这里处理
+
+	   end
 	else
 		print("send_to_client: not found clcient session")
 	end
