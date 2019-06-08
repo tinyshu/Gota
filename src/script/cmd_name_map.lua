@@ -11,6 +11,8 @@ local cmd_name_map = {
 	"EditProfileRes",
 	"AccountUpgradeReq",
 	"AccountUpgradeRes",
+	"UnameLoginReq",
+	"UnameLoginRes",
 }
 
 return cmd_name_map

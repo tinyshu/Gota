@@ -173,13 +173,56 @@ function do_account_upgrade(uid,uname,upwd,cb_handle)
 	end)
 end
 
+function get_uinfo_by_uname_upwd(uname, upwd, cb_handler)
+    if mysql_conn == nil then 
+		  if ret_handler then 
+			 cb_handler("mysql is not connected!", nil)
+		  end
+		  return
+	end
+
+	local sql = "select uid, unick, usex, uface, uvip, status, is_guest from uinfo where uname = \"%s\" and upwd = \"%s\" limit 1"
+	local sql_cmd = string.format(sql, uname, upwd)	
+	print("get_uinfo_by_uname_upwd sql:"..sql_cmd)
+
+	mysql_wrapper.query(mysql_conn,sql_cmd,function(err,ret)   
+	    if err then
+				cb_handle(err,nil)				return 
+			end
+			
+		
+		-- 没有这条记录
+		if ret == nil or #ret <= 0 then 
+			if cb_handler ~= nil then 
+				cb_handler(nil, nil)
+			end
+			return
+		end
+		print("get_uinfo_by_uname_upwd return data")
+		--查询到数据 24min
+		local result = ret[1]
+		local uinfo = {}
+		uinfo.uid = tonumber(result[1])
+		uinfo.unick = result[2]
+		uinfo.usex = tonumber(result[3])
+		uinfo.uface = tonumber(result[4])
+		uinfo.uvip = tonumber(result[5])
+		uinfo.status = tonumber(result[6])
+		uinfo.is_guest = tonumber(result[7])
+		cb_handler(nil, uinfo)
+
+	end)
+
+end
+
 local mysql_auth_center={
 	get_guest_user_info = get_guest_user_info,
 	insert_guest_user_info = insert_guest_user_info,
 	edit_profile_info = edit_profile_info,
 	check_username_exist = check_username_exist,
 	get_userinfo_by_uid = get_userinfo_by_uid,
-	do_account_upgrade = do_account_upgrade
+	do_account_upgrade = do_account_upgrade,
+	get_uinfo_by_uname_upwd = get_uinfo_by_uname_upwd
 }
 
 return mysql_auth_center

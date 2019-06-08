@@ -9,8 +9,9 @@ local ResponesCode = {
 	UserIsNotGuest = -1001,
 	UserRelogin = -1002,
 	UserNotFound = -1003,
-	UserNameExist = -1004,
-	UserIsNotGuest = -1005,
+	UserNameExist = -1004,    --游客升级用户名称已经存在
+	UserIsNotGuest = -1005,   --不是游客状态
+	UserUnamePwdErr = -1006,  --正式登录用户名或密码错误
 } 
 
 return ResponesCode

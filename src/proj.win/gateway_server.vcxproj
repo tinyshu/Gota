@@ -259,6 +259,7 @@
     <None Include="..\script\auth_server\edit_profile.lua" />
     <None Include="..\script\auth_server\guest.lua" />
     <None Include="..\script\auth_server\main.lua" />
+    <None Include="..\script\auth_server\uname_login.lua" />
     <None Include="..\script\cmd_name_map.lua" />
     <None Include="..\script\cmd_type.lua" />
     <None Include="..\script\conf.lua" />

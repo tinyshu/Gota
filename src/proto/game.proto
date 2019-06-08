@@ -27,6 +27,9 @@ enum Cmd {
 	eEditProfileRes = 6;
 	eAccountUpgradeReq = 7;
 	eAccountUpgradeRes = 8;
+	eUnameLoginReq = 9;
+	eUnameLoginRes = 10;
+
 
 }
 
@@ -45,6 +48,17 @@ message UserCenterInfo{
 message GuestLoginRes{
    int32 status = 1;
    UserCenterInfo userinfo=2;
+}
+
+
+message UnameLoginReq {
+     string uname = 1;
+	 string upwd_md5 = 2;
+}
+
+message UnameLoginRes{
+     int32 status = 1;
+     UserCenterInfo userinfo=2;
 }
 
 message EditProfileReq {

@@ -847,5 +847,8 @@
     <None Include="..\script\auth_server\account_upgrade.lua">
       <Filter>src\script\auth_server</Filter>
     </None>
+    <None Include="..\script\auth_server\uname_login.lua">
+      <Filter>src\script\auth_server</Filter>
+    </None>
   </ItemGroup>
 </Project>

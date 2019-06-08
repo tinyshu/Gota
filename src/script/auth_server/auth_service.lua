@@ -3,6 +3,8 @@ local Cmd = require("cmd_type")
 local guest = require("auth_server/guest")
 local edit_profile_modduel = require("auth_server/edit_profile")
 local account_upgrade_moduel = require("auth_server/account_upgrade")
+local uname_login_moduel = require("auth_server/uname_login")
+
 function print_r ( t )  
     local print_r_cache={}
     local function sub_print_r(t,indent)
@@ -43,6 +45,9 @@ local auth_service_handles = {}
 auth_service_handles[Cmd.GuestLoginReq] = guest.login
 auth_service_handles[Cmd.EditProfileReq] = edit_profile_modduel.edit
 auth_service_handles[Cmd.AccountUpgradeReq] = account_upgrade_moduel.account_upgrade_process
+auth_service_handles[Cmd.UnameLoginReq] = uname_login_moduel.uname_login_process
+
+
 -----------------------------------------------
 
 -- {stype, ctype, utag, body}

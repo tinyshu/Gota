@@ -9,6 +9,8 @@ local Cmd = {
 	EditProfileRes = 6,
 	AccountUpgradeReq = 7,
 	AccountUpgradeRes = 8,
+	UnameLoginReq = 9,
+	UnameLoginRes = 10,
 }
      
 return Cmd

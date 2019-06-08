@@ -57,7 +57,8 @@ end
 --local socket_type = WEB_SOCKET
 --local proto_type =  PROTO_JSON
 function is_login_request(cmd_type)
-	if cmd_type == cmd_module.GuestLoginReq then 
+	if cmd_type == cmd_module.GuestLoginReq or 
+	   cmd_type == cmd_module.UnameLoginReq then 
 		return true
 	end
 
@@ -78,6 +79,7 @@ function send_to_server(client_session,raw_data)
 	
 	--判断是否为登录协议请求
 	if is_login_request(cmd) then
+	  print("is_login_request cmd"..cmd)
 	  utag = session_wrapper.get_utag(client_session)
 	   --还没有utag，生成一个tag,在登录前使用
 	   if utag ==0 then
@@ -105,7 +107,8 @@ end
 
 --判断是否为登录返回协议
 function is_loginresp_ctype(ctype)
-	if ctype == cmd_module.GuestLoginRes then
+	if ctype == cmd_module.GuestLoginRes or 
+	   ctype == cmd_module.UnameLoginRes then
 		return true
 	end
 	return false
@@ -114,14 +117,14 @@ end
 --服务器发过来的信息，转给对应的客户端
 function send_to_client(server_session,raw_data)
 	local cmdtype, ctype, utag = proto_mgr_wrapper.read_msg_head(raw_data)
-	--print(utag)
+	print("send_to_client".." cmdtype:"..cmdtype.." ctype:"..ctype.." utag:"..utag)
 	local client_session = nil
 	
 	--判断是否为登录返回协议
 	--print("send_to_client ctype,"..ctype)
 	--ctype是协议id,判断是否为登录返回协议
 	if is_loginresp_ctype(ctype) == true then
-	    --print("is_login_ctype")
+	    print("is_login_ctype ctype:"..ctype)
 		--登录协议返回，在这里读取认证服务器返回的uid
 		local t_body = proto_mgr_wrapper.read_msg_body(raw_data)
 		if t_body == nil then
@@ -129,9 +132,11 @@ function send_to_client(server_session,raw_data)
 		   return
 		end
 
+		utils.print_table(t_body)
 		--client_session_utag在登录前设置了,
 		--client_session_utag[utag] = client_session的对应关系
 		client_session = client_session_utag[utag]
+		print("is_login_ctype utag:"..utag)
 		if client_session==nil then
 			--如果获取不到就是一个异常
 			print("client_session is nil")
@@ -139,7 +144,6 @@ function send_to_client(server_session,raw_data)
 		end
 		--判断登录消息是否成功
 		if t_body.status ~= res_module.OK then
-		   
 		   proto_mgr_wrapper.set_raw_utag(raw_data,0)
 		   if client_session ~= nil then
 			  session_wrapper.send_raw_msg(client_session,raw_data)
@@ -147,6 +151,7 @@ function send_to_client(server_session,raw_data)
 		end
 		
 		--下面是登录成功逻辑
+		
 		local t_userinfo = t_body.userinfo
 		--用户uid,uid是在底层创建的
 		local login_uid = t_userinfo.uid
@@ -242,7 +247,7 @@ function on_gw_session_disconnect(s,service_stype)
 	--客户端连接到网关，已经是登录后
 	local uid = session_wrapper.get_uid(s)
 	if client_session_uid[uid] ~= nil and client_session_uid[uid] == s then
-	   print("client_session_uid[uid] remove!!")
+	   print("client_session_uid[uid] remove!! uid"..uid)
 	   client_session_uid[uid] = nil
 	end
 
