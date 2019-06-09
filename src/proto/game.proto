@@ -31,7 +31,9 @@ enum Cmd {
 	eUnameLoginRes = 10;
 	eLoginOutReq = 11;
 	eLoginOutRes = 12;
-
+	//系统服务器协议
+	eGetUgameInfoReq = 13;
+	eGetUgameInfoRes = 14;
 }
 
 message GuestLoginReq{
@@ -83,4 +85,15 @@ message AccountUpgradeRes {
 
 message LoginOutRes {
      int32 status = 1;
+}
+
+message GetUgameInfoRes {
+	 int32 uchip = 1;
+	 int32 uexp = 2;
+	 int32 uvip = 3;
+	 int32 uchip2 = 4;
+	 int32 uchip3 = 5;
+	 int32 udata1 = 6;
+	 int32 udata2 = 7;
+	 int32 udata3 = 8;	
 }

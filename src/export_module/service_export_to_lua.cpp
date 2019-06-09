@@ -207,6 +207,7 @@ bool lua_service_module::on_session_recv_cmd(struct session_base* s, recv_msg* m
 	//创建一个表2的位置，存入{1: stype, 2 ctype, 3 utag, 4 pb{}或许 json的string}
 	lua_newtable(lua_status);
 	//lua_rawseti
+	//table[index] = value, L: table
 	lua_pushinteger(lua_status, msg->head.stype);
 	lua_rawseti(lua_status,-2,idx);
 	idx++;
@@ -221,6 +222,8 @@ bool lua_service_module::on_session_recv_cmd(struct session_base* s, recv_msg* m
 
 	if (msg->body == NULL) {
 		lua_pushnil(lua_status);
+		lua_rawseti(lua_status, -2, idx);         
+		++idx;
 	}
 	else {
 		if (get_proto_type() == BIN_PROTOCAL) {

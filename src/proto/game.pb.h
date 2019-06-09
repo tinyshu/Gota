@@ -42,7 +42,7 @@ struct TableStruct_game_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::google::protobuf::internal::ParseTable schema[10]
+  static const ::google::protobuf::internal::ParseTable schema[11]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
@@ -61,6 +61,9 @@ extern EditProfileReqDefaultTypeInternal _EditProfileReq_default_instance_;
 class EditProfileRes;
 class EditProfileResDefaultTypeInternal;
 extern EditProfileResDefaultTypeInternal _EditProfileRes_default_instance_;
+class GetUgameInfoRes;
+class GetUgameInfoResDefaultTypeInternal;
+extern GetUgameInfoResDefaultTypeInternal _GetUgameInfoRes_default_instance_;
 class GuestLoginReq;
 class GuestLoginReqDefaultTypeInternal;
 extern GuestLoginReqDefaultTypeInternal _GuestLoginReq_default_instance_;
@@ -85,6 +88,7 @@ template<> ::AccountUpgradeReq* Arena::CreateMaybeMessage<::AccountUpgradeReq>(A
 template<> ::AccountUpgradeRes* Arena::CreateMaybeMessage<::AccountUpgradeRes>(Arena*);
 template<> ::EditProfileReq* Arena::CreateMaybeMessage<::EditProfileReq>(Arena*);
 template<> ::EditProfileRes* Arena::CreateMaybeMessage<::EditProfileRes>(Arena*);
+template<> ::GetUgameInfoRes* Arena::CreateMaybeMessage<::GetUgameInfoRes>(Arena*);
 template<> ::GuestLoginReq* Arena::CreateMaybeMessage<::GuestLoginReq>(Arena*);
 template<> ::GuestLoginRes* Arena::CreateMaybeMessage<::GuestLoginRes>(Arena*);
 template<> ::LoginOutRes* Arena::CreateMaybeMessage<::LoginOutRes>(Arena*);
@@ -131,12 +135,14 @@ enum Cmd {
   eUnameLoginRes = 10,
   eLoginOutReq = 11,
   eLoginOutRes = 12,
+  eGetUgameInfoReq = 13,
+  eGetUgameInfoRes = 14,
   Cmd_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   Cmd_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool Cmd_IsValid(int value);
 const Cmd Cmd_MIN = INVALID_CMD;
-const Cmd Cmd_MAX = eLoginOutRes;
+const Cmd Cmd_MAX = eGetUgameInfoRes;
 const int Cmd_ARRAYSIZE = Cmd_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* Cmd_descriptor();
@@ -1391,6 +1397,166 @@ class LoginOutRes : public ::google::protobuf::Message /* @@protoc_insertion_poi
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_game_2eproto;
 };
+// -------------------------------------------------------------------
+
+class GetUgameInfoRes : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GetUgameInfoRes) */ {
+ public:
+  GetUgameInfoRes();
+  virtual ~GetUgameInfoRes();
+
+  GetUgameInfoRes(const GetUgameInfoRes& from);
+
+  inline GetUgameInfoRes& operator=(const GetUgameInfoRes& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GetUgameInfoRes(GetUgameInfoRes&& from) noexcept
+    : GetUgameInfoRes() {
+    *this = ::std::move(from);
+  }
+
+  inline GetUgameInfoRes& operator=(GetUgameInfoRes&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const GetUgameInfoRes& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GetUgameInfoRes* internal_default_instance() {
+    return reinterpret_cast<const GetUgameInfoRes*>(
+               &_GetUgameInfoRes_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    10;
+
+  void Swap(GetUgameInfoRes* other);
+  friend void swap(GetUgameInfoRes& a, GetUgameInfoRes& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GetUgameInfoRes* New() const final {
+    return CreateMaybeMessage<GetUgameInfoRes>(nullptr);
+  }
+
+  GetUgameInfoRes* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<GetUgameInfoRes>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const GetUgameInfoRes& from);
+  void MergeFrom(const GetUgameInfoRes& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GetUgameInfoRes* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 uchip = 1;
+  void clear_uchip();
+  static const int kUchipFieldNumber = 1;
+  ::google::protobuf::int32 uchip() const;
+  void set_uchip(::google::protobuf::int32 value);
+
+  // int32 uexp = 2;
+  void clear_uexp();
+  static const int kUexpFieldNumber = 2;
+  ::google::protobuf::int32 uexp() const;
+  void set_uexp(::google::protobuf::int32 value);
+
+  // int32 uvip = 3;
+  void clear_uvip();
+  static const int kUvipFieldNumber = 3;
+  ::google::protobuf::int32 uvip() const;
+  void set_uvip(::google::protobuf::int32 value);
+
+  // int32 uchip2 = 4;
+  void clear_uchip2();
+  static const int kUchip2FieldNumber = 4;
+  ::google::protobuf::int32 uchip2() const;
+  void set_uchip2(::google::protobuf::int32 value);
+
+  // int32 uchip3 = 5;
+  void clear_uchip3();
+  static const int kUchip3FieldNumber = 5;
+  ::google::protobuf::int32 uchip3() const;
+  void set_uchip3(::google::protobuf::int32 value);
+
+  // int32 udata1 = 6;
+  void clear_udata1();
+  static const int kUdata1FieldNumber = 6;
+  ::google::protobuf::int32 udata1() const;
+  void set_udata1(::google::protobuf::int32 value);
+
+  // int32 udata2 = 7;
+  void clear_udata2();
+  static const int kUdata2FieldNumber = 7;
+  ::google::protobuf::int32 udata2() const;
+  void set_udata2(::google::protobuf::int32 value);
+
+  // int32 udata3 = 8;
+  void clear_udata3();
+  static const int kUdata3FieldNumber = 8;
+  ::google::protobuf::int32 udata3() const;
+  void set_udata3(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:GetUgameInfoRes)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::int32 uchip_;
+  ::google::protobuf::int32 uexp_;
+  ::google::protobuf::int32 uvip_;
+  ::google::protobuf::int32 uchip2_;
+  ::google::protobuf::int32 uchip3_;
+  ::google::protobuf::int32 udata1_;
+  ::google::protobuf::int32 udata2_;
+  ::google::protobuf::int32 udata3_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
 // ===================================================================
 
 
@@ -2065,9 +2231,127 @@ inline void LoginOutRes::set_status(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:LoginOutRes.status)
 }
 
+// -------------------------------------------------------------------
+
+// GetUgameInfoRes
+
+// int32 uchip = 1;
+inline void GetUgameInfoRes::clear_uchip() {
+  uchip_ = 0;
+}
+inline ::google::protobuf::int32 GetUgameInfoRes::uchip() const {
+  // @@protoc_insertion_point(field_get:GetUgameInfoRes.uchip)
+  return uchip_;
+}
+inline void GetUgameInfoRes::set_uchip(::google::protobuf::int32 value) {
+  
+  uchip_ = value;
+  // @@protoc_insertion_point(field_set:GetUgameInfoRes.uchip)
+}
+
+// int32 uexp = 2;
+inline void GetUgameInfoRes::clear_uexp() {
+  uexp_ = 0;
+}
+inline ::google::protobuf::int32 GetUgameInfoRes::uexp() const {
+  // @@protoc_insertion_point(field_get:GetUgameInfoRes.uexp)
+  return uexp_;
+}
+inline void GetUgameInfoRes::set_uexp(::google::protobuf::int32 value) {
+  
+  uexp_ = value;
+  // @@protoc_insertion_point(field_set:GetUgameInfoRes.uexp)
+}
+
+// int32 uvip = 3;
+inline void GetUgameInfoRes::clear_uvip() {
+  uvip_ = 0;
+}
+inline ::google::protobuf::int32 GetUgameInfoRes::uvip() const {
+  // @@protoc_insertion_point(field_get:GetUgameInfoRes.uvip)
+  return uvip_;
+}
+inline void GetUgameInfoRes::set_uvip(::google::protobuf::int32 value) {
+  
+  uvip_ = value;
+  // @@protoc_insertion_point(field_set:GetUgameInfoRes.uvip)
+}
+
+// int32 uchip2 = 4;
+inline void GetUgameInfoRes::clear_uchip2() {
+  uchip2_ = 0;
+}
+inline ::google::protobuf::int32 GetUgameInfoRes::uchip2() const {
+  // @@protoc_insertion_point(field_get:GetUgameInfoRes.uchip2)
+  return uchip2_;
+}
+inline void GetUgameInfoRes::set_uchip2(::google::protobuf::int32 value) {
+  
+  uchip2_ = value;
+  // @@protoc_insertion_point(field_set:GetUgameInfoRes.uchip2)
+}
+
+// int32 uchip3 = 5;
+inline void GetUgameInfoRes::clear_uchip3() {
+  uchip3_ = 0;
+}
+inline ::google::protobuf::int32 GetUgameInfoRes::uchip3() const {
+  // @@protoc_insertion_point(field_get:GetUgameInfoRes.uchip3)
+  return uchip3_;
+}
+inline void GetUgameInfoRes::set_uchip3(::google::protobuf::int32 value) {
+  
+  uchip3_ = value;
+  // @@protoc_insertion_point(field_set:GetUgameInfoRes.uchip3)
+}
+
+// int32 udata1 = 6;
+inline void GetUgameInfoRes::clear_udata1() {
+  udata1_ = 0;
+}
+inline ::google::protobuf::int32 GetUgameInfoRes::udata1() const {
+  // @@protoc_insertion_point(field_get:GetUgameInfoRes.udata1)
+  return udata1_;
+}
+inline void GetUgameInfoRes::set_udata1(::google::protobuf::int32 value) {
+  
+  udata1_ = value;
+  // @@protoc_insertion_point(field_set:GetUgameInfoRes.udata1)
+}
+
+// int32 udata2 = 7;
+inline void GetUgameInfoRes::clear_udata2() {
+  udata2_ = 0;
+}
+inline ::google::protobuf::int32 GetUgameInfoRes::udata2() const {
+  // @@protoc_insertion_point(field_get:GetUgameInfoRes.udata2)
+  return udata2_;
+}
+inline void GetUgameInfoRes::set_udata2(::google::protobuf::int32 value) {
+  
+  udata2_ = value;
+  // @@protoc_insertion_point(field_set:GetUgameInfoRes.udata2)
+}
+
+// int32 udata3 = 8;
+inline void GetUgameInfoRes::clear_udata3() {
+  udata3_ = 0;
+}
+inline ::google::protobuf::int32 GetUgameInfoRes::udata3() const {
+  // @@protoc_insertion_point(field_get:GetUgameInfoRes.udata3)
+  return udata3_;
+}
+inline void GetUgameInfoRes::set_udata3(::google::protobuf::int32 value) {
+  
+  udata3_ = value;
+  // @@protoc_insertion_point(field_set:GetUgameInfoRes.udata3)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

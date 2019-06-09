@@ -94,6 +94,9 @@
     <Filter Include="src\script\database">
       <UniqueIdentifier>{7fa135a6-f10b-4c2a-9176-b994c1646e5f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\script\system_server">
+      <UniqueIdentifier>{592ebeaf-fec6-4fa7-9544-85254f1a00f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\crypt\base64_encoder.c">
@@ -852,6 +855,15 @@
     </None>
     <None Include="..\script\auth_server\login_out.lua">
       <Filter>src\script\auth_server</Filter>
+    </None>
+    <None Include="..\script\user_game_config.lua">
+      <Filter>src\script</Filter>
+    </None>
+    <None Include="..\script\system_server\main.lua">
+      <Filter>src\script\system_server</Filter>
+    </None>
+    <None Include="..\script\system_server\system_service.lua">
+      <Filter>src\script\system_server</Filter>
     </None>
   </ItemGroup>
 </Project>

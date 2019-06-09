@@ -273,6 +273,9 @@
     <None Include="..\script\respones.lua" />
     <None Include="..\script\service_type.lua" />
     <None Include="..\script\socket_proto_type.lua" />
+    <None Include="..\script\system_server\system_service.lua" />
+    <None Include="..\script\system_server\main.lua" />
+    <None Include="..\script\user_game_config.lua" />
     <None Include="..\script\utils.lua" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
