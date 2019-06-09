@@ -265,6 +265,7 @@
     <None Include="..\script\cmd_type.lua" />
     <None Include="..\script\conf.lua" />
     <None Include="..\script\database\mysql_auth_center.lua" />
+    <None Include="..\script\database\mysql_system_ugame.lua" />
     <None Include="..\script\database\redis_auth_center.lua" />
     <None Include="..\script\gateway_server\gateway_service.lua" />
     <None Include="..\script\gateway_server\main.lua" />
@@ -275,6 +276,7 @@
     <None Include="..\script\socket_proto_type.lua" />
     <None Include="..\script\system_server\system_service.lua" />
     <None Include="..\script\system_server\main.lua" />
+    <None Include="..\script\system_server\user_game_info.lua" />
     <None Include="..\script\user_game_config.lua" />
     <None Include="..\script\utils.lua" />
   </ItemGroup>

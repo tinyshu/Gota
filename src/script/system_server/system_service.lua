@@ -1,19 +1,18 @@
 local stype = require("service_type")
 local Cmd = require("cmd_type")
 local utils = require("utils")
+local ugame_info_module = require("system_server/user_game_info")
 --定义认证服务器协议和函数映射
 --在这里注册auth服务处理的协议和对应得人处理函数
 local system_service_handles = {}
 
---auth_service_handles[Cmd.GuestLoginReq] = guest.login
+system_service_handles[Cmd.GetUgameInfoReq] = ugame_info_module.get_ugame_info
 -----------------------------------------------
 
 -- {stype, ctype, utag, body}
 function on_system_recv_cmd(s, msg)
+      print("on_system_recv_cmd")
       utils.print_table(msg)
-	--print("on_system_recv_cmd "..msg[1].." "..msg[2])
-	--print(msg[1],msg[2],msg[3])
-	--print("on_auth_recv_cmd"..msg[4])
 	--判断cmdid是否有对应的处理函数
 	local ctype = msg[2] --协议id
 	if system_service_handles[ctype] then

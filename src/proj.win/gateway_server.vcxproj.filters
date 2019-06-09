@@ -865,5 +865,11 @@
     <None Include="..\script\system_server\system_service.lua">
       <Filter>src\script\system_server</Filter>
     </None>
+    <None Include="..\script\system_server\user_game_info.lua">
+      <Filter>src\script\system_server</Filter>
+    </None>
+    <None Include="..\script\database\mysql_system_ugame.lua">
+      <Filter>src\script\database</Filter>
+    </None>
   </ItemGroup>
 </Project>

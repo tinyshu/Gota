@@ -13,6 +13,8 @@ local Cmd = {
 	UnameLoginRes = 10,
 	LoginOutReq = 11,
 	LoginOutRes = 12,
+	GetUgameInfoReq = 13,
+	GetUgameInfoRes = 14,
 }
      
 return Cmd
