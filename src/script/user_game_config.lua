@@ -6,7 +6,11 @@ local user_game_config = {
 		uexp = 0,
 		-- ...
 	},	
+
+	--奖励配置: 连续登录5天在重100开始
+	login_bonues = {100, 200, 300, 400, 500},
 }
+
 
 return user_game_config
 

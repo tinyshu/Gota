@@ -453,6 +453,12 @@
     <ClCompile Include="..\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\utils\timestamp.c">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\export_module\utils_export_to_lua.cpp">
+      <Filter>src\export_module</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h">
@@ -788,6 +794,12 @@
     <ClInclude Include="..\moduel\net\proto_type.h">
       <Filter>src\moduel\net</Filter>
     </ClInclude>
+    <ClInclude Include="..\utils\timestamp.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\export_module\utils_export_to_lua.h">
+      <Filter>src\export_module</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\proto\message.proto">
@@ -870,6 +882,9 @@
     </None>
     <None Include="..\script\database\mysql_system_ugame.lua">
       <Filter>src\script\database</Filter>
+    </None>
+    <None Include="..\script\system_server\login_bonues.lua">
+      <Filter>src\script\system_server</Filter>
     </None>
   </ItemGroup>
 </Project>

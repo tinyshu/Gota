@@ -96,9 +96,100 @@ function insert_ugame_info(uid, ret_handler)
 
 end
 
+function get_bonues_info(uid, ret_handler)
+   if mysql_conn == nil then 
+		if ret_handler then 
+			ret_handler("mysql is not connected!", nil)
+		end
+		return
+	end
+
+	local sql = "select bonues, status, bonues_time, days from login_bonues where uid = %d limit 1"
+	local sql_cmd = string.format(sql, uid)	
+	print(sql_cmd)
+
+	
+	mysql_wrapper.query(mysql_conn, sql_cmd, function(err, ret)
+		if err then 
+			if ret_handler ~= nil then 
+				ret_handler(err, nil)
+			end
+			return
+		end
+
+		-- 没有这条记录
+		if ret == nil or #ret <= 0 then 
+			if ret_handler ~= nil then 
+				ret_handler(nil, nil)
+			end
+			return
+		end
+		-- end
+		
+		local result = ret[1]
+		local bonues_info = {}
+		bonues_info.bonues = tonumber(result[1])
+		bonues_info.status = tonumber(result[2])
+		bonues_info.bonues_time = tonumber(result[3])
+		bonues_info.days = tonumber(result[4])
+		
+		ret_handler(nil, bonues_info)
+	end)
+
+end
+
+function insert_bonues_info(uid, ret_handler)
+	if mysql_conn == nil then 
+		if ret_handler then 
+			ret_handler("mysql is not connected!", nil)
+		end
+		return
+	end
+
+	local sql = "INSERT INTO login_bonues(`uid`, `bonues_time`, `status`)VALUES(%d, %d, 1)"
+	local sql_cmd = string.format(sql, uid, utils_wrapper.timestamp())
+	print(sql_cmd)
+	mysql_wrapper.query(mysql_conn, sql_cmd, function (err, ret)
+		if err then 
+			ret_handler(err, nil)
+			return
+		else
+			ret_handler(nil, nil)
+		end
+	end)
+end
+
+function update_login_bonues(uid, bonues_info, ret_handler)
+    if mysql_conn == nil then 
+		if ret_handler then 
+			ret_handler("mysql is not connected!", nil)
+		end
+		return
+	end
+
+	local sql = "update login_bonues set status = 0, bonues = %d, bonues_time = %d, days = %d where uid = %d"
+	local sql_cmd = string.format(sql, bonues_info.bonues, bonues_info.bonues_time, bonues_info.days, uid)
+	
+	mysql_wrapper.query(mysql_conn, sql_cmd, function(err, ret)
+		if err then
+			if ret_handler ~= nil then 
+				ret_handler(err, nil)
+			end
+			return
+		end
+
+		if ret_handler then 
+			ret_handler(nil, nil)
+		end
+	end)
+end
+ 
 local mysql_game = {
 	get_ugame_info = get_ugame_info,
 	insert_ugame_info = insert_ugame_info,
+	get_bonues_info = get_bonues_info,
+	insert_bonues_info = insert_bonues_info,
+	update_login_bonues = update_login_bonues,
 }
 
 return mysql_game

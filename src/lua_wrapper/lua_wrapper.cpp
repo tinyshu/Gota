@@ -11,6 +11,7 @@
 #include "../export_module/timer_export_to_lua.h"
 #include "../export_module/netbus_export_to_lua.h"
 #include "../export_module/proto_mgr_export_to_lua.h"
+#include "../export_module/utils_export_to_lua.h"
 
 lua_State* g_lua_state = NULL;
 
@@ -237,18 +238,15 @@ void lua_wrapper::init_lua() {
 	register_timer_export_tolua(g_lua_state);
 	register_betbus_export_tolua(g_lua_state);
 	register_proto_export_tolua(g_lua_state);
+	register_timer_export_tolua(g_lua_state);
+	register_utils_export_tolua(g_lua_state);
 	/////////////////////////////////////////////////
 
-	//导出框架接口
+	//导出log接口
 	reg_func2lua("LOGDEBUG", lua_logdebug);
 	reg_func2lua("LOGWARNING", lua_logwarning);
 	reg_func2lua("LOGERROR", lua_logerror);
 	
-	//test
-	//reg_func2lua("Add", add);
-	//reg_func2lua("print_array", print_array);
-	//reg_func2lua("print_table", print_table);
-	//reg_func2lua("re_table", re_table);
 }
 
 void lua_wrapper::exit_lua() {

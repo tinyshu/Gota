@@ -1,9 +1,11 @@
 --系统服务模块
+local utils = require("utils")
 local stype_module = require("service_type")
 local cmd_module = require("cmd_type")
 local res_module = require("respones")
 local mysql_game = require("database/mysql_system_ugame")
-local utils = require("utils")
+local login_bonues = require("system_server/login_bonues")
+
 
 --获取游戏数据
 function get_ugame_info(s, msg)
@@ -54,7 +56,19 @@ function get_ugame_info(s, msg)
 					return
 		end
 
-		-- 返回给客户端
+		login_bonues.ckeck_login_bonues(uid,function(err,bonues_info)
+	       if err ~= nil or bonues_info == nil then
+		       local ret_msg = {
+					        stype=stype_module.SystemServer,ctype=cmd_module.GetUgameInfoRes,utag=uid,
+							body={
+									status = res_module.SystemErr
+							}}
+
+			        session_wrapper.send_msg(s,ret_msg)
+					return
+		   end
+
+		-- 返回游戏基础数据客户端
         local ret_msg = {
 					       stype=stype_module.SystemServer,ctype=cmd_module.GetUgameInfoRes,utag=uid,
 							body={
@@ -73,7 +87,7 @@ function get_ugame_info(s, msg)
 						  }
 		utils.print_table(ret_msg)
 		session_wrapper.send_msg(s,ret_msg)
-
+        end)
    end)
 
 end

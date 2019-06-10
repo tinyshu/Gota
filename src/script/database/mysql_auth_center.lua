@@ -222,7 +222,7 @@ local mysql_auth_center={
 	check_username_exist = check_username_exist,
 	get_userinfo_by_uid = get_userinfo_by_uid,
 	do_account_upgrade = do_account_upgrade,
-	get_uinfo_by_uname_upwd = get_uinfo_by_uname_upwd
+	get_uinfo_by_uname_upwd = get_uinfo_by_uname_upwd,
 }
 
 return mysql_auth_center
