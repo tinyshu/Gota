@@ -1,0 +1,1 @@
+ServerEngin.exe ../src/script/ logic_server/main.lua

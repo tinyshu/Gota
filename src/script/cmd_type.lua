@@ -16,7 +16,13 @@ local Cmd = {
 	GetUgameInfoReq = 13,
 	GetUgameInfoRes = 14,
 	RecvLoginBonuesReq = 15,
-	RecvLoginBonuesRes = 16
+	RecvLoginBonuesRes = 16,
+	GetWorldRankUchipReq = 17,
+	GetWorldRankUchipRes = 18,
+	GetSysMsgReq = 19,
+	GetSysMsgRes = 20,
+	LoginLogicReq = 21,
+	LoginLogicRes = 22,
 }
      
 return Cmd

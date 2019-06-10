@@ -42,7 +42,7 @@ struct TableStruct_game_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::google::protobuf::internal::ParseTable schema[12]
+  static const ::google::protobuf::internal::ParseTable schema[14]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
@@ -70,9 +70,15 @@ extern GuestLoginReqDefaultTypeInternal _GuestLoginReq_default_instance_;
 class GuestLoginRes;
 class GuestLoginResDefaultTypeInternal;
 extern GuestLoginResDefaultTypeInternal _GuestLoginRes_default_instance_;
+class LoginLogicRes;
+class LoginLogicResDefaultTypeInternal;
+extern LoginLogicResDefaultTypeInternal _LoginLogicRes_default_instance_;
 class LoginOutRes;
 class LoginOutResDefaultTypeInternal;
 extern LoginOutResDefaultTypeInternal _LoginOutRes_default_instance_;
+class RecvLoginBonuesRes;
+class RecvLoginBonuesResDefaultTypeInternal;
+extern RecvLoginBonuesResDefaultTypeInternal _RecvLoginBonuesRes_default_instance_;
 class UnameLoginReq;
 class UnameLoginReqDefaultTypeInternal;
 extern UnameLoginReqDefaultTypeInternal _UnameLoginReq_default_instance_;
@@ -94,7 +100,9 @@ template<> ::EditProfileRes* Arena::CreateMaybeMessage<::EditProfileRes>(Arena*)
 template<> ::GetUgameInfoRes* Arena::CreateMaybeMessage<::GetUgameInfoRes>(Arena*);
 template<> ::GuestLoginReq* Arena::CreateMaybeMessage<::GuestLoginReq>(Arena*);
 template<> ::GuestLoginRes* Arena::CreateMaybeMessage<::GuestLoginRes>(Arena*);
+template<> ::LoginLogicRes* Arena::CreateMaybeMessage<::LoginLogicRes>(Arena*);
 template<> ::LoginOutRes* Arena::CreateMaybeMessage<::LoginOutRes>(Arena*);
+template<> ::RecvLoginBonuesRes* Arena::CreateMaybeMessage<::RecvLoginBonuesRes>(Arena*);
 template<> ::UnameLoginReq* Arena::CreateMaybeMessage<::UnameLoginReq>(Arena*);
 template<> ::UnameLoginRes* Arena::CreateMaybeMessage<::UnameLoginRes>(Arena*);
 template<> ::UserCenterInfo* Arena::CreateMaybeMessage<::UserCenterInfo>(Arena*);
@@ -141,12 +149,20 @@ enum Cmd {
   eLoginOutRes = 12,
   eGetUgameInfoReq = 13,
   eGetUgameInfoRes = 14,
+  eRecvLoginBonuesReq = 15,
+  eRecvLoginBonuesRes = 16,
+  eGetWorldRankUchipReq = 17,
+  eGetWorldRankUchipRes = 18,
+  eGetSysMsgReq = 19,
+  eGetSysMsgRes = 20,
+  eLoginLogicReq = 21,
+  eLoginLogicRes = 22,
   Cmd_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   Cmd_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool Cmd_IsValid(int value);
 const Cmd Cmd_MIN = INVALID_CMD;
-const Cmd Cmd_MAX = eGetUgameInfoRes;
+const Cmd Cmd_MAX = eLoginLogicRes;
 const int Cmd_ARRAYSIZE = Cmd_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* Cmd_descriptor();
@@ -1703,6 +1719,228 @@ class GetUgameInfoRes : public ::google::protobuf::Message /* @@protoc_insertion
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_game_2eproto;
 };
+// -------------------------------------------------------------------
+
+class RecvLoginBonuesRes : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:RecvLoginBonuesRes) */ {
+ public:
+  RecvLoginBonuesRes();
+  virtual ~RecvLoginBonuesRes();
+
+  RecvLoginBonuesRes(const RecvLoginBonuesRes& from);
+
+  inline RecvLoginBonuesRes& operator=(const RecvLoginBonuesRes& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  RecvLoginBonuesRes(RecvLoginBonuesRes&& from) noexcept
+    : RecvLoginBonuesRes() {
+    *this = ::std::move(from);
+  }
+
+  inline RecvLoginBonuesRes& operator=(RecvLoginBonuesRes&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const RecvLoginBonuesRes& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const RecvLoginBonuesRes* internal_default_instance() {
+    return reinterpret_cast<const RecvLoginBonuesRes*>(
+               &_RecvLoginBonuesRes_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    12;
+
+  void Swap(RecvLoginBonuesRes* other);
+  friend void swap(RecvLoginBonuesRes& a, RecvLoginBonuesRes& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline RecvLoginBonuesRes* New() const final {
+    return CreateMaybeMessage<RecvLoginBonuesRes>(nullptr);
+  }
+
+  RecvLoginBonuesRes* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<RecvLoginBonuesRes>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const RecvLoginBonuesRes& from);
+  void MergeFrom(const RecvLoginBonuesRes& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RecvLoginBonuesRes* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 status = 1;
+  void clear_status();
+  static const int kStatusFieldNumber = 1;
+  ::google::protobuf::int32 status() const;
+  void set_status(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:RecvLoginBonuesRes)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::int32 status_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
+// -------------------------------------------------------------------
+
+class LoginLogicRes : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:LoginLogicRes) */ {
+ public:
+  LoginLogicRes();
+  virtual ~LoginLogicRes();
+
+  LoginLogicRes(const LoginLogicRes& from);
+
+  inline LoginLogicRes& operator=(const LoginLogicRes& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  LoginLogicRes(LoginLogicRes&& from) noexcept
+    : LoginLogicRes() {
+    *this = ::std::move(from);
+  }
+
+  inline LoginLogicRes& operator=(LoginLogicRes&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const LoginLogicRes& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const LoginLogicRes* internal_default_instance() {
+    return reinterpret_cast<const LoginLogicRes*>(
+               &_LoginLogicRes_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    13;
+
+  void Swap(LoginLogicRes* other);
+  friend void swap(LoginLogicRes& a, LoginLogicRes& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline LoginLogicRes* New() const final {
+    return CreateMaybeMessage<LoginLogicRes>(nullptr);
+  }
+
+  LoginLogicRes* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<LoginLogicRes>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const LoginLogicRes& from);
+  void MergeFrom(const LoginLogicRes& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(LoginLogicRes* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 status = 1;
+  void clear_status();
+  static const int kStatusFieldNumber = 1;
+  ::google::protobuf::int32 status() const;
+  void set_status(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:LoginLogicRes)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::int32 status_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
 // ===================================================================
 
 
@@ -2604,9 +2842,49 @@ inline void GetUgameInfoRes::set_allocated_uinfo(::UserGameInfo* uinfo) {
   // @@protoc_insertion_point(field_set_allocated:GetUgameInfoRes.uinfo)
 }
 
+// -------------------------------------------------------------------
+
+// RecvLoginBonuesRes
+
+// int32 status = 1;
+inline void RecvLoginBonuesRes::clear_status() {
+  status_ = 0;
+}
+inline ::google::protobuf::int32 RecvLoginBonuesRes::status() const {
+  // @@protoc_insertion_point(field_get:RecvLoginBonuesRes.status)
+  return status_;
+}
+inline void RecvLoginBonuesRes::set_status(::google::protobuf::int32 value) {
+  
+  status_ = value;
+  // @@protoc_insertion_point(field_set:RecvLoginBonuesRes.status)
+}
+
+// -------------------------------------------------------------------
+
+// LoginLogicRes
+
+// int32 status = 1;
+inline void LoginLogicRes::clear_status() {
+  status_ = 0;
+}
+inline ::google::protobuf::int32 LoginLogicRes::status() const {
+  // @@protoc_insertion_point(field_get:LoginLogicRes.status)
+  return status_;
+}
+inline void LoginLogicRes::set_status(::google::protobuf::int32 value) {
+  
+  status_ = value;
+  // @@protoc_insertion_point(field_set:LoginLogicRes.status)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

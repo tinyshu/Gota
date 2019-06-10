@@ -273,6 +273,10 @@
     <None Include="..\script\database\redis_auth_center.lua" />
     <None Include="..\script\gateway_server\gateway_service.lua" />
     <None Include="..\script\gateway_server\main.lua" />
+    <None Include="..\script\logic_server\logic_game_mgr.lua" />
+    <None Include="..\script\logic_server\logic_player.lua" />
+    <None Include="..\script\logic_server\logic_service.lua" />
+    <None Include="..\script\logic_server\main.lua" />
     <None Include="..\script\main.lua" />
     <None Include="..\script\main_test.lua" />
     <None Include="..\script\respones.lua" />

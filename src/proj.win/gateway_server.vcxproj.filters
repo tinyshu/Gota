@@ -97,6 +97,9 @@
     <Filter Include="src\script\system_server">
       <UniqueIdentifier>{592ebeaf-fec6-4fa7-9544-85254f1a00f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\script\logic_server">
+      <UniqueIdentifier>{4b1dcb82-5eb1-45f0-8067-63142e74c117}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\crypt\base64_encoder.c">
@@ -885,6 +888,18 @@
     </None>
     <None Include="..\script\system_server\login_bonues.lua">
       <Filter>src\script\system_server</Filter>
+    </None>
+    <None Include="..\script\logic_server\logic_service.lua">
+      <Filter>src\script\logic_server</Filter>
+    </None>
+    <None Include="..\script\logic_server\main.lua">
+      <Filter>src\script\logic_server</Filter>
+    </None>
+    <None Include="..\script\logic_server\logic_game_mgr.lua">
+      <Filter>src\script\logic_server</Filter>
+    </None>
+    <None Include="..\script\logic_server\logic_player.lua">
+      <Filter>src\script\logic_server</Filter>
     </None>
   </ItemGroup>
 </Project>

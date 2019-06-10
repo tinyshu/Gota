@@ -37,6 +37,15 @@ enum Cmd {
 	//每日奖励领取
 	eRecvLoginBonuesReq = 15;
 	eRecvLoginBonuesRes = 16;
+	//排行榜
+	eGetWorldRankUchipReq = 17;
+	eGetWorldRankUchipRes = 18;
+	//系统公告
+	eGetSysMsgReq = 19;
+	eGetSysMsgRes = 20;
+	//登录logic服务器
+	eLoginLogicReq = 21;
+	eLoginLogicRes = 22;
 }
 
 message GuestLoginReq{
@@ -112,4 +121,8 @@ message GetUgameInfoRes {
 
 message RecvLoginBonuesRes {
 	int32 status = 1;	
+}
+
+message LoginLogicRes {
+	int32 status = 1;
 }
