@@ -34,7 +34,7 @@ static int lua_timestamp_today(lua_State* tolua_s) {
 }
 
 static int lua_timestamp_yesterday(lua_State* tolua_s) {
-	unsigned long ts = timestamp_today();
+	unsigned long ts = timestamp_yesterday();
 	lua_pushinteger(tolua_s, ts);
 	return 1;
 }

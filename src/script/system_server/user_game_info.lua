@@ -79,9 +79,12 @@ function get_ugame_info(s, msg)
 										uvip  = uinfo.uvip,
 										uchip2  = uinfo.uchip2,
 										uchip3 = uinfo.uchip3, 
-										udata1  = uinfo.udata1,
+										udata1  = uinfo.udata1,               --保留
 										udata2  = uinfo.udata2,
 										udata3 = uinfo.udata3,
+										bonues_status = bonues_info.status,  --是否有奖励
+                                        bonues = bonues_info.bonues,         --奖励数量
+										days = bonues_info.days,             --连续奖励天数
 								        }
 								}
 						  }

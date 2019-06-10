@@ -34,6 +34,9 @@ enum Cmd {
 	//系统服务器协议
 	eGetUgameInfoReq = 13;
 	eGetUgameInfoRes = 14;
+	//每日奖励领取
+	eRecvLoginBonuesReq = 15;
+	eRecvLoginBonuesRes = 16;
 }
 
 message GuestLoginReq{
@@ -97,9 +100,16 @@ message UserGameInfo {
 	 int32 udata1 = 6;
 	 int32 udata2 = 7;
 	 int32 udata3 = 8;
+	 int32 bonues_status = 9;
+	 int32 bonues = 10;
+	 int32 days = 11;
 }
 
 message GetUgameInfoRes {
 	 int32 status = 1;
 	 UserGameInfo uinfo = 2; 
+}
+
+message RecvLoginBonuesRes {
+	int32 status = 1;	
 }

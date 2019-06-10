@@ -81,7 +81,65 @@ function ckeck_login_bonues(uid,cb_handle)
 	
 end
 
+function recv_login_bonues(s,msg)
+	uid = msg[3]
+	print("recv_login_bonues uid:"..uid)
+	mysql_game.get_bonues_info(uid, function (err, bonues_info)
+	  if err then
+		 --返回系统错误
+		  local ret_msg = {
+					        stype=stype_module.SystemServer,ctype=cmd_module.RecvLoginBonuesRes,utag=uid,
+							body={
+									status = res_module.SystemErr
+							}}
+
+			        session_wrapper.send_msg(s,ret_msg)
+					return
+	  end
+
+		-- 这个用户第一次来登陆，默认给插入一条记录
+	  if bonues_info == nil or bonues_info.status~=0 then
+	      local ret_msg = {
+					        stype=stype_module.SystemServer,ctype=cmd_module.RecvLoginBonuesRes,utag=uid,
+							body={
+									status = res_module.InvalidOptErr
+							}}
+
+			        session_wrapper.send_msg(s,ret_msg)
+					return
+	  end
+
+	  --可以领取
+	  mysql_game.update_login_bonues_status(uid,function(err,ret)
+	        if err ~= nil then
+	        	 local ret_msg = {
+					        stype=stype_module.SystemServer,ctype=cmd_module.RecvLoginBonuesRes,utag=uid,
+							body={
+									status = res_module.SystemErr
+							}}
+
+			        session_wrapper.send_msg(s,ret_msg)
+					return
+			end
+            
+			--更新金币数据
+			mysql_game.add_chip(uid, bonues_info.bonues, nil)
+			local ret_msg = {
+					        stype=stype_module.SystemServer,ctype=cmd_module.RecvLoginBonuesRes,utag=uid,
+							body={
+									status = res_module.OK
+							}}
+
+			 session_wrapper.send_msg(s,ret_msg)
+
+      end)
+
+	end)
+
+end
+
 local login_bonues = {
 	ckeck_login_bonues = ckeck_login_bonues,
+	recv_login_bonues = recv_login_bonues,
 }
 return login_bonues

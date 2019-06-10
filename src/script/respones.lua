@@ -12,6 +12,7 @@ local ResponesCode = {
 	UserNameExist = -1004,    --游客升级用户名称已经存在
 	UserIsNotGuest = -1005,   --不是游客状态
 	UserUnamePwdErr = -1006,  --正式登录用户名或密码错误
+	InvalidOptErr   = -1007,  --非法操作
 } 
 
 return ResponesCode

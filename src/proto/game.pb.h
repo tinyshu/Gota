@@ -1545,6 +1545,24 @@ class UserGameInfo : public ::google::protobuf::Message /* @@protoc_insertion_po
   ::google::protobuf::int32 udata3() const;
   void set_udata3(::google::protobuf::int32 value);
 
+  // int32 bonues_status = 9;
+  void clear_bonues_status();
+  static const int kBonuesStatusFieldNumber = 9;
+  ::google::protobuf::int32 bonues_status() const;
+  void set_bonues_status(::google::protobuf::int32 value);
+
+  // int32 bonues = 10;
+  void clear_bonues();
+  static const int kBonuesFieldNumber = 10;
+  ::google::protobuf::int32 bonues() const;
+  void set_bonues(::google::protobuf::int32 value);
+
+  // int32 days = 11;
+  void clear_days();
+  static const int kDaysFieldNumber = 11;
+  ::google::protobuf::int32 days() const;
+  void set_days(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:UserGameInfo)
  private:
   class HasBitSetters;
@@ -1558,6 +1576,9 @@ class UserGameInfo : public ::google::protobuf::Message /* @@protoc_insertion_po
   ::google::protobuf::int32 udata1_;
   ::google::protobuf::int32 udata2_;
   ::google::protobuf::int32 udata3_;
+  ::google::protobuf::int32 bonues_status_;
+  ::google::protobuf::int32 bonues_;
+  ::google::protobuf::int32 days_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_game_2eproto;
 };
@@ -2470,6 +2491,48 @@ inline void UserGameInfo::set_udata3(::google::protobuf::int32 value) {
   
   udata3_ = value;
   // @@protoc_insertion_point(field_set:UserGameInfo.udata3)
+}
+
+// int32 bonues_status = 9;
+inline void UserGameInfo::clear_bonues_status() {
+  bonues_status_ = 0;
+}
+inline ::google::protobuf::int32 UserGameInfo::bonues_status() const {
+  // @@protoc_insertion_point(field_get:UserGameInfo.bonues_status)
+  return bonues_status_;
+}
+inline void UserGameInfo::set_bonues_status(::google::protobuf::int32 value) {
+  
+  bonues_status_ = value;
+  // @@protoc_insertion_point(field_set:UserGameInfo.bonues_status)
+}
+
+// int32 bonues = 10;
+inline void UserGameInfo::clear_bonues() {
+  bonues_ = 0;
+}
+inline ::google::protobuf::int32 UserGameInfo::bonues() const {
+  // @@protoc_insertion_point(field_get:UserGameInfo.bonues)
+  return bonues_;
+}
+inline void UserGameInfo::set_bonues(::google::protobuf::int32 value) {
+  
+  bonues_ = value;
+  // @@protoc_insertion_point(field_set:UserGameInfo.bonues)
+}
+
+// int32 days = 11;
+inline void UserGameInfo::clear_days() {
+  days_ = 0;
+}
+inline ::google::protobuf::int32 UserGameInfo::days() const {
+  // @@protoc_insertion_point(field_get:UserGameInfo.days)
+  return days_;
+}
+inline void UserGameInfo::set_days(::google::protobuf::int32 value) {
+  
+  days_ = value;
+  // @@protoc_insertion_point(field_set:UserGameInfo.days)
 }
 
 // -------------------------------------------------------------------

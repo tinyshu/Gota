@@ -183,13 +183,66 @@ function update_login_bonues(uid, bonues_info, ret_handler)
 		end
 	end)
 end
- 
+
+
+function update_login_bonues_status(uid, ret_handler) 
+	if mysql_conn == nil then 
+		if ret_handler then 
+			ret_handler("mysql is not connected!", nil)
+		end
+		return
+	end
+
+	local sql = "update login_bonues set status = 1 where uid = %d"
+	local sql_cmd = string.format(sql, uid)
+	
+	mysql_wrapper.query(mysql_conn, sql_cmd, function(err, ret)
+		if err then
+			if ret_handler ~= nil then 
+				ret_handler(err, nil)
+			end
+			return
+		end
+
+		if ret_handler then 
+			ret_handler(nil, nil)
+		end
+	end)
+end
+
+function  add_chip(uid, chip, ret_handler)
+	if mysql_conn == nil then 
+		if ret_handler then 
+			ret_handler("mysql is not connected!", nil)
+		end
+		return
+	end
+
+	local sql = "update ugame set uchip = uchip + %d where uid = %d"
+	local sql_cmd = string.format(sql, chip, uid)
+	
+	mysql_wrapper.query(mysql_conn, sql_cmd, function(err, ret)
+		if err then
+			if ret_handler ~= nil then 
+				ret_handler(err, nil)
+			end
+			return
+		end
+
+		if ret_handler then 
+			ret_handler(nil, nil)
+		end
+	end)
+end
+
 local mysql_game = {
 	get_ugame_info = get_ugame_info,
 	insert_ugame_info = insert_ugame_info,
 	get_bonues_info = get_bonues_info,
 	insert_bonues_info = insert_bonues_info,
 	update_login_bonues = update_login_bonues,
+	update_login_bonues_status = update_login_bonues_status,
+	add_chip = add_chip,
 }
 
 return mysql_game

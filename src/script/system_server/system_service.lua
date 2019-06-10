@@ -2,11 +2,13 @@ local stype = require("service_type")
 local Cmd = require("cmd_type")
 local utils = require("utils")
 local ugame_info_module = require("system_server/user_game_info")
+local login_bonues = require("system_server/login_bonues")
 --定义认证服务器协议和函数映射
 --在这里注册auth服务处理的协议和对应得人处理函数
 local system_service_handles = {}
 
 system_service_handles[Cmd.GetUgameInfoReq] = ugame_info_module.get_ugame_info
+system_service_handles[Cmd.RecvLoginBonuesReq] = login_bonues.recv_login_bonues
 -----------------------------------------------
 
 -- {stype, ctype, utag, body}

@@ -15,6 +15,8 @@ local Cmd = {
 	LoginOutRes = 12,
 	GetUgameInfoReq = 13,
 	GetUgameInfoRes = 14,
+	RecvLoginBonuesReq = 15,
+	RecvLoginBonuesRes = 16
 }
      
 return Cmd
