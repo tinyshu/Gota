@@ -24,7 +24,9 @@ local cmd_name_map = {
 	"GetSysMsgReq",
 	"GetSysMsgRes",
 	"LoginLogicReq",
-	"LoginLogicRes"
+	"LoginLogicRes",
+	"EnterZoneReq",
+	"EnterZoneRes"
 
 }
 

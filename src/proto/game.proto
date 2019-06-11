@@ -46,6 +46,9 @@ enum Cmd {
 	//登录logic服务器
 	eLoginLogicReq = 21;
 	eLoginLogicRes = 22;
+	//加入地图,请求匹配
+    eEnterZoneReq = 23;
+	eEnterZoneRes = 24;
 }
 
 message GuestLoginReq{
@@ -124,5 +127,13 @@ message RecvLoginBonuesRes {
 }
 
 message LoginLogicRes {
+	int32 status = 1;
+}
+
+message EnterZoneReq {
+	int32 zid = 1;
+}
+
+message EnterZoneRes {
 	int32 status = 1;
 }

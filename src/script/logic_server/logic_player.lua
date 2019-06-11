@@ -21,7 +21,8 @@ end
 function player:init(uid, s, ret_handler)
 	self.session = s
 	self.uid = uid
-
+	--zid玩家进入的地图，初始化为-1
+	self.zid = -1
 	-- 数据库理面读取玩家的基本信息;
 	mysql_game.get_ugame_info(uid, function (err, ugame_info)
 		if err then

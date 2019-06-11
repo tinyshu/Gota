@@ -901,5 +901,8 @@
     <None Include="..\script\logic_server\logic_player.lua">
       <Filter>src\script\logic_server</Filter>
     </None>
+    <None Include="..\script\logic_server\Zone.lua">
+      <Filter>src\script\logic_server</Filter>
+    </None>
   </ItemGroup>
 </Project>

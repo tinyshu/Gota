@@ -23,6 +23,8 @@ local Cmd = {
 	GetSysMsgRes = 20,
 	LoginLogicReq = 21,
 	LoginLogicRes = 22,
+	EnterZoneReq = 23,
+	EnterZoneRes = 24,
 }
      
 return Cmd

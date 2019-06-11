@@ -277,6 +277,7 @@
     <None Include="..\script\logic_server\logic_player.lua" />
     <None Include="..\script\logic_server\logic_service.lua" />
     <None Include="..\script\logic_server\main.lua" />
+    <None Include="..\script\logic_server\Zone.lua" />
     <None Include="..\script\main.lua" />
     <None Include="..\script\main_test.lua" />
     <None Include="..\script\respones.lua" />
