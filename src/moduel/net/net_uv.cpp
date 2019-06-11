@@ -5,6 +5,7 @@
 #include "../../utils/logger.h"
 #include "net_uv.h"
 #include "proto_type.h"
+#include "../../moduel/netbus/service_manger.h"
 
 #ifdef WIN32
 #include <WinSock2.h>
@@ -550,7 +551,7 @@ static void on_after_read(uv_stream_t* stream, ssize_t nread, const uv_buf_t* bu
 
 }
 
-//新连接回调函数
+//在有新连接成功被连接进来后,调用这个回调函数
 static void on_connection(uv_stream_t* server, int status) {
 	if (status<0) {
 		return;
@@ -589,6 +590,10 @@ static void on_connection(uv_stream_t* server, int status) {
 	//给新连接绑定关心的事件和回调
 	//on_read_alloc_buff 当有读事件触发，该函数会被回调
 	uv_read_start((uv_stream_t*)new_client, on_read_alloc_buff, on_after_read);
+
+	//通知lua层有新连接成功事件
+	server_manage::get_instance().on_session_connect(s);
+
 }
 
 void start_server_ws(char* ip, int port) {
@@ -649,6 +654,7 @@ typedef struct connect_context {
 	void* udata;
 }connect_context;
 
+//连接成功回调函数
 static void on_after_connect(uv_connect_t* handle, int status) {
 	connect_context* context = (connect_context*)handle->data;
 	if (status) {
@@ -664,6 +670,7 @@ static void on_after_connect(uv_connect_t* handle, int status) {
 		return;
 	}
 	
+	
 	if (context->on_connected!=NULL) {
 		io_package* package = (io_package*)handle->handle->data;
 		context->on_connected(NULL, (session_base*)package->s, context->udata);
@@ -675,6 +682,7 @@ static void on_after_connect(uv_connect_t* handle, int status) {
 		return;
 	}
 
+	
 	free(handle->data); //connect_context
 	free(handle);
 }

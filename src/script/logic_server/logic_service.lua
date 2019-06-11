@@ -7,8 +7,9 @@ local utils = require("utils")
 
 local logic_service_handles = {}
 logic_service_handles[Cmd.LoginLogicReq] = logic_game_mgr.login_server_enter
------------------------------------------------
+logic_service_handles[Cmd.UserLostConn] = logic_game_mgr.on_player_disconnect
 
+-----------------------------------------------
 -- {stype, ctype, utag, body}
 function on_logic_recv_cmd(s, msg)
 	--解析数据做响应的逻辑
@@ -23,13 +24,23 @@ function on_logic_recv_cmd(s, msg)
 	end
 end
 
+function on_session_connect(s,stype)
+	print("gateway connect to Logic !!!")
+	logic_game_mgr.on_gateway_connect(s,stype)
+end
+
+--当和网关连接断开，函数被调用
 function on_logic_session_disconnect(s,ctype) 
-    print("on_logic_session_disconnect")
+    print("on_gateway_session_disconnect!! ctype:"..ctype)
+	--当网关断开
+	logic_game_mgr.on_gateway_disconnect(s,ctype)
 end
 
 local logic_service = {
       on_session_recv_cmd = on_logic_recv_cmd,
       on_session_disconnect = on_logic_session_disconnect,
+	  	--gateway重连其他服务器成功,调用
+	  on_session_connect = on_session_connect,
 }
 
 return logic_service

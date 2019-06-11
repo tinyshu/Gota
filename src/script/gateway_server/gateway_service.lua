@@ -3,6 +3,7 @@ local stype_module = require("service_type")
 local cmd_module = require("cmd_type")
 local res_module = require("respones")
 local utils = require("utils")
+local logic_game_mgr = require("logic_server/logic_game_mgr")
 
 --stype到网关连接的session的session映射,存储的连接的服务器的session
 local session_map = {}
@@ -228,7 +229,6 @@ end
 
 --session断开回调函数
 function on_gw_session_disconnect(s,service_stype) 
-	print("on_gw_session_disconnect!!")
     --这个是网关连接其他服务器的session
 	if session_wrapper.is_client_session(s)==1 then
 	--网关连接的session断开回调函数
@@ -268,6 +268,8 @@ function on_gw_session_disconnect(s,service_stype)
 	end
 	
 	if uid~=0 then
+	  --UserLostConn协议是用户非主动退出和网关服务网络异常断开
+	  --由网关广播给其他连接的服务，通知有用户网络异常事件通知
 	  --广播用户断线的消息给，所有连接的网关
 	  local ret_msg = {stype=service_stype,ctype=cmd_module.UserLostConn,utag=uid,body=nil}
 	  session_wrapper.send_msg(server_session,ret_msg)
@@ -280,6 +282,7 @@ local gw_service = {
 	on_session_recv_raw_cmd = on_gw_recv_raw_cmd,
 	--session断线底层调用(客户端session和server的session都会被调用)
 	on_session_disconnect = on_gw_session_disconnect,
+
 }
 
 --模块被加载后，函数会被调用

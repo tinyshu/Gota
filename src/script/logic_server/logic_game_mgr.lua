@@ -27,14 +27,13 @@ function login_server_enter(s,msg)
    
    local play = online_player_map[uid]
    if play ~= nil then
-      --更新session
+      --更新session,这里的session是客户端和gateway的连接对象
       play:set_session(s)
 	  send_logic_enter_status(s,uid,res_module.OK)
 	  return
    end
 
    --没有找到，创建一个player实例
- 
    play = player:new()
    if play == nil then
       print("player:new() is error")
@@ -42,7 +41,6 @@ function login_server_enter(s,msg)
    end
 
    --重db读取player数据
-   
    play:init(uid, s, function(status)
       if status == res_module.OK then
 			online_player_map[uid] = play
@@ -53,8 +51,51 @@ function login_server_enter(s,msg)
    end)
 end
 
+--网关广播过来的用户断线消息
+function on_player_disconnect(s,msg)
+    local uid = msg[3]
+	print("on_player_disconnect uid:"..uid)
+	--先不考虑断线重连，直接先重online_player_map删除
+	if online_player_map[uid] ~= nil then
+	   online_player_map[uid] = nil
+	   online_player_num = online_player_num -1
+	   if online_player_num < 0 then
+	      online_player_num = 0
+	   end  
+	   print("on_player_disconnect online_player_num:"..online_player_num)
+	end
+
+end
+
+--和gateway网关服务断线
+--和网关断开后，会有网关侧发起重连请求
+function on_gateway_disconnect(s,ctype)
+	local k, v
+	--这里只删除player对象里存储的session,online_player_map不清除
+	--2个原因:
+	--1.这里客户端并没有和网关断开，也就是说client和gateway的网关是好的，
+	--2.在和gateway断开后，是需要重新去连接网关的，如果连接成功，在把client和gateway
+	--连接好的session重新设置到player对象就可以了
+    for k, v in pairs(online_player_map) do 
+		v:set_session(nil)
+	end
+
+end
+
+--gateway连接成功触发这个函数，来通知其他服务service
+function on_gateway_connect(s,stype)
+	print("on_gateway_connect stype"..stype)
+	 for k, v in pairs(online_player_map) do 
+		v:set_session(s)
+	end
+
+end
+
 local game_mgr = {
 	login_server_enter = login_server_enter,
+	on_player_disconnect = on_player_disconnect,
+	on_gateway_disconnect = on_gateway_disconnect,
+	on_gateway_connect = on_gateway_connect,
 }
 
 return game_mgr

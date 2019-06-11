@@ -31,23 +31,27 @@ static unsigned s_function_ref_id = 0;
 
 using namespace google::protobuf;
 
-//存储lua传入进来的函数handle_id
+//存储lua传入进来的service设置的回调函数handle_id
 class lua_service_module :public service {
 public:
 	lua_service_module() {
-
 		on_session_recv_cmd_handle = 0;
 		on_session_disconnect_handle = 0;
 		on_session_recv_raw_cmd_handle = 0;
+		on_session_connect_handle = 0;
+
 	}
 
 	virtual bool on_session_recv_cmd(struct session_base*s, recv_msg* msg);
-	virtual void on_session_disconnect(struct session* s,int stype);
 	virtual bool on_session_recv_raw_cmd(struct session_base* s, raw_cmd* msg);
+	virtual void on_session_disconnect(struct session* s, int stype);
+	virtual void on_session_connect(struct session_base* s, int stype);
+
 public:
 	int on_session_recv_cmd_handle;
 	int on_session_disconnect_handle;
 	int on_session_recv_raw_cmd_handle;
+	int on_session_connect_handle;
 };
 
 static void push_pb_message_tolua(const Message* pb_msg) {
@@ -250,12 +254,31 @@ bool lua_service_module::on_session_recv_cmd(struct session_base* s, recv_msg* m
 	return true;
 }
 
+//底层有网络连接断开，调用在有这个函数触发发lua层
 void lua_service_module::on_session_disconnect(struct session* s,int stype) {
+	if (s == NULL) {
+		return;
+	}
 	tolua_pushuserdata(lua_wrapper::get_luastatus(),s);
 	tolua_pushnumber(lua_wrapper::get_luastatus(),stype);
 	if (lua_wrapper::execute_service_fun_by_handle(on_session_disconnect_handle, 2) == 0) {
 		lua_wrapper::remove_service_fun_by_handle(on_session_disconnect_handle);
 	}
+
+}
+
+void lua_service_module::on_session_connect(struct session_base* s,int stype) {
+	if (s == NULL) {
+		return;
+	}
+	tolua_pushuserdata(lua_wrapper::get_luastatus(), s);
+	tolua_pushnumber(lua_wrapper::get_luastatus(), stype);
+	if (on_session_connect_handle != 0) {
+		if (lua_wrapper::execute_service_fun_by_handle(on_session_connect_handle, 2) == 0) {
+			lua_wrapper::remove_service_fun_by_handle(on_session_connect_handle);
+		}
+	}
+	
 }
 
 static void init_service_function_map(lua_State* L) {
@@ -309,13 +332,14 @@ int register_service(lua_State* tolua_s) {
 		return 1;
 	}
 
-	//获取lua传入的table的值，就是函数地址 3-4
+	//获取lua传入的table的值，就是函数地址 3-5,放入lua的栈上
 	lua_getfield(tolua_s, 2, "on_session_recv_cmd");
 	lua_getfield(tolua_s, 2, "on_session_disconnect");
-	
+	lua_getfield(tolua_s, 2, "on_session_connect");
+
 	int on_session_recv_cmd_handle = save_service_function(tolua_s, 3, 0);
 	int on_session_disconnect_handle = save_service_function(tolua_s, 4, 0);
-	
+	int on_session_connect_handle = save_service_function(tolua_s, 5, 0);
 	if (on_session_recv_cmd_handle ==0 && on_session_disconnect_handle ==0) {
 		lua_pushinteger(tolua_s, 0);
 		return 1;
@@ -332,6 +356,7 @@ int register_service(lua_State* tolua_s) {
 	lua_module->on_session_recv_cmd_handle = on_session_recv_cmd_handle;
 	lua_module->on_session_disconnect_handle = on_session_disconnect_handle;
 	lua_module->on_session_recv_raw_cmd_handle = 0;
+	lua_module->on_session_connect_handle = on_session_connect_handle;
 	//注册到service管理模块
 	server_manage::get_instance().register_service(stype, lua_module);
 	lua_pushinteger(tolua_s,1);
@@ -353,9 +378,12 @@ int register_raw_service(lua_State* tolua_s) {
 	//获取lua table的2个函数handle
 	lua_getfield(tolua_s, 2, "on_session_recv_raw_cmd");
 	lua_getfield(tolua_s, 2, "on_session_disconnect");
+	lua_getfield(tolua_s, 2, "on_session_connect");
+
 	int on_session_recv_raw_cmd = save_service_function(tolua_s, 3, 0);
 	int on_session_disconnect_handle = save_service_function(tolua_s, 4, 0);
-	
+	int on_session_connect_handle = save_service_function(tolua_s, 5, 0);
+
 	if (on_session_recv_raw_cmd == 0 && on_session_disconnect_handle == 0) {
 		lua_pushinteger(tolua_s, 0);
 		return 1;
@@ -370,7 +398,7 @@ int register_raw_service(lua_State* tolua_s) {
 	lua_module->on_session_recv_cmd_handle = 0;
 	lua_module->on_session_disconnect_handle = on_session_disconnect_handle;
 	lua_module->on_session_recv_raw_cmd_handle = on_session_recv_raw_cmd;
-
+	lua_module->on_session_connect_handle = on_session_connect_handle;
 	server_manage::get_instance().register_service(stype, lua_module);
 	lua_pushinteger(tolua_s, 1);
 	return 1;
