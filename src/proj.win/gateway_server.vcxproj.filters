@@ -904,5 +904,11 @@
     <None Include="..\script\logic_server\Zone.lua">
       <Filter>src\script\logic_server</Filter>
     </None>
+    <None Include="..\script\logic_server\room_status.lua">
+      <Filter>src\script\logic_server</Filter>
+    </None>
+    <None Include="..\script\logic_server\room.lua">
+      <Filter>src\script\logic_server</Filter>
+    </None>
   </ItemGroup>
 </Project>

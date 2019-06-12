@@ -13,7 +13,7 @@ logic_service_handles[Cmd.EnterZoneReq] = logic_game_mgr.logic_enter_zone
 -- {stype, ctype, utag, body}
 function on_logic_recv_cmd(s, msg)
 	--解析数据做响应的逻辑
-	  print("on_logic_recv_cmd")
+	  print("on_logic_recv_cmd ctype:"..msg[2])
       utils.print_table(msg)
 	--判断cmdid是否有对应的处理函数
 	local ctype = msg[2] --协议id
@@ -25,7 +25,7 @@ function on_logic_recv_cmd(s, msg)
 end
 
 function on_session_connect(s,stype)
-	print("gateway connect to Logic !!!")
+	--print("gateway connect to Logic !!!")
 	logic_game_mgr.on_gateway_connect(s,stype)
 end
 

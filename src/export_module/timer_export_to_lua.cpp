@@ -28,7 +28,16 @@ const char * timer_moduel_name = "timer_wrapper";
 
 static void on_lua_time(void* udata) {
 	timer_handle* handle = (timer_handle*)udata;
-	lua_wrapper::execute_lua_script_by_handle(handle->ref, 0);
+	int ret = lua_wrapper::execute_lua_script_by_handle(handle->ref, 0);
+	if (ret!=0) {
+		int a = 10;
+		//lua_wrapper::remove_lua_script_by_handle(handle->ref);
+	}
+
+	if (handle->repeat_count == -1) {
+		return;
+	}
+
 	if (handle->repeat_count > 0) {
 		handle->repeat_count--;
 		if (handle->repeat_count==0) {

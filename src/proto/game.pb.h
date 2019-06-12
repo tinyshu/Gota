@@ -42,7 +42,7 @@ struct TableStruct_game_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::google::protobuf::internal::ParseTable schema[16]
+  static const ::google::protobuf::internal::ParseTable schema[18]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
@@ -61,6 +61,12 @@ extern EditProfileReqDefaultTypeInternal _EditProfileReq_default_instance_;
 class EditProfileRes;
 class EditProfileResDefaultTypeInternal;
 extern EditProfileResDefaultTypeInternal _EditProfileRes_default_instance_;
+class EnterArriveNotify;
+class EnterArriveNotifyDefaultTypeInternal;
+extern EnterArriveNotifyDefaultTypeInternal _EnterArriveNotify_default_instance_;
+class EnterPlayNotify;
+class EnterPlayNotifyDefaultTypeInternal;
+extern EnterPlayNotifyDefaultTypeInternal _EnterPlayNotify_default_instance_;
 class EnterZoneReq;
 class EnterZoneReqDefaultTypeInternal;
 extern EnterZoneReqDefaultTypeInternal _EnterZoneReq_default_instance_;
@@ -103,6 +109,8 @@ template<> ::AccountUpgradeReq* Arena::CreateMaybeMessage<::AccountUpgradeReq>(A
 template<> ::AccountUpgradeRes* Arena::CreateMaybeMessage<::AccountUpgradeRes>(Arena*);
 template<> ::EditProfileReq* Arena::CreateMaybeMessage<::EditProfileReq>(Arena*);
 template<> ::EditProfileRes* Arena::CreateMaybeMessage<::EditProfileRes>(Arena*);
+template<> ::EnterArriveNotify* Arena::CreateMaybeMessage<::EnterArriveNotify>(Arena*);
+template<> ::EnterPlayNotify* Arena::CreateMaybeMessage<::EnterPlayNotify>(Arena*);
 template<> ::EnterZoneReq* Arena::CreateMaybeMessage<::EnterZoneReq>(Arena*);
 template<> ::EnterZoneRes* Arena::CreateMaybeMessage<::EnterZoneRes>(Arena*);
 template<> ::GetUgameInfoRes* Arena::CreateMaybeMessage<::GetUgameInfoRes>(Arena*);
@@ -167,12 +175,14 @@ enum Cmd {
   eLoginLogicRes = 22,
   eEnterZoneReq = 23,
   eEnterZoneRes = 24,
+  eEnterPlayNotify = 25,
+  eEnterArriveNotify = 26,
   Cmd_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   Cmd_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool Cmd_IsValid(int value);
 const Cmd Cmd_MIN = INVALID_CMD;
-const Cmd Cmd_MAX = eEnterZoneRes;
+const Cmd Cmd_MAX = eEnterArriveNotify;
 const int Cmd_ARRAYSIZE = Cmd_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* Cmd_descriptor();
@@ -2173,6 +2183,257 @@ class EnterZoneRes : public ::google::protobuf::Message /* @@protoc_insertion_po
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_game_2eproto;
 };
+// -------------------------------------------------------------------
+
+class EnterPlayNotify : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:EnterPlayNotify) */ {
+ public:
+  EnterPlayNotify();
+  virtual ~EnterPlayNotify();
+
+  EnterPlayNotify(const EnterPlayNotify& from);
+
+  inline EnterPlayNotify& operator=(const EnterPlayNotify& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  EnterPlayNotify(EnterPlayNotify&& from) noexcept
+    : EnterPlayNotify() {
+    *this = ::std::move(from);
+  }
+
+  inline EnterPlayNotify& operator=(EnterPlayNotify&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const EnterPlayNotify& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const EnterPlayNotify* internal_default_instance() {
+    return reinterpret_cast<const EnterPlayNotify*>(
+               &_EnterPlayNotify_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    16;
+
+  void Swap(EnterPlayNotify* other);
+  friend void swap(EnterPlayNotify& a, EnterPlayNotify& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline EnterPlayNotify* New() const final {
+    return CreateMaybeMessage<EnterPlayNotify>(nullptr);
+  }
+
+  EnterPlayNotify* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<EnterPlayNotify>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const EnterPlayNotify& from);
+  void MergeFrom(const EnterPlayNotify& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(EnterPlayNotify* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 zid = 1;
+  void clear_zid();
+  static const int kZidFieldNumber = 1;
+  ::google::protobuf::int32 zid() const;
+  void set_zid(::google::protobuf::int32 value);
+
+  // int32 roomid = 2;
+  void clear_roomid();
+  static const int kRoomidFieldNumber = 2;
+  ::google::protobuf::int32 roomid() const;
+  void set_roomid(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:EnterPlayNotify)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::int32 zid_;
+  ::google::protobuf::int32 roomid_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
+// -------------------------------------------------------------------
+
+class EnterArriveNotify : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:EnterArriveNotify) */ {
+ public:
+  EnterArriveNotify();
+  virtual ~EnterArriveNotify();
+
+  EnterArriveNotify(const EnterArriveNotify& from);
+
+  inline EnterArriveNotify& operator=(const EnterArriveNotify& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  EnterArriveNotify(EnterArriveNotify&& from) noexcept
+    : EnterArriveNotify() {
+    *this = ::std::move(from);
+  }
+
+  inline EnterArriveNotify& operator=(EnterArriveNotify&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const EnterArriveNotify& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const EnterArriveNotify* internal_default_instance() {
+    return reinterpret_cast<const EnterArriveNotify*>(
+               &_EnterArriveNotify_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    17;
+
+  void Swap(EnterArriveNotify* other);
+  friend void swap(EnterArriveNotify& a, EnterArriveNotify& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline EnterArriveNotify* New() const final {
+    return CreateMaybeMessage<EnterArriveNotify>(nullptr);
+  }
+
+  EnterArriveNotify* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<EnterArriveNotify>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const EnterArriveNotify& from);
+  void MergeFrom(const EnterArriveNotify& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(EnterArriveNotify* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string unick = 1;
+  void clear_unick();
+  static const int kUnickFieldNumber = 1;
+  const ::std::string& unick() const;
+  void set_unick(const ::std::string& value);
+  #if LANG_CXX11
+  void set_unick(::std::string&& value);
+  #endif
+  void set_unick(const char* value);
+  void set_unick(const char* value, size_t size);
+  ::std::string* mutable_unick();
+  ::std::string* release_unick();
+  void set_allocated_unick(::std::string* unick);
+
+  // int32 uface = 2;
+  void clear_uface();
+  static const int kUfaceFieldNumber = 2;
+  ::google::protobuf::int32 uface() const;
+  void set_uface(::google::protobuf::int32 value);
+
+  // int32 usex = 3;
+  void clear_usex();
+  static const int kUsexFieldNumber = 3;
+  ::google::protobuf::int32 usex() const;
+  void set_usex(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:EnterArriveNotify)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr unick_;
+  ::google::protobuf::int32 uface_;
+  ::google::protobuf::int32 usex_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
 // ===================================================================
 
 
@@ -3146,9 +3407,130 @@ inline void EnterZoneRes::set_status(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:EnterZoneRes.status)
 }
 
+// -------------------------------------------------------------------
+
+// EnterPlayNotify
+
+// int32 zid = 1;
+inline void EnterPlayNotify::clear_zid() {
+  zid_ = 0;
+}
+inline ::google::protobuf::int32 EnterPlayNotify::zid() const {
+  // @@protoc_insertion_point(field_get:EnterPlayNotify.zid)
+  return zid_;
+}
+inline void EnterPlayNotify::set_zid(::google::protobuf::int32 value) {
+  
+  zid_ = value;
+  // @@protoc_insertion_point(field_set:EnterPlayNotify.zid)
+}
+
+// int32 roomid = 2;
+inline void EnterPlayNotify::clear_roomid() {
+  roomid_ = 0;
+}
+inline ::google::protobuf::int32 EnterPlayNotify::roomid() const {
+  // @@protoc_insertion_point(field_get:EnterPlayNotify.roomid)
+  return roomid_;
+}
+inline void EnterPlayNotify::set_roomid(::google::protobuf::int32 value) {
+  
+  roomid_ = value;
+  // @@protoc_insertion_point(field_set:EnterPlayNotify.roomid)
+}
+
+// -------------------------------------------------------------------
+
+// EnterArriveNotify
+
+// string unick = 1;
+inline void EnterArriveNotify::clear_unick() {
+  unick_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& EnterArriveNotify::unick() const {
+  // @@protoc_insertion_point(field_get:EnterArriveNotify.unick)
+  return unick_.GetNoArena();
+}
+inline void EnterArriveNotify::set_unick(const ::std::string& value) {
+  
+  unick_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:EnterArriveNotify.unick)
+}
+#if LANG_CXX11
+inline void EnterArriveNotify::set_unick(::std::string&& value) {
+  
+  unick_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:EnterArriveNotify.unick)
+}
+#endif
+inline void EnterArriveNotify::set_unick(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  unick_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:EnterArriveNotify.unick)
+}
+inline void EnterArriveNotify::set_unick(const char* value, size_t size) {
+  
+  unick_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:EnterArriveNotify.unick)
+}
+inline ::std::string* EnterArriveNotify::mutable_unick() {
+  
+  // @@protoc_insertion_point(field_mutable:EnterArriveNotify.unick)
+  return unick_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* EnterArriveNotify::release_unick() {
+  // @@protoc_insertion_point(field_release:EnterArriveNotify.unick)
+  
+  return unick_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void EnterArriveNotify::set_allocated_unick(::std::string* unick) {
+  if (unick != nullptr) {
+    
+  } else {
+    
+  }
+  unick_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), unick);
+  // @@protoc_insertion_point(field_set_allocated:EnterArriveNotify.unick)
+}
+
+// int32 uface = 2;
+inline void EnterArriveNotify::clear_uface() {
+  uface_ = 0;
+}
+inline ::google::protobuf::int32 EnterArriveNotify::uface() const {
+  // @@protoc_insertion_point(field_get:EnterArriveNotify.uface)
+  return uface_;
+}
+inline void EnterArriveNotify::set_uface(::google::protobuf::int32 value) {
+  
+  uface_ = value;
+  // @@protoc_insertion_point(field_set:EnterArriveNotify.uface)
+}
+
+// int32 usex = 3;
+inline void EnterArriveNotify::clear_usex() {
+  usex_ = 0;
+}
+inline ::google::protobuf::int32 EnterArriveNotify::usex() const {
+  // @@protoc_insertion_point(field_get:EnterArriveNotify.usex)
+  return usex_;
+}
+inline void EnterArriveNotify::set_usex(::google::protobuf::int32 value) {
+  
+  usex_ = value;
+  // @@protoc_insertion_point(field_set:EnterArriveNotify.usex)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

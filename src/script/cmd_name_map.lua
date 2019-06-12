@@ -26,7 +26,9 @@ local cmd_name_map = {
 	"LoginLogicReq",
 	"LoginLogicRes",
 	"EnterZoneReq",
-	"EnterZoneRes"
+	"EnterZoneRes",
+	"EnterPlayNotify",
+	"EnterArriveNotify",
 
 }
 

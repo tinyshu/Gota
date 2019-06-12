@@ -25,6 +25,8 @@ local Cmd = {
 	LoginLogicRes = 22,
 	EnterZoneReq = 23,
 	EnterZoneRes = 24,
+	EnterPlayNotify = 25,
+	EnterArriveNotify = 26,
 }
      
 return Cmd

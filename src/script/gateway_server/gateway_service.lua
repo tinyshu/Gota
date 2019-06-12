@@ -3,7 +3,6 @@ local stype_module = require("service_type")
 local cmd_module = require("cmd_type")
 local res_module = require("respones")
 local utils = require("utils")
-local logic_game_mgr = require("logic_server/logic_game_mgr")
 
 --stype到网关连接的session的session映射,存储的连接的服务器的session
 local session_map = {}

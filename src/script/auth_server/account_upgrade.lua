@@ -3,7 +3,7 @@ local stype_module = require("service_type")
 local cmd_module = require("cmd_type")
 local res_module = require("respones")
 local mysql_center = require("database/mysql_auth_center")
-local redis_center = require("database/redis_auth_center")
+--local redis_center = require("database/redis_auth_center")
 local utils = require("utils")
 
 --¸üÐÂdb

@@ -27,7 +27,7 @@ extern "C" {
 #include "../moduel/netbus/recv_msg.h"
 
 const char * service_moduel_name = "service_wrapper";
-static unsigned s_function_ref_id = 0;
+static unsigned service_s_function_ref_id = 0;
 
 using namespace google::protobuf;
 
@@ -262,7 +262,7 @@ void lua_service_module::on_session_disconnect(struct session* s,int stype) {
 	tolua_pushuserdata(lua_wrapper::get_luastatus(),s);
 	tolua_pushnumber(lua_wrapper::get_luastatus(),stype);
 	if (lua_wrapper::execute_service_fun_by_handle(on_session_disconnect_handle, 2) == 0) {
-		lua_wrapper::remove_service_fun_by_handle(on_session_disconnect_handle);
+		//lua_wrapper::remove_service_fun_by_handle(on_session_disconnect_handle);
 	}
 
 }
@@ -275,7 +275,7 @@ void lua_service_module::on_session_connect(struct session_base* s,int stype) {
 	tolua_pushnumber(lua_wrapper::get_luastatus(), stype);
 	if (on_session_connect_handle != 0) {
 		if (lua_wrapper::execute_service_fun_by_handle(on_session_connect_handle, 2) == 0) {
-			lua_wrapper::remove_service_fun_by_handle(on_session_connect_handle);
+			//lua_wrapper::remove_service_fun_by_handle(on_session_connect_handle);
 		}
 	}
 	
@@ -296,7 +296,7 @@ static unsigned int save_service_function(lua_State* L, int lo, int def)
 		return 0;
 	}
 
-	s_function_ref_id++;
+	service_s_function_ref_id++;
 
 	lua_pushstring(L, SERVICE_FUNCTION_MAPPING);
 	//把 t[k] 值压入堆栈， 这里的 t 是指有效索引 index 指向的值， 而 k 则是栈顶放的值。
@@ -304,7 +304,7 @@ static unsigned int save_service_function(lua_State* L, int lo, int def)
 	//通过伪索引获取SERVICE_FUNCTION_MAPPING表，并放入栈顶
 	lua_rawget(L, LUA_REGISTRYINDEX);                           /* stack: fun ... refid_fun */
 	//放入函数对应的func_id
-	lua_pushinteger(L, s_function_ref_id);                      /* stack: fun ... refid_fun refid */
+	lua_pushinteger(L, service_s_function_ref_id);                      /* stack: fun ... refid_fun refid */
 	//现在栈最上面是 func_id table table_name
 	//把堆栈上给定有效处索引处的元素作一个拷贝压栈
 	lua_pushvalue(L, lo);                                       /* stack: fun ... refid_fun refid fun */
@@ -317,7 +317,7 @@ static unsigned int save_service_function(lua_State* L, int lo, int def)
 	lua_rawset(L, -3);                  /* refid_fun[refid] = fun, stack: fun ... refid_ptr */
 	lua_pop(L, 1);                                              /* stack: fun ... */
 
-	return s_function_ref_id;
+	return service_s_function_ref_id;
 }
 
 int register_service(lua_State* tolua_s) {
