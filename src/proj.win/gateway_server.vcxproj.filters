@@ -910,5 +910,11 @@
     <None Include="..\script\logic_server\room.lua">
       <Filter>src\script\logic_server</Filter>
     </None>
+    <None Include="..\script\logic_server\robot.lua">
+      <Filter>src\script\logic_server</Filter>
+    </None>
+    <None Include="..\script\database\redis_game.lua">
+      <Filter>src\script\database</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -5,6 +5,14 @@ local ugame_info_conf = require("user_game_config")
 
 local mysql_conn = nil
 
+local function is_connectd()
+	if not mysql_conn then
+	   return false
+	end
+
+	return true
+end
+
 function mysql_connect_to_moba_game()
       local moba_conf = config.moba_mysql
 	  mysql_wrapper.connect(moba_conf.host,moba_conf.port,moba_conf.db_name,
@@ -235,6 +243,58 @@ function  add_chip(uid, chip, ret_handler)
 	end)
 end
 
+function get_robots_ugame_info(ret_handler)
+	if mysql_conn == nil then 
+		if ret_handler then 
+			ret_handler("mysql is not connected!", nil)
+		end
+		return
+	end
+
+	local sql = "select uchip, uchip2, uchip3, uvip, uvip_endtime, udata1, udata2, udata3, uexp, ustatus, uid from ugame where is_robot = 1"
+	local sql_cmd = sql
+	print(sql_cmd)
+	mysql_wrapper.query(mysql_conn, sql_cmd, function(err, ret)
+		if err then 
+			if ret_handler ~= nil then 
+				ret_handler(err, nil)
+			end
+			return
+		end
+
+		-- 没有这条记录
+		if ret == nil or #ret <= 0 then 
+			if ret_handler ~= nil then 
+				ret_handler(nil, nil)
+			end
+			return
+		end
+		-- end
+		
+		local k, v
+		local robots = {}
+		for k, v in pairs(ret) do 
+			local result = v
+			local one_robot = {}
+			one_robot.uchip = tonumber(result[1])
+			one_robot.uchip2 = tonumber(result[2])
+			one_robot.uchip3 = tonumber(result[3])
+			one_robot.uvip = tonumber(result[4])
+			one_robot.uvip_endtime = tonumber(result[5])
+			one_robot.udata1 = tonumber(result[6])
+			one_robot.udata2 = tonumber(result[7])
+			one_robot.udata3 = tonumber(result[8])
+			one_robot.uexp = tonumber(result[9])
+			one_robot.ustatus = tonumber(result[10])
+			one_robot.uid = tonumber(result[11])
+
+			table.insert(robots, one_robot)
+		end
+
+		ret_handler(nil, robots)
+	end)
+end
+
 local mysql_game = {
 	get_ugame_info = get_ugame_info,
 	insert_ugame_info = insert_ugame_info,
@@ -243,6 +303,8 @@ local mysql_game = {
 	update_login_bonues = update_login_bonues,
 	update_login_bonues_status = update_login_bonues_status,
 	add_chip = add_chip,
+	is_connectd = is_connectd,
+	get_robots_ugame_info = get_robots_ugame_info,
 }
 
 return mysql_game

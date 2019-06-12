@@ -2,6 +2,14 @@ local config = require("conf")
 local mysql_conn = nil
 local utils = require("utils")
 
+local function is_connectd()
+	if not mysql_conn then
+	   return false
+	end
+
+	return true
+end
+
 function mysql_connect_auth_center()
 
 	local auth_conf = config.auth_mysql
@@ -52,7 +60,6 @@ function get_userinfo_by_uid(uid,cb_handle)
 					t_userinfo.uvip = result[5]
 					t_userinfo.status = tonumber(result[6])
 					t_userinfo.is_guest = tonumber(result[7])
-					print_r(t_userinfo)
 				    cb_handle(nil,t_userinfo)
 			end 
 	end)
@@ -223,6 +230,7 @@ local mysql_auth_center={
 	get_userinfo_by_uid = get_userinfo_by_uid,
 	do_account_upgrade = do_account_upgrade,
 	get_uinfo_by_uname_upwd = get_uinfo_by_uname_upwd,
+	is_connectd = is_connectd,
 }
 
 return mysql_auth_center

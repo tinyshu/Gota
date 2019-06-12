@@ -17,21 +17,30 @@ CREATE DATABASE IF NOT EXISTS `moba_game` /*!40100 DEFAULT CHARACTER SET utf8 */
 USE `moba_game`;
 
 -- 导出  表 moba_game.ugame 结构
-CREATE TABLE IF NOT EXISTS `ugame` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '记录唯一的id号',
-  `uid` int(11) NOT NULL COMMENT '用户唯一的id号',
-  `uchip` int(11) NOT NULL DEFAULT '0' COMMENT '用户的金币数目',
-  `uchip2` int(11) NOT NULL DEFAULT '0' COMMENT '用户的其他货币或等价物，你自己可以设计',
-  `uchip3` int(11) NOT NULL DEFAULT '0' COMMENT '用户的其他货币或等价物，你自己可以设计',
-  `uvip` int(11) NOT NULL DEFAULT '0' COMMENT '用户在本游戏中的等级',
-  `uvip_endtime` int(11) NOT NULL DEFAULT '0' COMMENT 'vip结束时间',
-  `udata1` int(11) NOT NULL DEFAULT '0' COMMENT '用户在游戏中的道具1',
-  `udata2` int(11) NOT NULL DEFAULT '0' COMMENT '用户在游戏中的道具2',
-  `udata3` int(11) NOT NULL DEFAULT '0' COMMENT '用户在游戏中的道具3',
-  `uexp` int(11) NOT NULL DEFAULT '0' COMMENT '用户的经验值',
-  `ustatus` int(11) NOT NULL DEFAULT '0' COMMENT '0正常，其他为不正常',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='moba游戏数据表, 存放用户的游戏数据';
+CREATE TABLE `ugame` (
+`id`  int(11) NOT NULL AUTO_INCREMENT COMMENT '记录唯一的id号' ,
+`uid`  int(11) NOT NULL COMMENT '用户唯一的id号' ,
+`uchip`  int(11) NOT NULL DEFAULT 0 COMMENT '用户的金币数目' ,
+`uchip2`  int(11) NOT NULL DEFAULT 0 COMMENT '用户的其他货币或等价物，你自己可以设计' ,
+`uchip3`  int(11) NOT NULL DEFAULT 0 COMMENT '用户的其他货币或等价物，你自己可以设计' ,
+`uvip`  int(11) NOT NULL DEFAULT 0 COMMENT '用户在本游戏中的等级' ,
+`uvip_endtime`  int(11) NOT NULL DEFAULT 0 COMMENT 'vip结束时间' ,
+`udata1`  int(11) NOT NULL DEFAULT 0 COMMENT '用户在游戏中的道具1' ,
+`udata2`  int(11) NOT NULL DEFAULT 0 COMMENT '用户在游戏中的道具2' ,
+`udata3`  int(11) NOT NULL DEFAULT 0 COMMENT '用户在游戏中的道具3' ,
+`uexp`  int(11) NOT NULL DEFAULT 0 COMMENT '用户的经验值' ,
+`ustatus`  int(11) NOT NULL DEFAULT 0 COMMENT '0正常，其他为不正常' ,
+`is_robot`  tinyint(4) NULL DEFAULT 0 COMMENT '1机器人 0用户' ,
+PRIMARY KEY (`id`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+COMMENT='moba游戏数据表, 存放用户的游戏数据'
+AUTO_INCREMENT=3
+ROW_FORMAT=DYNAMIC
+;
+
+
 
 -- 数据导出被取消选择。
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

@@ -3,6 +3,14 @@ local redis_conn = nil
 --user key =auth_center_user_uid_xxxx–Œ Ω 
 auth_key = "auth_center_user_uid_" 
 
+local function is_connectd()
+	if not redis_conn then
+	   return false
+	end
+
+	return true
+end
+
 function redis_connect_auth_center()
 	local redis_auth_conf = config.center_redis
 	local host = redis_auth_conf.host
@@ -110,7 +118,8 @@ end
 local redis_auth_center={
 	set_userinfo_to_redis = set_userinfo_to_redis,
     get_userinfo_to_redis = get_userinfo_to_redis,
-	edit_profile_to_redis = edit_profile_to_redis
+	edit_profile_to_redis = edit_profile_to_redis,
+	is_connectd = is_connectd,
 }
 
 return redis_auth_center

@@ -7,6 +7,13 @@ local zone =   require("logic_server/Zone")
 local room_moduel = require("logic_server/room")
 local room_status = require("logic_server/room_status")
 
+local mysql_game = require("database/mysql_system_ugame")
+local redis_game = require("database/redis_game")
+--中心服务存储接口
+--中心服务存储接口
+local mysql_center = require("database/mysql_auth_center")
+local redis_center = require("database/redis_auth_center")
+
 --uid和player的对应关系
 local online_player_map = {}
 local online_player_num = 0
@@ -23,6 +30,64 @@ local room_list = {}
 room_list[zone.SGYD] = {}
 room_list[zone.ASSY] = {}
 
+function do_load_robot_uinfo(now_index, robots)
+    mysql_center.get_userinfo_by_uid(robots[now_index].uid, function (err, uinfo)
+    if err or not uinfo then
+	        print("get_userinfo_by_uid error"..err)
+			return 
+	end
+
+	redis_center.set_userinfo_to_redis(robots[now_index].uid, uinfo)
+	print("uid " .. robots[now_index].uid .. " load to center reids!!!")
+	now_index = now_index + 1
+	if now_index > #robots then
+			return 
+	end
+
+	do_load_robot_uinfo(now_index, robots)
+	end)
+end
+
+function do_load_robot_ugame_info()
+    print("do_load_robot_ugame_info")
+	mysql_game.get_robots_ugame_info(function(err, ret)
+	    if err then
+		    print("get_robots_ugame_info err"..err)
+			return 
+		end
+
+		--没有数据
+		if not ret or #ret <= 0 then 
+			return
+		end
+
+		--把数据添加到redis
+		local k, v
+		for k, v in pairs(ret) do
+			redis_game.set_ugame_info_inredis(v.uid, v)
+		end
+
+		--把用户中心信息设置到game数据
+		do_load_robot_uinfo(1, ret)
+	end)
+end
+
+function load_robots()
+    print("load_robots")
+	if not mysql_game.is_connectd() or 
+	   not mysql_center.is_connectd() or 
+	   not redis_center.is_connectd() or not redis_game.is_connectd() then 
+	       print("create_timer_once")
+		   --启动一个一次性定时任务
+	       timer_wrapper.create_timer_once(load_robots,1000,1000)
+	       return
+	end
+
+	--读取robot数据
+	do_load_robot_ugame_info()
+end
+
+load_robots()
 
 
 --找到一个状态是InView的房间
