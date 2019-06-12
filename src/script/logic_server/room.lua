@@ -5,7 +5,7 @@ local res_module = require("respones")
 local utils = require("utils")
 local player = require("logic_server/logic_player")
 local zone =   require("logic_server/Zone")
-local room_status = require("logic_server/room_status")
+local status = require("logic_server/room_status")
 --当前放假全局id
 local g_room_id = 1
 --定义一边的参与人数,一局的人数就是*2
@@ -26,25 +26,30 @@ function room:new(instant)
 end
 
 function room:init(zid)
+
     self.zid = zid
 	self.room_id = g_room_id
-	sg_matchid = sg_matchid + 1
-	self.room_state = room_status.InView
+	roomid = g_room_id + 1
+	self.room_state = status.InView
 	 
 	self.inview_players = {}  -- 旁观玩家的列表
 	self.lhs_players = {}     -- 左右两边的玩家
 	self.rhs_players = {}     -- 左右两边的玩家
+
+	print("room:init(zid)")
 end
 
-function room:enter_player(p)
+function room:enter_room(p)
 
-	print("room:enter_player start")
+	print("room:enter_room start")
     if p == nil then
 	   print("enter p is null")
 	   return false
 	end 
 	--判断房间和玩家状态是否合法
-	if self.room_state ~= room_status.InView or p.state ~= room_status.InView then 
+	print("room_status:"..self.room_state.."pstatus"..p.status)
+	if self.room_state ~= status.InView or p.status ~= status.InView then 
+	    print("room:enter_room return false")
 		return false
 	end
 
@@ -79,12 +84,12 @@ function room:enter_player(p)
 
 	-- 判断我们当前是否集结玩家结束了
 	if #self.inview_players >= PLAYER_NUM_3v3 * 2 then 
-	   self.room_state = room_status.Ready
+	   self.room_state = status.Ready
 	   	for i = 1, #self.inview_players do 
-			self.inview_players[i].state = room_status.Ready
+			self.inview_players[i].state = status.Ready
 		end
 	end
-	print("room:enter_player end")
+	print("room:enter_room end")
 	return true
 end
 

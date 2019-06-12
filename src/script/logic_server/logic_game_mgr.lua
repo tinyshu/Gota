@@ -31,7 +31,7 @@ local function search_inview_match_mgr(zid)
 	   return nil
 	end
 	
-	--获取zid地图全部放假list
+	--获取zid地图全部list
 	zid_room_list = room_list[zid]
 	if zid_room_list == nil then
 	    print("search_inview_match_mgr zid_room_list is nil")
@@ -45,11 +45,9 @@ local function search_inview_match_mgr(zid)
 	   end
 
 	   --判断当前人数是否已满
-
 	end
 	--找不到,创建一个新room对象返回
-	print("room:new()")
-	local croom = room:new()
+	local croom = room_moduel:new()
 	croom:init(zid)
 	table.insert(zid_room_list,croom)
 	return croom
@@ -61,28 +59,27 @@ function do_match_sgyd_map()
  
 	--等待zone.SGYD地图的全部玩家列表
 	if #zone_wait_list == 0  then
-	   --print("zone_wait_list len:"..#zone_wait_list)
 	   return
 	end
-	print("zone_wait_list len:"..#zone_wait_list)
+
 	local zid, wait_list
 	--遍历所有的等待列表
 	for zid, wait_list in pairs(zone_wait_list) do 
-	    print("zid, wait_list in pairs(zone_wait_list)")
 	    local k,v
 	    for k,v in pairs(wait_list) do
 	        --k:uid v:player
 	        local room =  search_inview_match_mgr(zid)
-	        if room ~= nil then
-			   print("find room:enter_room uid:"..k)
-	           if room:enter_room(v) == false then
+	        if room then
+	           if not room:enter_room(v) then
 			      --出错
 				  print("room:enter_room error! v.status:"..v.status)
 			   else
 			      --加入成功，从等待列表移除
-				  wait_list[k] = nil
+				  print("add success wait_list remove! uid:"..k)
+				  zone_wait_list[zid][k] = nil
 			   end
-
+		    else
+			   print("room is nil")
 	        end
 	    end
 	end
