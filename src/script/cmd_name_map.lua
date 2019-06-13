@@ -29,6 +29,9 @@ local cmd_name_map = {
 	"EnterZoneRes",
 	"EnterPlayNotify",
 	"EnterArriveNotify",
+	"ExitRoomReq",
+	"ExitRoomRes",
+	"UserExitRoomNotify",
 
 }
 

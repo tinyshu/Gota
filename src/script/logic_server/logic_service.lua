@@ -7,8 +7,9 @@ local utils = require("utils")
 
 local logic_service_handles = {}
 logic_service_handles[Cmd.LoginLogicReq] = logic_game_mgr.login_server_enter
-logic_service_handles[Cmd.UserLostConn] = logic_game_mgr.on_player_disconnect
-logic_service_handles[Cmd.EnterZoneReq] = logic_game_mgr.logic_enter_zone
+logic_service_handles[Cmd.UserLostConn] =  logic_game_mgr.on_player_disconnect
+logic_service_handles[Cmd.EnterZoneReq] =  logic_game_mgr.logic_enter_zone
+logic_service_handles[Cmd.ExitRoomReq] =   logic_game_mgr.ExitRoomReq
 -----------------------------------------------
 -- {stype, ctype, utag, body}
 function on_logic_recv_cmd(s, msg)

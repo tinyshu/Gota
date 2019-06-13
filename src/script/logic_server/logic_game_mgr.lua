@@ -180,7 +180,7 @@ local function search_inview_match_mgr(zid)
 	end
 	
 	--获取zid地图全部list
-	zid_room_list = room_list[zid]
+	local zid_room_list = room_list[zid]
 	if zid_room_list == nil then
 	    print("search_inview_match_mgr zid_room_list is nil")
 	    return nil
@@ -197,7 +197,10 @@ local function search_inview_match_mgr(zid)
 	--找不到,创建一个新room对象返回
 	local croom = room_moduel:new()
 	croom:init(zid)
-	table.insert(zid_room_list,croom)
+	--table.insert(zid_room_list,croom)
+	print("croom.roomid: "..croom.room_id)
+	zid_room_list[croom.room_id] = croom
+	
 	return croom
 end
 
@@ -409,12 +412,72 @@ function logic_enter_zone(s,msg)
 
 end
 
+--玩家退出等待列表
+function ExitRoomReq(s,msg)
+	local uid = msg[3]
+	if uid <= 0 then
+	    
+	     local ret_msg = {
+			       stype=stype,ctype=cmd_module.ExitRoomRes,utag=uid,
+				   body={
+							status = res_module.InvalidOptErr
+					    }}
+                    
+		 session_wrapper.send_msg(s,ret_msg)
+		 return
+     end
+	 
+	 local play = online_player_map[uid]
+	 if play == nil then
+	  
+	    local ret_msg = {
+			       stype=stype,ctype=cmd_module.ExitRoomRes,utag=uid,
+				   body={
+							status = res_module.InvalidOptErr
+					    }}
+                    
+		 session_wrapper.send_msg(s,ret_msg)
+		 return
+	 end
+	 
+	 if play.status ~= room_status.InView then
+	     
+	      local ret_msg = {
+			       stype=stype,ctype=cmd_module.ExitRoomRes,utag=uid,
+				   body={
+							status = res_module.InvalidOptErr
+					    }}
+                    
+		 session_wrapper.send_msg(s,ret_msg)
+		 return
+	 end
+
+	 --获取用户所在的房间对象
+	 local croom = room_list[play.zid][play.roomid]
+	 if croom == nil or croom.room_state ~= room_status.InView then
+	     print("ExitRoomReq 444")
+	     local ret_msg = {
+			       stype=stype,ctype=cmd_module.ExitRoomRes,utag=uid,
+				   body={
+							status = res_module.InvalidOptErr
+					    }}
+                    
+		 session_wrapper.send_msg(s,ret_msg)
+		 return
+	 end
+
+	 --开始做玩家利空逻辑
+	 --croom:exit_room(play);
+	 croom:exit_room(play);
+end
+
 local game_mgr = {
 	login_server_enter = login_server_enter,
 	on_player_disconnect = on_player_disconnect,
 	on_gateway_disconnect = on_gateway_disconnect,
 	on_gateway_connect = on_gateway_connect,
 	logic_enter_zone = logic_enter_zone,
+	ExitRoomReq = ExitRoomReq,
 }
 
 return game_mgr

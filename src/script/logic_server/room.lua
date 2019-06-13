@@ -35,8 +35,32 @@ function room:init(zid)
 	self.inview_players = {}  -- 旁观玩家的列表
 	self.lhs_players = {}     -- 左右两边的玩家
 	self.rhs_players = {}     -- 左右两边的玩家
+end
 
-	print("room:init(zid)")
+function room:exit_room(p)
+	
+	if p == nil then
+	   print("exit p is null")
+	   return false
+	end
+    
+	--先从等待匹配列表移除
+	local index = 0
+	for index = 1, #self.inview_players do
+		if (self.inview_players[index] == p) then
+			table.remove(self.inview_players, index); 
+		end 
+	end
+
+	--通知玩家，退出成功
+	p.zid = -1;
+	p.matchid = -1
+	local body = {status = res_module.OK}
+	p:send_cmd(stype_module.LogicServer, cmd_module.ExitRoomRes, body)
+	
+	--广播其他用户有用户退出房间
+
+
 end
 
 function room:enter_room(p)
