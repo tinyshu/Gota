@@ -22,16 +22,20 @@ end
 function player:init(uid, s, ret_handler)
 	self.session = s
 	self.uid = uid
-	--zid玩家进入的地图，初始化为-1
+	--zid玩家进入的地图，初始化为-1,表示为不在任何地图，
 	self.zid = -1
 	--房间唯一标识符
 	self.roomid = -1
 	--用户在房间里的状态
 	self.status = room_status.InView
+	--是否为机器人玩家
+	self.is_robot = false
 	-- 数据库理面读取玩家的基本信息;
 	mysql_game.get_ugame_info(uid, function (err, ugame_info)
 		if err then
-			ret_handler(res_module.SystemErr) 
+		    if ret_handler then
+			   ret_handler(res_module.SystemErr) 
+			end
 			return
 		end
 
@@ -43,13 +47,17 @@ function player:init(uid, s, ret_handler)
 	    redis_center.get_userinfo_to_redis(self.uid,function(err,user_uinfo)
 	    if err ~= nil then
 		   print("get_userinfo_to_redis err:"..err)
-		   ret_handler(res_module.SystemErr) 
+		   if ret_handler then
+		     ret_handler(res_module.SystemErr)
+		   end	  
 		   return
 		end
 
 		print("play read redis unick:"..user_uinfo.unick.." uface:"..user_uinfo.uface)
 		self.uinfo = user_uinfo
-		ret_handler(res_module.OK) 
+		if ret_handler then
+		   ret_handler(res_module.OK)
+		end 
     end)
  end)
 	-- end
@@ -63,7 +71,7 @@ function player:set_session(s)
 end
 
 function player:send_cmd(sstype, cctype, cbody)
-	if not self.session then 
+	if not self.session or self.is_robot==true then 
 		return
 	end
 

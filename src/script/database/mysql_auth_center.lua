@@ -30,9 +30,9 @@ end
 mysql_connect_auth_center()
 
 function get_userinfo_by_uid(uid,cb_handle)
-	print("get_userinfo_by_uid call")	if mysql_conn==nil then	   cb_handle("mysql is not connect",nil)	   return 	end
+	--print("get_userinfo_by_uid call")	if mysql_conn==nil then	   cb_handle("mysql is not connect",nil)	   return 	end
 
-	local sql = "select uid, unick, usex, uface, uvip, status ,is_guest from uinfo where uid = %d limit 1";	local sql_cmd = string.format(sql,uid)	print("get_userinfo_by_uid: "..sql_cmd)
+	local sql = "select uid, unick, usex, uface, uvip, status ,is_guest from uinfo where uid = %d limit 1";	local sql_cmd = string.format(sql,uid)	--print("get_userinfo_by_uid: "..sql_cmd)
 
 	mysql_wrapper.query(mysql_conn,sql_cmd,function(err,t_ret_userinfo)
             --≤È—Ø¥Ì

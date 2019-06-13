@@ -41,11 +41,11 @@ end
 
 function room:enter_room(p)
 
-	print("room:enter_room start")
     if p == nil then
 	   print("enter p is null")
 	   return false
 	end 
+	
 	--判断房间和玩家状态是否合法
 	print("room_status:"..self.room_state.."pstatus"..p.status)
 	if self.room_state ~= status.InView or p.status ~= status.InView then 
@@ -84,12 +84,13 @@ function room:enter_room(p)
 
 	-- 判断我们当前是否集结玩家结束了
 	if #self.inview_players >= PLAYER_NUM_3v3 * 2 then 
+	   print("room is read!!!")
 	   self.room_state = status.Ready
 	   	for i = 1, #self.inview_players do 
 			self.inview_players[i].state = status.Ready
 		end
 	end
-	print("room:enter_room end")
+	--print("room:enter_room end")
 	return true
 end
 

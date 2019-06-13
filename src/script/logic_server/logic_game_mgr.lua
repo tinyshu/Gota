@@ -13,7 +13,7 @@ local redis_game = require("database/redis_game")
 --中心服务存储接口
 local mysql_center = require("database/mysql_auth_center")
 local redis_center = require("database/redis_auth_center")
-
+local robot_player = require("logic_server/robot")
 --uid和player的对应关系
 local online_player_map = {}
 local online_player_num = 0
@@ -25,10 +25,51 @@ local online_player_num = 0
 local zone_wait_list = {} 
 
 --匹配成功比赛房间列表,也是按照zid来划分
---room_list[zid]获取全部zid地图的房间列表list
+--room_list[zid]获取全部zid地图的房间列表list  表格式: {zid,{roomid,room}}
 local room_list = {}
 room_list[zone.SGYD] = {}
 room_list[zone.ASSY] = {}
+
+--机器人列表,也是按照地图涵划分 表格式{zid,{uid,borot}}
+local zone_robot_list = {}
+zone_robot_list[zone.SGYD] = {}
+zone_robot_list[zone.ASSY] = {}
+
+local function do_new_robot_play(robotlist)
+  
+	if #robotlist <=0 then
+	   return
+	end
+
+	--根据地图来划分robot
+	local half_len = #robotlist
+	local i = 1
+	half_len = math.floor(half_len * 0.5)
+	print("half_len:"..half_len)
+	--创建robot对象
+    --for i = 1, half_len do 
+	--先不划分，把全部robot放到一个地图
+	for i = 1, #robotlist do 
+	    local v = robotlist[i] 
+		local robot = robot_player:new()
+		robot:init(v.uid,nil,nil)
+		robot.zid = zone.SGYD
+		zone_robot_list[zone.SGYD][v.uid] = robot
+		
+	end
+	--[[
+	   for i = half_len + 1, #robotlist do 
+	    local v = robotlist[i] 
+		local robot = robot_player:new()
+		robot:init(v.uid,nil,nil)
+		robot.zid = zone.ASSY
+		zone_robot_list[zone.ASSY][v.uid] = robot
+		print("zone_robot_list[zone.ASSY][v.uid] = robot")
+	end
+	]]
+	
+
+end
 
 function do_load_robot_uinfo(now_index, robots)
     mysql_center.get_userinfo_by_uid(robots[now_index].uid, function (err, uinfo)
@@ -38,18 +79,60 @@ function do_load_robot_uinfo(now_index, robots)
 	end
 
 	redis_center.set_userinfo_to_redis(robots[now_index].uid, uinfo)
-	print("uid " .. robots[now_index].uid .. " load to center reids!!!")
+	--print("uid " .. robots[now_index].uid .. " load to center reids!!!")
 	now_index = now_index + 1
 	if now_index > #robots then
-			return 
+	   --到这里说明全部robot数据加载完成
+	   --创建robot对象，并存储到zone_robot_list列表
+	   do_new_robot_play(robots)
+	   return 
 	end
 
 	do_load_robot_uinfo(now_index, robots)
 	end)
 end
 
+local function search_idle_robot(zid)
+	local robots = zone_robot_list[zid]
+	local k, v 
+	for k, v in pairs(robots) do 
+		if v.roomid == -1 then
+			return v 
+		end
+	end
+
+	return nil
+end
+
+--由于定时器触发，来把robot放入到比赛中
+function do_push_to_match()
+   
+	--遍历全部在inview状态下的房间,然后在找到一个robot对象，添加进房间
+    local zid, zid_room_list
+	local k, room  
+	for zid, zid_room_list in pairs(room_list) do 
+	    
+		for k, room in pairs(zid_room_list) do
+			if room.room_state == room_status.InView then  -- 找到了一个空闲的room
+				--找到一个可以加入的robot
+				--print("room state is InView zid"..zid)
+				local robot = search_idle_robot(zid)
+				if robot then
+					print("[".. robot.uid .."]" .. " enter match!")
+					robot.zid = zid
+					room:enter_room(robot) 
+				end
+			end 
+		end
+	end
+
+end
+
+--启动一个1s执行一次的定时任务 ，如果不需要robot模式
+timer_wrapper.create_timer(do_push_to_match,-1,2000,1000)
+
 function do_load_robot_ugame_info()
-    print("do_load_robot_ugame_info")
+ 
 	mysql_game.get_robots_ugame_info(function(err, ret)
 	    if err then
 		    print("get_robots_ugame_info err"..err)
@@ -73,11 +156,11 @@ function do_load_robot_ugame_info()
 end
 
 function load_robots()
-    print("load_robots")
+    --print("load_robots")
 	if not mysql_game.is_connectd() or 
 	   not mysql_center.is_connectd() or 
 	   not redis_center.is_connectd() or not redis_game.is_connectd() then 
-	       print("create_timer_once")
+	       --print("create_timer_once")
 		   --启动一个一次性定时任务
 	       timer_wrapper.create_timer_once(load_robots,1000,1000)
 	       return

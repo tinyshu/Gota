@@ -39,7 +39,7 @@ end
 redis_connect_auth_center()
 
 function set_userinfo_to_redis(uid,uinfo)
-	print("set_userinfo_to_redis uid:"..uid)
+	--print("set_userinfo_to_redis uid:"..uid)
 	if uid < 0 or redis_conn== nil then
 	   print("uid error uid:"..uid)
 	   return
@@ -48,14 +48,14 @@ function set_userinfo_to_redis(uid,uinfo)
 	--HMSET key field value [field value …] 给hash设置值
 	--hmset key unkci v1 uface v2 usezx v3
 	local key = auth_key .. uid 
-	print("key:"..key)
+	--print("key:"..key)
 	local redis_cmd = "hmset " .. key .. 
 	" unick " .. uinfo.unick ..
 	" uface " .. uinfo.uface ..
 	" usex "  .. uinfo.usex ..
 	" uvip "  .. uinfo.uvip ..
 	" is_guest ".. uinfo.is_guest
-	print(redis_cmd)
+	--print(redis_cmd)
 	redis_wrapper.query(redis_conn,redis_cmd,function(err,ret)
 	  if err then
 	     print("err"..err)
@@ -64,7 +64,7 @@ function set_userinfo_to_redis(uid,uinfo)
 end
 
 function get_userinfo_to_redis(uid,cb_handle)
-	print("get_userinfo_to_redis uid:"..uid)
+	--print("get_userinfo_to_redis uid:"..uid)
 	if uid < 0 or redis_conn == nil then
 	   print("uid error uid:"..uid)
 	   return
@@ -73,7 +73,7 @@ function get_userinfo_to_redis(uid,cb_handle)
    local key = auth_key .. uid
    --hgetall获取字段key全部数据，底层数据作为array返回 
    local redis_cmd = "hgetall " .. key
-   print(redis_cmd)
+   --print(redis_cmd)
    redis_wrapper.query(redis_conn,redis_cmd,function(err,ret)
 	  if err then
 	    if cb_handle ~= nil then
@@ -94,7 +94,7 @@ function get_userinfo_to_redis(uid,cb_handle)
 end
 
 function edit_profile_to_redis(uid,unick,uface,usex)
-	print("edit_profile_to_redis uid:"..uid)
+	--print("edit_profile_to_redis uid:"..uid)
 	if uid <= 0 or redis_conn == nil then
 	   print("uid error uid:"..uid)
 	   return

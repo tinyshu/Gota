@@ -47,7 +47,7 @@ function set_ugame_info_inredis(uid, ugame_info)
 	                  " uchip " .. ugame_info.uchip ..
 	                  " uexp " .. ugame_info.uexp .. 
 	                  " uvip " .. ugame_info.uvip
-	print("redis_cmd: "..redis_cmd)
+	--print("redis_cmd: "..redis_cmd)
 	redis_wrapper.query(redis_conn, redis_cmd, function (err, ret)
 		if err then
 		    print("set_ugame_info_inredis"..err)
