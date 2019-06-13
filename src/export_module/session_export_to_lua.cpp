@@ -65,6 +65,8 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 		const FieldDescriptor* filedes = descriptor->field(i);
 		const string& file_name = filedes->name();
 		if (file_name.empty()) {
+			delete message;
+			message = NULL;
 			return NULL;
 		}
 
@@ -86,100 +88,103 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 				lua_pop(tolua_s, 1);
 				continue;
 			}
-
-			if (!lua_istable(tolua_s,-1)) {
-				log_error("cant find repeated field %s\n", file_name.c_str());
-				delete message;
-				message = NULL;
-				return NULL;
-			}
 			else {
-				lua_pushnil(tolua_s);
-				//lua_next会先弹出栈顶元素，所以要先放一个nil
-				//然后把key,value放入 key放在-2 value放在-1的位置
-				while (lua_next(tolua_s, -1) != 0) {
-					switch (filedes->cpp_type()) {
-					case FieldDescriptor::CPPTYPE_DOUBLE:
-					{
-						double value = luaL_checknumber(tolua_s, -1);
-						reflection->SetDouble(message, filedes, value);
-
-					}break;
-					case FieldDescriptor::CPPTYPE_FLOAT:
-					{
-						float value = luaL_checknumber(tolua_s, -1);
-						reflection->SetFloat(message, filedes, value);
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_INT64:
-					{
-						int64_t value = luaL_checknumber(tolua_s, -1);
-						reflection->SetInt64(message, filedes, value);
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_UINT64:
-					{
-						uint64_t value = luaL_checknumber(tolua_s, -1);
-						reflection->SetUInt64(message, filedes, value);
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_ENUM: // 与int32一样处理
-					{
-						int32_t value = luaL_checknumber(tolua_s, -1);
-						const EnumDescriptor* enumDescriptor = filedes->enum_type();
-						const EnumValueDescriptor* valueDescriptor = enumDescriptor->FindValueByNumber(value);
-						reflection->SetEnum(message, filedes, valueDescriptor);
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_INT32:
-					{
-						int32_t value = luaL_checknumber(tolua_s, -1);
-						reflection->SetInt32(message, filedes, value);
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_UINT32:
-					{
-						uint32_t value = luaL_checknumber(tolua_s, -1);
-						reflection->SetUInt32(message, filedes, value);
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_STRING:
-					{
-						size_t size = 0;
-						const char* value = luaL_checklstring(tolua_s, -1, &size);
-						reflection->SetString(message, filedes, std::string(value, size));
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_BOOL:
-					{
-						bool value = lua_toboolean(tolua_s, -1);
-						reflection->SetBool(message, filedes, value);
-						
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_MESSAGE:
-					{
-						//递归调用
-						Message* value = create_message_from_lua_table(tolua_s, lua_gettop(tolua_s), filedes->message_type()->name().c_str());
-						if (!value) {
-							log_error("convert to message %s failed whith value %s \n", filedes->message_type()->name().c_str(), file_name.c_str());
-							delete message;
-							message = NULL;
-							return NULL;
-						}
-						Message* msg = reflection->MutableMessage(message, filedes);
-						msg->CopyFrom(*value);
-						delete msg;
-						msg = NULL;
-					}
-					break;
-					default:
-						break;
-					} //switch
-
-					lua_pop(tolua_s, 1);
+				//在lua层数组是以table的方式传入C++层,所以这里先判断类型是否正确
+				if (!lua_istable(tolua_s, -1)) {
+					log_error("cant find repeated field %s\n", file_name.c_str());
+					delete message;
+					message = NULL;
+					return NULL;
 				}
 			}
+			lua_pushnil(tolua_s);
+			//lua_next会先弹出栈顶元素，所以要先放一个nil
+			//然后把key,value放入 key放在-2 value放在-1的位置
+
+			for (; lua_next(tolua_s, -2) != 0;) {
+				FieldDescriptor::CppType cpptype = filedes->cpp_type();
+				switch (cpptype) {
+				case FieldDescriptor::CPPTYPE_DOUBLE:
+				{
+					double value = luaL_checknumber(tolua_s, -1);
+					reflection->AddDouble(message, filedes, value);
+
+				}break;
+				case FieldDescriptor::CPPTYPE_FLOAT:
+				{
+					float value = luaL_checknumber(tolua_s, -1);
+					reflection->AddFloat(message, filedes, value);
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_INT64:
+				{
+					int64_t value = luaL_checknumber(tolua_s, -1);
+					reflection->AddInt64(message, filedes, value);
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_UINT64:
+				{
+					uint64_t value = luaL_checknumber(tolua_s, -1);
+					reflection->AddUInt64(message, filedes, value);
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_ENUM: // 与int32一样处理
+				{
+					int32_t value = luaL_checknumber(tolua_s, -1);
+					const EnumDescriptor* enumDescriptor = filedes->enum_type();
+					const EnumValueDescriptor* valueDescriptor = enumDescriptor->FindValueByNumber(value);
+					reflection->AddEnum(message, filedes, valueDescriptor);
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_INT32:
+				{
+					int32_t value = luaL_checknumber(tolua_s, -1);
+					reflection->AddInt32(message, filedes, value);
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_UINT32:
+				{
+					uint32_t value = luaL_checknumber(tolua_s, -1);
+					reflection->AddUInt32(message, filedes, value);
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_STRING:
+				{
+					size_t size = 0;
+					const char* value = luaL_checklstring(tolua_s, -1, &size);
+					reflection->AddString(message, filedes, std::string(value, size));
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_BOOL:
+				{
+					bool value = lua_toboolean(tolua_s, -1);
+					reflection->AddBool(message, filedes, value);
+
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_MESSAGE:
+				{
+					//递归调用
+					Message* value = create_message_from_lua_table(tolua_s, lua_gettop(tolua_s), filedes->message_type()->name().c_str());
+					if (!value) {
+						log_error("convert to message %s failed whith value %s \n", filedes->message_type()->name().c_str(), file_name.c_str());
+						delete message;
+						message = NULL;
+						return NULL;
+					}
+					Message* msg = reflection->AddMessage(message, filedes);
+					msg->CopyFrom(*value);
+					delete msg;
+					msg = NULL;
+				}
+				break;
+				default:
+					break;
+				} //switch
+
+				lua_pop(tolua_s, 1);
+			}
+
 		}
 		else {
 			//基础类型或者嵌套类型

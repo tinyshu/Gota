@@ -30,6 +30,7 @@ local Cmd = {
 	ExitRoomReq = 27,
 	ExitRoomRes = 28,
     UserExitRoomNotify = 29,
+	GameStartNotify = 30,
 }
      
 return Cmd

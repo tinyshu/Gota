@@ -42,7 +42,7 @@ struct TableStruct_game_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::google::protobuf::internal::ParseTable schema[19]
+  static const ::google::protobuf::internal::ParseTable schema[21]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
@@ -76,6 +76,9 @@ extern EnterZoneResDefaultTypeInternal _EnterZoneRes_default_instance_;
 class ExitRoomRes;
 class ExitRoomResDefaultTypeInternal;
 extern ExitRoomResDefaultTypeInternal _ExitRoomRes_default_instance_;
+class GameStartNotify;
+class GameStartNotifyDefaultTypeInternal;
+extern GameStartNotifyDefaultTypeInternal _GameStartNotify_default_instance_;
 class GetUgameInfoRes;
 class GetUgameInfoResDefaultTypeInternal;
 extern GetUgameInfoResDefaultTypeInternal _GetUgameInfoRes_default_instance_;
@@ -103,6 +106,9 @@ extern UnameLoginResDefaultTypeInternal _UnameLoginRes_default_instance_;
 class UserCenterInfo;
 class UserCenterInfoDefaultTypeInternal;
 extern UserCenterInfoDefaultTypeInternal _UserCenterInfo_default_instance_;
+class UserExitRoomNotify;
+class UserExitRoomNotifyDefaultTypeInternal;
+extern UserExitRoomNotifyDefaultTypeInternal _UserExitRoomNotify_default_instance_;
 class UserGameInfo;
 class UserGameInfoDefaultTypeInternal;
 extern UserGameInfoDefaultTypeInternal _UserGameInfo_default_instance_;
@@ -117,6 +123,7 @@ template<> ::EnterPlayNotify* Arena::CreateMaybeMessage<::EnterPlayNotify>(Arena
 template<> ::EnterZoneReq* Arena::CreateMaybeMessage<::EnterZoneReq>(Arena*);
 template<> ::EnterZoneRes* Arena::CreateMaybeMessage<::EnterZoneRes>(Arena*);
 template<> ::ExitRoomRes* Arena::CreateMaybeMessage<::ExitRoomRes>(Arena*);
+template<> ::GameStartNotify* Arena::CreateMaybeMessage<::GameStartNotify>(Arena*);
 template<> ::GetUgameInfoRes* Arena::CreateMaybeMessage<::GetUgameInfoRes>(Arena*);
 template<> ::GuestLoginReq* Arena::CreateMaybeMessage<::GuestLoginReq>(Arena*);
 template<> ::GuestLoginRes* Arena::CreateMaybeMessage<::GuestLoginRes>(Arena*);
@@ -126,6 +133,7 @@ template<> ::RecvLoginBonuesRes* Arena::CreateMaybeMessage<::RecvLoginBonuesRes>
 template<> ::UnameLoginReq* Arena::CreateMaybeMessage<::UnameLoginReq>(Arena*);
 template<> ::UnameLoginRes* Arena::CreateMaybeMessage<::UnameLoginRes>(Arena*);
 template<> ::UserCenterInfo* Arena::CreateMaybeMessage<::UserCenterInfo>(Arena*);
+template<> ::UserExitRoomNotify* Arena::CreateMaybeMessage<::UserExitRoomNotify>(Arena*);
 template<> ::UserGameInfo* Arena::CreateMaybeMessage<::UserGameInfo>(Arena*);
 }  // namespace protobuf
 }  // namespace google
@@ -184,12 +192,13 @@ enum Cmd {
   eExitRoomReq = 27,
   eExitRoomRes = 28,
   eUserExitRoomNotify = 29,
+  eGameStartNotify = 30,
   Cmd_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   Cmd_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool Cmd_IsValid(int value);
 const Cmd Cmd_MIN = INVALID_CMD;
-const Cmd Cmd_MAX = eUserExitRoomNotify;
+const Cmd Cmd_MAX = eGameStartNotify;
 const int Cmd_ARRAYSIZE = Cmd_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* Cmd_descriptor();
@@ -2298,6 +2307,18 @@ class EnterPlayNotify : public ::google::protobuf::Message /* @@protoc_insertion
   ::google::protobuf::int32 roomid() const;
   void set_roomid(::google::protobuf::int32 value);
 
+  // int32 seatid = 3;
+  void clear_seatid();
+  static const int kSeatidFieldNumber = 3;
+  ::google::protobuf::int32 seatid() const;
+  void set_seatid(::google::protobuf::int32 value);
+
+  // int32 side = 4;
+  void clear_side();
+  static const int kSideFieldNumber = 4;
+  ::google::protobuf::int32 side() const;
+  void set_side(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:EnterPlayNotify)
  private:
   class HasBitSetters;
@@ -2305,6 +2326,8 @@ class EnterPlayNotify : public ::google::protobuf::Message /* @@protoc_insertion
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::int32 zid_;
   ::google::protobuf::int32 roomid_;
+  ::google::protobuf::int32 seatid_;
+  ::google::protobuf::int32 side_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_game_2eproto;
 };
@@ -2430,6 +2453,18 @@ class EnterArriveNotify : public ::google::protobuf::Message /* @@protoc_inserti
   ::google::protobuf::int32 usex() const;
   void set_usex(::google::protobuf::int32 value);
 
+  // int32 seatid = 4;
+  void clear_seatid();
+  static const int kSeatidFieldNumber = 4;
+  ::google::protobuf::int32 seatid() const;
+  void set_seatid(::google::protobuf::int32 value);
+
+  // int32 side = 5;
+  void clear_side();
+  static const int kSideFieldNumber = 5;
+  ::google::protobuf::int32 side() const;
+  void set_side(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:EnterArriveNotify)
  private:
   class HasBitSetters;
@@ -2438,6 +2473,8 @@ class EnterArriveNotify : public ::google::protobuf::Message /* @@protoc_inserti
   ::google::protobuf::internal::ArenaStringPtr unick_;
   ::google::protobuf::int32 uface_;
   ::google::protobuf::int32 usex_;
+  ::google::protobuf::int32 seatid_;
+  ::google::protobuf::int32 side_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_game_2eproto;
 };
@@ -2549,6 +2586,235 @@ class ExitRoomRes : public ::google::protobuf::Message /* @@protoc_insertion_poi
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::int32 status_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
+// -------------------------------------------------------------------
+
+class UserExitRoomNotify : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:UserExitRoomNotify) */ {
+ public:
+  UserExitRoomNotify();
+  virtual ~UserExitRoomNotify();
+
+  UserExitRoomNotify(const UserExitRoomNotify& from);
+
+  inline UserExitRoomNotify& operator=(const UserExitRoomNotify& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  UserExitRoomNotify(UserExitRoomNotify&& from) noexcept
+    : UserExitRoomNotify() {
+    *this = ::std::move(from);
+  }
+
+  inline UserExitRoomNotify& operator=(UserExitRoomNotify&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const UserExitRoomNotify& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const UserExitRoomNotify* internal_default_instance() {
+    return reinterpret_cast<const UserExitRoomNotify*>(
+               &_UserExitRoomNotify_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    19;
+
+  void Swap(UserExitRoomNotify* other);
+  friend void swap(UserExitRoomNotify& a, UserExitRoomNotify& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline UserExitRoomNotify* New() const final {
+    return CreateMaybeMessage<UserExitRoomNotify>(nullptr);
+  }
+
+  UserExitRoomNotify* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<UserExitRoomNotify>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const UserExitRoomNotify& from);
+  void MergeFrom(const UserExitRoomNotify& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(UserExitRoomNotify* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 seatid = 1;
+  void clear_seatid();
+  static const int kSeatidFieldNumber = 1;
+  ::google::protobuf::int32 seatid() const;
+  void set_seatid(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:UserExitRoomNotify)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::int32 seatid_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
+// -------------------------------------------------------------------
+
+class GameStartNotify : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameStartNotify) */ {
+ public:
+  GameStartNotify();
+  virtual ~GameStartNotify();
+
+  GameStartNotify(const GameStartNotify& from);
+
+  inline GameStartNotify& operator=(const GameStartNotify& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GameStartNotify(GameStartNotify&& from) noexcept
+    : GameStartNotify() {
+    *this = ::std::move(from);
+  }
+
+  inline GameStartNotify& operator=(GameStartNotify&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const GameStartNotify& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameStartNotify* internal_default_instance() {
+    return reinterpret_cast<const GameStartNotify*>(
+               &_GameStartNotify_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    20;
+
+  void Swap(GameStartNotify* other);
+  friend void swap(GameStartNotify& a, GameStartNotify& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameStartNotify* New() const final {
+    return CreateMaybeMessage<GameStartNotify>(nullptr);
+  }
+
+  GameStartNotify* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<GameStartNotify>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const GameStartNotify& from);
+  void MergeFrom(const GameStartNotify& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GameStartNotify* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated int32 heroes = 1;
+  int heroes_size() const;
+  void clear_heroes();
+  static const int kHeroesFieldNumber = 1;
+  ::google::protobuf::int32 heroes(int index) const;
+  void set_heroes(int index, ::google::protobuf::int32 value);
+  void add_heroes(::google::protobuf::int32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+      heroes() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+      mutable_heroes();
+
+  // @@protoc_insertion_point(class_scope:GameStartNotify)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 > heroes_;
+  mutable std::atomic<int> _heroes_cached_byte_size_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_game_2eproto;
 };
@@ -3557,6 +3823,34 @@ inline void EnterPlayNotify::set_roomid(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:EnterPlayNotify.roomid)
 }
 
+// int32 seatid = 3;
+inline void EnterPlayNotify::clear_seatid() {
+  seatid_ = 0;
+}
+inline ::google::protobuf::int32 EnterPlayNotify::seatid() const {
+  // @@protoc_insertion_point(field_get:EnterPlayNotify.seatid)
+  return seatid_;
+}
+inline void EnterPlayNotify::set_seatid(::google::protobuf::int32 value) {
+  
+  seatid_ = value;
+  // @@protoc_insertion_point(field_set:EnterPlayNotify.seatid)
+}
+
+// int32 side = 4;
+inline void EnterPlayNotify::clear_side() {
+  side_ = 0;
+}
+inline ::google::protobuf::int32 EnterPlayNotify::side() const {
+  // @@protoc_insertion_point(field_get:EnterPlayNotify.side)
+  return side_;
+}
+inline void EnterPlayNotify::set_side(::google::protobuf::int32 value) {
+  
+  side_ = value;
+  // @@protoc_insertion_point(field_set:EnterPlayNotify.side)
+}
+
 // -------------------------------------------------------------------
 
 // EnterArriveNotify
@@ -3642,6 +3936,34 @@ inline void EnterArriveNotify::set_usex(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:EnterArriveNotify.usex)
 }
 
+// int32 seatid = 4;
+inline void EnterArriveNotify::clear_seatid() {
+  seatid_ = 0;
+}
+inline ::google::protobuf::int32 EnterArriveNotify::seatid() const {
+  // @@protoc_insertion_point(field_get:EnterArriveNotify.seatid)
+  return seatid_;
+}
+inline void EnterArriveNotify::set_seatid(::google::protobuf::int32 value) {
+  
+  seatid_ = value;
+  // @@protoc_insertion_point(field_set:EnterArriveNotify.seatid)
+}
+
+// int32 side = 5;
+inline void EnterArriveNotify::clear_side() {
+  side_ = 0;
+}
+inline ::google::protobuf::int32 EnterArriveNotify::side() const {
+  // @@protoc_insertion_point(field_get:EnterArriveNotify.side)
+  return side_;
+}
+inline void EnterArriveNotify::set_side(::google::protobuf::int32 value) {
+  
+  side_ = value;
+  // @@protoc_insertion_point(field_set:EnterArriveNotify.side)
+}
+
 // -------------------------------------------------------------------
 
 // ExitRoomRes
@@ -3660,9 +3982,65 @@ inline void ExitRoomRes::set_status(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:ExitRoomRes.status)
 }
 
+// -------------------------------------------------------------------
+
+// UserExitRoomNotify
+
+// int32 seatid = 1;
+inline void UserExitRoomNotify::clear_seatid() {
+  seatid_ = 0;
+}
+inline ::google::protobuf::int32 UserExitRoomNotify::seatid() const {
+  // @@protoc_insertion_point(field_get:UserExitRoomNotify.seatid)
+  return seatid_;
+}
+inline void UserExitRoomNotify::set_seatid(::google::protobuf::int32 value) {
+  
+  seatid_ = value;
+  // @@protoc_insertion_point(field_set:UserExitRoomNotify.seatid)
+}
+
+// -------------------------------------------------------------------
+
+// GameStartNotify
+
+// repeated int32 heroes = 1;
+inline int GameStartNotify::heroes_size() const {
+  return heroes_.size();
+}
+inline void GameStartNotify::clear_heroes() {
+  heroes_.Clear();
+}
+inline ::google::protobuf::int32 GameStartNotify::heroes(int index) const {
+  // @@protoc_insertion_point(field_get:GameStartNotify.heroes)
+  return heroes_.Get(index);
+}
+inline void GameStartNotify::set_heroes(int index, ::google::protobuf::int32 value) {
+  heroes_.Set(index, value);
+  // @@protoc_insertion_point(field_set:GameStartNotify.heroes)
+}
+inline void GameStartNotify::add_heroes(::google::protobuf::int32 value) {
+  heroes_.Add(value);
+  // @@protoc_insertion_point(field_add:GameStartNotify.heroes)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+GameStartNotify::heroes() const {
+  // @@protoc_insertion_point(field_list:GameStartNotify.heroes)
+  return heroes_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+GameStartNotify::mutable_heroes() {
+  // @@protoc_insertion_point(field_mutable_list:GameStartNotify.heroes)
+  return &heroes_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

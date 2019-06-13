@@ -26,6 +26,12 @@ function player:init(uid, s, ret_handler)
 	self.zid = -1
 	--房间唯一标识符
 	self.roomid = -1
+	--匹配的作为id
+	self.seatid = -1
+	--玩家属于的队伍 0左边或1右边
+	self.side= -1
+	--玩家选用的英雄 暂时取值[1-5]
+	self.heroid = -1
 	--用户在房间里的状态
 	self.status = room_status.InView
 	--是否为机器人玩家
@@ -80,13 +86,15 @@ function player:send_cmd(sstype, cctype, cbody)
     session_wrapper.send_msg(self.session,ret_msg)
 end
 
-
+--这里返回给房间里用户信息，需要什么在这里添加
 function player:get_user_arrived()
 	local body = {
 	    --在房间里展示的信息
 		unick = self.uinfo.unick,
 		uface = self.uinfo.uface,
 		usex =  self.uinfo.usex,
+		seatid = self.seatid,
+		side = self.side,
 	}
 
 	return body

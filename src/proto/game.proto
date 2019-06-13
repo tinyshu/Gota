@@ -1,5 +1,5 @@
 syntax = "proto3"; 
-
+//syntax = "proto2";
 /*
 添加新协议的规则
 1.在game.proto文件添加新协议和结构
@@ -57,6 +57,8 @@ enum Cmd {
     eExitRoomRes = 28;
 	//玩家退出等待匹配，通知给房间其他用户
 	eUserExitRoomNotify = 29;
+	//通知开始一句对战游戏
+	eGameStartNotify = 30;
 }
 
 message GuestLoginReq{
@@ -64,99 +66,111 @@ message GuestLoginReq{
 }
 
 message UserCenterInfo{
-	string unick = 1;
-	int32 uface = 2;
-	int32 usex = 3;
-	int32 uvip = 4;
-	int32 uid = 5;
+	 string unick = 1;
+	 int32 uface = 2;
+	 int32 usex = 3;
+	 int32 uvip = 4;
+	 int32 uid = 5;
 }
 
 message GuestLoginRes{
-   int32 status = 1;
-   UserCenterInfo userinfo=2;
+    int32 status = 1;
+    UserCenterInfo userinfo=2;
 }
 
 
 message UnameLoginReq {
-     string uname = 1;
-	 string upwd_md5 = 2;
+      string uname = 1;
+	  string upwd_md5 = 2;
 }
 
 message UnameLoginRes{
-     int32 status = 1;
-     UserCenterInfo userinfo=2;
+      int32 status = 1;
+      UserCenterInfo userinfo=2;
 }
 
 message EditProfileReq {
-	 string unick = 1;
-	 int32 uface = 2;
-	 int32 usex = 3;
+	  string unick = 1;
+	  int32 uface = 2;
+	  int32 usex = 3;
 }
 
 message EditProfileRes {
-	 int32 status = 1;
+	  int32 status = 1;
 }
 
 message AccountUpgradeReq {
-     string uname = 1; //登录的用户名，全局唯一，不是unick
-	 string upwd_md5 = 2;
+      string uname = 1; //登录的用户名，全局唯一，不是unick
+	  string upwd_md5 = 2;
 }
 
 message AccountUpgradeRes {
-     int32 status = 1;
+      int32 status = 1;
 }
 
 message LoginOutRes {
-     int32 status = 1;
+      int32 status = 1;
 }
 
 
 message UserGameInfo {
-	 int32 uchip = 1;
-	 int32 uexp = 2;
-	 int32 uvip = 3;
-	 int32 uchip2 = 4;
-	 int32 uchip3 = 5;
-	 int32 udata1 = 6;
-	 int32 udata2 = 7;
-	 int32 udata3 = 8;
-	 int32 bonues_status = 9;
-	 int32 bonues = 10;
-	 int32 days = 11;
+	  int32 uchip = 1;
+	  int32 uexp = 2;
+	  int32 uvip = 3;
+	  int32 uchip2 = 4;
+	  int32 uchip3 = 5;
+	  int32 udata1 = 6;
+	  int32 udata2 = 7;
+	  int32 udata3 = 8;
+	  int32 bonues_status = 9;
+	  int32 bonues = 10;
+	  int32 days = 11;
 }
 
 message GetUgameInfoRes {
-	 int32 status = 1;
-	 UserGameInfo uinfo = 2; 
+	  int32 status = 1;
+	  UserGameInfo uinfo = 2; 
 }
 
 message RecvLoginBonuesRes {
-	int32 status = 1;	
+	 int32 status = 1;	
 }
 
 message LoginLogicRes {
-	int32 status = 1;
+	 int32 status = 1;
 }
 
 message EnterZoneReq {
-	int32 zid = 1;
+	 int32 zid = 1;
 }
 
 message EnterZoneRes {
-	int32 status = 1;
+	 int32 status = 1;
 }
 
 message EnterPlayNotify{
-    int32 zid = 1;
-	int32 roomid = 2;
+     int32 zid = 1;
+	 int32 roomid = 2;
+	 int32 seatid = 3;
+	 int32 side = 4;
 }
 
 message EnterArriveNotify{
-     string unick = 1;
-	 int32 uface = 2;
-	 int32 usex = 3;
+      string unick = 1;
+	  int32 uface = 2;
+	  int32 usex = 3;
+	  int32 seatid = 4;
+	  int32 side = 5;
 }
 
 message ExitRoomRes {
-     int32 status = 1;
+      int32 status = 1;
+}
+
+message UserExitRoomNotify{
+     int32 seatid =1;
+}
+
+message GameStartNotify {
+	repeated int32 heroes = 1; 
 }
