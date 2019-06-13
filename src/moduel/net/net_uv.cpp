@@ -146,6 +146,12 @@ static void on_bin_protocal_recved(struct session* s, struct io_package* io_data
 		if (recv_header(io_data->long_pkg, io_data->recved, &pkg_size) != 0) { // 继续投递recv请求，知道能否接收一个数据头;
 			break;
 		}
+		
+		if (pkg_size < 2) {
+			//小于2的pack说明session异常，直接关闭session
+			uv_close((uv_handle_t*)s->c_sock, on_close_stream);
+			break;
+		}
 
 		// Step2:判断数据大小，是否不符合规定的格式
 		if (pkg_size >= MAX_PKG_SIZE) { // ,异常的数据包，直接关闭掉socket;
@@ -168,11 +174,6 @@ static void on_bin_protocal_recved(struct session* s, struct io_package* io_data
 			if (io_data->recved<0) {
 				io_data->recved = 0;
 			}
-			/*if (io_data->recved ==0 && io_data->long_pkg != NULL) {
-				my_free(io_data->long_pkg);
-				io_data->long_pkg = NULL;
-				io_data->max_pkg_len = 0;
-			}*/
 		}
 	}
 }
