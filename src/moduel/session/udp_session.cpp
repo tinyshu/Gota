@@ -51,6 +51,11 @@ void udp_session::send_raw_msg(raw_cmd* raw_data) {
 	send_data(raw_data->raw_data, raw_data->raw_len);
 }
 
+const char* udp_session::get_address(int* client_port) {
+	*client_port = this->port;
+	return this->address;
+}
+
 static void udp_uv_alloc_buf(uv_handle_t* handle,
 	size_t suggested_size,
 	uv_buf_t* buf) {

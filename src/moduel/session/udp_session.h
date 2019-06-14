@@ -23,12 +23,13 @@ public:
 	virtual void send_data(unsigned char* pkg, int pkg_len);
 	virtual void send_msg(recv_msg* msg);
 	virtual void send_raw_msg(raw_cmd* raw_data);
+	virtual const char* get_address(int* client_port);
 public:
 	static void start_udp_server(const char* ip, int port);
 	static udp_recv_buf _recv_buf;
 	uv_udp_t * udp_handle;
 	char address[32];
-	int port;
+	int port; 
 	const sockaddr_in* sock_addr;
 };
 

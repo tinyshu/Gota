@@ -54,6 +54,11 @@ void session::send_raw_msg(raw_cmd* raw_data) {
 	}
 	session_send(this, raw_data->raw_data, raw_data->raw_len);
 }
+
+const char* session::get_address(int* client_port) {
+	*client_port = this->c_port;
+	return this->c_ip;
+}
 ///////////////////////////////////////////////////////
 extern void on_connect_lost(struct session* s);
 

@@ -445,6 +445,25 @@ static int lua_is_client_session(lua_State* tolua_s) {
 	return 1;
 }
 
+static int lua_get_addr(lua_State* tolua_s) {
+
+	int argc = lua_gettop(tolua_s);
+	if (argc != 1) {
+		return 0;
+	}
+
+	session_base* session = (session_base*)lua_touserdata(tolua_s, 1);
+	if (session == NULL) {
+		return 0;
+	}
+
+	int client_port = 0;
+	const char* client_ip = session->get_address(&client_port);
+	lua_pushstring(tolua_s, client_ip);
+	lua_pushinteger(tolua_s, client_port);
+	return 2;
+}
+
 static int lua_send_raw_msg(lua_State* tolua_s) {
 	int argc = lua_gettop(tolua_s);
 	if (argc != 2) {
@@ -486,6 +505,7 @@ int register_session_export_tolua(lua_State*tolua_s) {
 		tolua_function(tolua_s, "get_proto_type", lua_get_proto_type);
 		tolua_function(tolua_s, "set_socket_and_proto_type", lua_set_socket_and_proto_type);
 		tolua_function(tolua_s, "is_client_session", lua_is_client_session);
+		tolua_function(tolua_s, "get_address", lua_get_addr);
 		tolua_endmodule(tolua_s);
 	}
 	lua_pop(tolua_s, 1);
