@@ -28,8 +28,20 @@ void on_bin_protocal_recv_entry(struct session_base* s, unsigned char* data, int
 void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len);
 void register_services(int stype, struct service_module* module);
 
+class netbus {
+public:
+	netbus() {}
+	virtual ~netbus() {}
+
+	static netbus & get_instance();
+
+	void udp_listen(char* ip, int port);
+	void udp_send_msg(const char* ip,int port, unsigned char* data, int len);
+private:
+	void* udp_handle;
+};
 void tcp_listen(char* ip,int port);
-void udp_listen(char* ip, int port);
+//void udp_listen(char* ip, int port);
 void tcp_connection(const char* server_ip, int port, void(*connect_cb)(const char* err, session_base* s, void* udata), void* udata);
 void run_loop();
 void ws_listen(char* ip, int port);

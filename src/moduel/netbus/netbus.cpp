@@ -186,12 +186,44 @@ void tcp_listen(char* ip, int port) {
 	log_debug("start server tcp at %s:%d\n", ip, port);
 }
 
-void udp_listen(char* ip, int port) {
+netbus& netbus::get_instance() {
+	static netbus netbus_mgr;
+	return netbus_mgr;
+}
+void netbus::udp_listen(char* ip, int port) {
 	if (ip == NULL) {
 		ip = "0.0.0.0";
 	}
-	udp_session::start_udp_server(ip,port);
+
+	udp_handle = udp_session::start_udp_server(ip,port);
 	log_debug("start server udp at %s:%d\n", ip, port);
+}
+
+static void netbus_udp_send_cb(uv_udp_send_t* req, int status) {
+	if (status != 0) {
+		log_error("udp_send_cb status=%d error=%s", status, uv_strerror(status));
+	}
+	
+	if (req!=NULL) {
+	   free(req);
+	}
+}
+
+
+void netbus::udp_send_msg(const char* ip, int port, unsigned char* data, int len) {
+	if (data==NULL || len==0) {
+		return;
+	}
+	uv_udp_send_t* req = (uv_udp_send_t*)malloc(sizeof(uv_udp_send_t));
+	if (req==NULL) {
+		return;
+	}
+	uv_buf_t uv_buf;
+	uv_buf.base = (char*)data;
+	uv_buf.len = len;
+	struct sockaddr_in addr;
+	uv_ip4_addr(ip, port, &addr);
+	uv_udp_send(req, (uv_udp_t*)udp_handle, &uv_buf, 1, (const sockaddr*)&addr, netbus_udp_send_cb);
 }
 
 void run_loop() {

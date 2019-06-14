@@ -79,7 +79,7 @@ function send_to_server(client_session,raw_data)
 
 	
    if cmd == cmd_module.LoginLogicReq then
-	    print("LoginLogicReq cmd:"..cmd) 
+	     --print("LoginLogicReq cmd:"..cmd) 
 	     --如果是client登录到logic服务器
 		 local uid = session_wrapper.get_uid(client_session)
 		 utag = uid

@@ -36,6 +36,8 @@ function player:init(uid, s, ret_handler)
 	self.status = room_status.InView
 	--是否为机器人玩家
 	self.is_robot = false
+	self.client_udp_ip = nil
+	self.client_upd_port = 0
 	-- 数据库理面读取玩家的基本信息;
 	mysql_game.get_ugame_info(uid, function (err, ugame_info)
 		if err then
@@ -67,9 +69,15 @@ function player:init(uid, s, ret_handler)
     end)
  end)
 	-- end
+end
 
+function player:set_udp_addr(ip,port)
+	if ip == nil or port<=0 then
+	   return
+	end
 
-
+	self.client_udp_ip = ip
+	self.client_upd_port = port
 end
 
 function player:set_session(s)
@@ -84,6 +92,18 @@ function player:send_cmd(sstype, cctype, cbody)
 	local ret_msg = {stype = sstype,ctype = cctype,utag = self.uid, body=cbody}
 	utils.print_table(ret_msg)
     session_wrapper.send_msg(self.session,ret_msg)
+end
+
+function player:udp_send_cmd(sstype, cctype, cbody)
+	if not self.session or self.is_robot==true then 
+		return
+	end
+
+	if self.client_udp_ip == nil or self.client_upd_port == 0 then
+	    return
+	end
+	local ret_msg = {stype = sstype,ctype = cctype,utag = self.uid, body=cbody}
+	session_wrapper.udp_send_msg(self.client_udp_ip,elf.client_upd_port,ret_msg)
 end
 
 --这里返回给房间里用户信息，需要什么在这里添加

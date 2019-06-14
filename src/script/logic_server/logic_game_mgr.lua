@@ -262,6 +262,7 @@ end
 function login_server_enter(s,msg)
   
    local uid = msg[3]
+   local body = msg[4] 
    --[[
    	 logic作为对战地图服务器按照这样来划分
 	 1.一个logic服务是一个完整的对战服务器，可以支持N个不同的地图和N种不同的玩法
@@ -275,6 +276,7 @@ function login_server_enter(s,msg)
    if play ~= nil then
       --更新session,这里的session是客户端和gateway的连接对象
       play:set_session(s)
+	  play:set_udp_addr(body.upd_ip,body.udp_port)
 	  send_logic_enter_status(s,uid,stype,res_module.OK)
 	  return
    end
@@ -297,6 +299,8 @@ function login_server_enter(s,msg)
 		end
 		send_logic_enter_status(s,uid,stype,status)
    end)
+   
+   play:set_udp_addr(body.upd_ip,body.udp_port)
 end
 
 --网关广播过来的用户断线消息
@@ -309,11 +313,16 @@ function on_player_disconnect(s,msg)
 	   return
 	end
 
+	play:set_session(nil)
+	play:set_udp_addr(nil,0)
 	--判断玩家是否在等待列表
 	if play.zid ~= -1 then
 	   --移除等待列表
 	   zone_wait_list[play.zid][uid] = nil
 	   play.zid = -1
+	else
+	  --正在游戏中
+
 	end
 	--先不考虑断线重连，直接先重online_player_map删除
 	if online_player_map[uid] ~= nil then

@@ -17,7 +17,7 @@ typedef struct udp_recv_buf {
 }udp_recv_buf;
 
 struct udp_session : public session_base {
-	udp_session():sock_addr(NULL){}
+	udp_session() :sock_addr(NULL) { udp_handle = NULL; }
 public:
 	virtual void close();
 	virtual void send_data(unsigned char* pkg, int pkg_len);
@@ -25,12 +25,13 @@ public:
 	virtual void send_raw_msg(raw_cmd* raw_data);
 	virtual const char* get_address(int* client_port);
 public:
-	static void start_udp_server(const char* ip, int port);
+	static uv_udp_t* start_udp_server(const char* ip, int port);
 	static udp_recv_buf _recv_buf;
 	uv_udp_t * udp_handle;
 	char address[32];
 	int port; 
 	const sockaddr_in* sock_addr;
+	
 };
 
 
