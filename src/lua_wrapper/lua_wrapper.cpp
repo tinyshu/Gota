@@ -272,7 +272,7 @@ void lua_wrapper::reg_func2lua(const char* func_name, int(*cfunction)(lua_State*
 int lua_wrapper::push_function_by_handle(int handle_id) {
 	toluafix_get_function_by_refid(g_lua_state, handle_id);
 	if (!lua_isfunction(g_lua_state,-1)) {
-		log_error("push_function_by_handle error %d", handle_id);
+		//log_error("push_function_by_handle error %d", handle_id);
 		lua_pop(g_lua_state, 1);
 		return -1;
 	}

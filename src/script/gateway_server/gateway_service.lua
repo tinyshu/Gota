@@ -4,37 +4,37 @@ local cmd_module = require("cmd_type")
 local res_module = require("respones")
 local utils = require("utils")
 
---stypeµ½Íø¹ØÁ¬½ÓµÄsessionµÄsessionÓ³Éä,´æ´¢µÄÁ¬½ÓµÄ·şÎñÆ÷µÄsession
+--stypeåˆ°ç½‘å…³è¿æ¥çš„sessionçš„sessionæ˜ å°„,å­˜å‚¨çš„è¿æ¥çš„æœåŠ¡å™¨çš„session
 local session_map = {}
---±ê¼ÇÕıÔÚÁ¬½Ó»¹Î´³É¹¦µÄsession
+--æ ‡è®°æ­£åœ¨è¿æ¥è¿˜æœªæˆåŠŸçš„session
 local session_connecting = {}
 
 local g_ukey = 1;
---µÇÂ¼Ç°´æ´¢ÓÃ»§µÄsession£¬±íµÄkeyÓÃÈ«¾Ö±äÁ¿g_ukey
+--ç™»å½•å‰å­˜å‚¨ç”¨æˆ·çš„sessionï¼Œè¡¨çš„keyç”¨å…¨å±€å˜é‡g_ukey
 local client_session_utag = {}
---µÇÂ½ºóÊ¹ÓÃ£¬µÇÂ½ºó»ñÈ¡uidºóÊ¹ÓÃuid×÷Îª±íµÄkey
+--ç™»é™†åä½¿ç”¨ï¼Œç™»é™†åè·å–uidåä½¿ç”¨uidä½œä¸ºè¡¨çš„key
 local client_session_uid = {}
 
 function connect_to_server(stype,server_ip,server_port)
 	netbus_wrapper.tcp_connect(server_ip,server_port,function(err,session)
-		--Á¬½ÓÊ§°Ü
+		--è¿æ¥å¤±è´¥
 		if err ~= nil then
 	       session_connecting[stype] = false
 		   print("connect error server["..config.servers[stype].desic.."]".."error:"..err)
 		   return
 	    end
-		--Á¬½Ó³É¹¦
+		--è¿æ¥æˆåŠŸ
 		session_map[stype] = session
 		print("connect sucess server["..config.servers[stype].desic.."]")
 end
 )
 end
 
---±»¶¨Ê±Æ÷µ÷ÓÃ
+--è¢«å®šæ—¶å™¨è°ƒç”¨
 function check_session_connect()
-	--±éÀúÍø¹ØĞèÒªÁ¬½ÓµÄ·şÎñÆ÷
+	--éå†ç½‘å…³éœ€è¦è¿æ¥çš„æœåŠ¡å™¨
 	for k,v in pairs(config.servers) do
-	    --ÅĞ¶Ï Èç¹ûÃ»ÓĞÁ¬½Ó³É¹¦£¬²¢ÇÒÒ²²»ÊÇÕıÔÚÁ¬½ÓµÄserver£¬¾Í·¢ÆğÒ»´ÎÁ¬½Óµ÷ÓÃ
+	    --åˆ¤æ–­ å¦‚æœæ²¡æœ‰è¿æ¥æˆåŠŸï¼Œå¹¶ä¸”ä¹Ÿä¸æ˜¯æ­£åœ¨è¿æ¥çš„serverï¼Œå°±å‘èµ·ä¸€æ¬¡è¿æ¥è°ƒç”¨
 		if session_map[v.stype] == nil and session_connecting[v.stype] == false then
 			session_connecting[v.stype] = true
 			print("connecting server["..v.desic.."]"..v.ip..":"..v.port)
@@ -44,13 +44,13 @@ function check_session_connect()
 end
 
 function server_session_init()
-    --»ñÈ¡conf.lua£¬gatewayĞèÒªÁ¬½ÓµÄserversÅäÖÃ
+    --è·å–conf.luaï¼Œgatewayéœ€è¦è¿æ¥çš„serversé…ç½®
 	for k,v in pairs(config.servers) do
-		--ÔÚÑ­»·ÖĞ³õÊ¼»¯2¸ömap
+		--åœ¨å¾ªç¯ä¸­åˆå§‹åŒ–2ä¸ªmap
 		session_map[v.stype] = nil
 		session_connecting[v.stype] = false
 	end
-	--Æô¶¯Á¬½Ó¶¨Ê±Æ÷£¬¼ä¸ôÃ¿1sµ÷ÓÃcheck_session_connect
+	--å¯åŠ¨è¿æ¥å®šæ—¶å™¨ï¼Œé—´éš”æ¯1sè°ƒç”¨check_session_connect
 	timer_wrapper.create_timer(check_session_connect,-1,1000,1000)
 end
 
@@ -65,47 +65,75 @@ function is_login_request(cmd_type)
 	return false
 end
 
---¿Í»§¶Ë·¢ËÍ¹ıÀ´£¬ÓÉÍø¹Ø·şÎñÆ÷×ª·¢¸ø·şÎñÆ÷
+--å®¢æˆ·ç«¯å‘é€è¿‡æ¥ï¼Œç”±ç½‘å…³æœåŠ¡å™¨è½¬å‘ç»™æœåŠ¡å™¨
 function send_to_server(client_session,raw_data)
 	local stype,cmd,utag = proto_mgr_wrapper.read_msg_head(raw_data)
 	print(stype,cmd,utag)
 	
-	--»ñÈ¡·şÎñÆ÷Á¬½ÓµÄsession
+	--è·å–æœåŠ¡å™¨è¿æ¥çš„session
 	local server_session = session_map[stype]
 	if server_session == nil then
 	print("not found session stype:"..stype)
 	   return	
 	end
+
 	
-	--ÅĞ¶ÏÊÇ·ñÎªµÇÂ¼Ğ­ÒéÇëÇó
+   if cmd == cmd_module.LoginLogicReq then
+	    print("LoginLogicReq cmd:"..cmd) 
+	     --å¦‚æœæ˜¯clientç™»å½•åˆ°logicæœåŠ¡å™¨
+		 local uid = session_wrapper.get_uid(client_session)
+		 utag = uid
+		 if utag == 0 then --æ”¹æ“ä½œè¦å…ˆç™»é™†
+			return
+		 end
+		 --è·å–clientè¿æ¥gatewayçš„çš„çœŸå®å…¬ç½‘ip,ç”¨æˆ·udpçš„è½¬å‘
+		 local tcp_ip, tcp_port = session_wrapper.get_address(client_session)
+		 print("tcp_ip:"..tcp_ip.." tcp_port:"..tcp_port.." uid"..utag)
+		 --æŠŠ
+		 local dbody = proto_mgr_wrapper.read_msg_body(raw_data)
+		 --è®¾ç½®å®¢æˆ·ç«¯çš„tcp_ipåˆ°ç»“æ„ä½“,è¿™é‡Œçš„ipå®¢æˆ·ç«¯é»˜è®¤ä¼ è¾“çš„ä¸€ä¸ªæœ¬åœ°127.0.0.1åœ°å€
+		 --ä»¥ä¸ºclientä¹Ÿæ— æ³•çŸ¥é“è‡ªå·±çš„çœŸå®åœ°å€ï¼Œåªæœ‰åœ¨è¿æ¥gatewayåï¼Œåœ¨gatewayç«¯è·å–
+		 --ç„¶åè½¬å‘åˆ°logicæœåŠ¡,è¿™æ ·logicæœåŠ¡å°±çŸ¥é“clientçš„å…¬ç½‘ipäº†
+		 dbody.udp_ip = tcp_ip
+		 local new_logic_msg = {stype=stype,ctype=cmd,utag=utag,body=dbody}
+        utils.print_table(new_logic_msg)
+		session_wrapper.send_msg(server_session,new_logic_msg)
+		return
+	end
+	
+	--åˆ¤æ–­æ˜¯å¦ä¸ºç™»å½•åè®®è¯·æ±‚
 	if is_login_request(cmd) then
-	  print("is_login_request cmd"..cmd)
+	  print("is_login_request cmd:"..cmd)
 	  utag = session_wrapper.get_utag(client_session)
-	   --»¹Ã»ÓĞutag£¬Éú³ÉÒ»¸ötag,ÔÚµÇÂ¼Ç°Ê¹ÓÃ
+	   --è¿˜æ²¡æœ‰utagï¼Œç”Ÿæˆä¸€ä¸ªtag,åœ¨ç™»å½•å‰ä½¿ç”¨
 	   if utag ==0 then
-		  --»¹Ã»ÓĞÁÙÊ±µÄutag
+		  --è¿˜æ²¡æœ‰ä¸´æ—¶çš„utag
 		  utag = g_ukey
 		  g_ukey = g_ukey + 1
 		 
-		  --ÉèÖÃsessionµÄutagÖµ
+		  --è®¾ç½®sessionçš„utagå€¼
 		  session_wrapper.set_utag(client_session,utag)
 	   end
-		   --ÁÙÊ±µÄkeyºÍ¿Í»§¶Ësession×öÒ»¸öÁÙÊ±µÄ¹ØÏµÓ³Éä
-	       client_session_utag[utag] = client_session
-		else
-		 --ÕâÀï´¦Àí²»ÊÇµÇÂ¼ÇëÇó
-		 local uid = session_wrapper.get_uid(client_session)
+		   --ä¸´æ—¶çš„keyå’Œå®¢æˆ·ç«¯sessionåšä¸€ä¸ªä¸´æ—¶çš„å…³ç³»æ˜ å°„
+	   client_session_utag[utag] = client_session
+		--else
+		 --è¿™é‡Œå¤„ç†ä¸æ˜¯ç™»å½•è¯·æ±‚
+		 --local uid = session_wrapper.get_uid(client_session)
+		 --utag = uid
+	else
+ 	   
+	     local uid = session_wrapper.get_uid(client_session)
 		 utag = uid
 	end
-	 
-	 --ÏÈ¸øÊı¾İ°üĞ´Èëutag,ÕâÑùÔÚÊı¾İ·µ»Ø·¢¸øclient_session¾ÍÓĞÓ³Éä¹ØÏµ
+	
+	 --å…ˆç»™æ•°æ®åŒ…å†™å…¥utag,è¿™æ ·åœ¨æ•°æ®è¿”å›å‘ç»™client_sessionå°±æœ‰æ˜ å°„å…³ç³»
 	 proto_mgr_wrapper.set_raw_utag(raw_data,utag)
-	 --·¢ËÍÊı¾İ¸østype¶ÔÓ¦µÄ·şÎñÆ÷
+	 --å‘é€æ•°æ®ç»™stypeå¯¹åº”çš„æœåŠ¡å™¨
 	 session_wrapper.send_raw_msg(server_session,raw_data)
 
 end
 
---ÅĞ¶ÏÊÇ·ñÎªµÇÂ¼·µ»ØĞ­Òé
+--åˆ¤æ–­æ˜¯å¦ä¸ºç™»å½•è¿”å›åè®®
 function is_loginresp_ctype(ctype)
 	if ctype == cmd_module.GuestLoginRes or 
 	   ctype == cmd_module.UnameLoginRes then
@@ -114,18 +142,18 @@ function is_loginresp_ctype(ctype)
 	return false
 end
 
---·şÎñÆ÷·¢¹ıÀ´µÄĞÅÏ¢£¬×ª¸ø¶ÔÓ¦µÄ¿Í»§¶Ë
+--æœåŠ¡å™¨å‘è¿‡æ¥çš„ä¿¡æ¯ï¼Œè½¬ç»™å¯¹åº”çš„å®¢æˆ·ç«¯
 function send_to_client(server_session,raw_data)
 	local cmdtype, ctype, utag = proto_mgr_wrapper.read_msg_head(raw_data)
 	print("send_to_client".." cmdtype:"..cmdtype.." ctype:"..ctype.." utag:"..utag)
 	local client_session = nil
 	
-	--ÅĞ¶ÏÊÇ·ñÎªµÇÂ¼·µ»ØĞ­Òé
+	--åˆ¤æ–­æ˜¯å¦ä¸ºç™»å½•è¿”å›åè®®
 	--print("send_to_client ctype,"..ctype)
-	--ctypeÊÇĞ­Òéid,ÅĞ¶ÏÊÇ·ñÎªµÇÂ¼·µ»ØĞ­Òé
+	--ctypeæ˜¯åè®®id,åˆ¤æ–­æ˜¯å¦ä¸ºç™»å½•è¿”å›åè®®
 	if is_loginresp_ctype(ctype) == true then
 	    print("is_login_ctype ctype:"..ctype)
-		--µÇÂ¼Ğ­Òé·µ»Ø£¬ÔÚÕâÀï¶ÁÈ¡ÈÏÖ¤·şÎñÆ÷·µ»ØµÄuid
+		--ç™»å½•åè®®è¿”å›ï¼Œåœ¨è¿™é‡Œè¯»å–è®¤è¯æœåŠ¡å™¨è¿”å›çš„uid
 		local t_body = proto_mgr_wrapper.read_msg_body(raw_data)
 		if t_body == nil then
 		   print("t_body is nil")
@@ -133,16 +161,16 @@ function send_to_client(server_session,raw_data)
 		end
 
 		utils.print_table(t_body)
-		--client_session_utagÔÚµÇÂ¼Ç°ÉèÖÃÁË,
-		--client_session_utag[utag] = client_sessionµÄ¶ÔÓ¦¹ØÏµ
+		--client_session_utagåœ¨ç™»å½•å‰è®¾ç½®äº†,
+		--client_session_utag[utag] = client_sessionçš„å¯¹åº”å…³ç³»
 		client_session = client_session_utag[utag]
 		print("is_login_ctype utag:"..utag)
 		if client_session==nil then
-			--Èç¹û»ñÈ¡²»µ½¾ÍÊÇÒ»¸öÒì³£
+			--å¦‚æœè·å–ä¸åˆ°å°±æ˜¯ä¸€ä¸ªå¼‚å¸¸
 			print("client_session is nil")
 			return
 		end
-		--ÅĞ¶ÏµÇÂ¼ÏûÏ¢ÊÇ·ñ³É¹¦
+		--åˆ¤æ–­ç™»å½•æ¶ˆæ¯æ˜¯å¦æˆåŠŸ
 		if t_body.status ~= res_module.OK then
 		   proto_mgr_wrapper.set_raw_utag(raw_data,0)
 		   if client_session ~= nil then
@@ -150,56 +178,57 @@ function send_to_client(server_session,raw_data)
 			end
 		end
 		
-		--ÏÂÃæÊÇµÇÂ¼³É¹¦Âß¼­
+		--ä¸‹é¢æ˜¯ç™»å½•æˆåŠŸé€»è¾‘
 		
 		local t_userinfo = t_body.userinfo
-		--ÓÃ»§uid,uidÊÇÔÚµ×²ã´´½¨µÄ
+		--ç”¨æˆ·uid,uidæ˜¯åœ¨åº•å±‚åˆ›å»ºçš„
 		local login_uid = t_userinfo.uid
 		print("login_uid"..login_uid)
 		if login_uid~= 0 then 
-		   --ÅĞ¶ÏÊÇ·ñÓĞsessionÊÇ·ñÒÑ¾­µÇÂ¼
+		   --åˆ¤æ–­æ˜¯å¦æœ‰sessionæ˜¯å¦å·²ç»ç™»å½•
 		   if client_session_uid[login_uid] ~= nil and client_session_uid[login_uid] ~= client_session then
 		       print("Relogin uid is"..login_uid)
-		       --·µ»ØÒ»¸öÖØ¸´µÇÂ¼ÏûÏ¢
+		       --è¿”å›ä¸€ä¸ªé‡å¤ç™»å½•æ¶ˆæ¯
 			  local ret_msg = {stype=stype_module.AuthSerser,ctype=cmd_module.ReLoginRes,utag=0,body=nil}
 			  session_wrapper.send_msg(client_session,ret_msg)
-			   --ÏÈ¹Ø±Õµ×²ãsession£¬É¾³ıÒÑ¾­´æÔÚµÄsession
+			   --å…ˆå…³é—­åº•å±‚sessionï¼Œåˆ é™¤å·²ç»å­˜åœ¨çš„session
 			   session_wrapper.close_session(client_session)
 			   client_session_uid[login_uid] = nil
 		   end 
 		end
 
-		--ÏÈ°ÑµÇÂ¼Ç°µÄutag±íÀïµÄutag¶ÔÓ¦µÄÖµÉèÖÃÎª¿Õ
+		--å…ˆæŠŠç™»å½•å‰çš„utagè¡¨é‡Œçš„utagå¯¹åº”çš„å€¼è®¾ç½®ä¸ºç©º
 		client_session_utag[utag] = nil
 		client_session_uid[login_uid] = client_session
-		--µÇÂ¼³É¹¦ºó£¬ÔÚÍø¹ØÉèÖÃuidµ½µ×²ãsession¶ÔÏó
+		--ç™»å½•æˆåŠŸåï¼Œåœ¨ç½‘å…³è®¾ç½®uidåˆ°åº•å±‚sessionå¯¹è±¡
 		print("client_session_uid uid="..login_uid)
 		session_wrapper.set_uid(client_session,login_uid)
-		--ÕâÀïÉèÖÃÎª0,Ö÷ÒªÊÇÎªÁË²»±©Â¶uid¸ø¿Í»§¶Ë
+		--è¿™é‡Œè®¾ç½®ä¸º0,ä¸»è¦æ˜¯ä¸ºäº†ä¸æš´éœ²uidç»™å®¢æˆ·ç«¯
 		t_body.userinfo.uid = 0
-		--·µ»ØµÇÂ¼ÇëÇóµÄuserinfoĞÅÏ¢¸øÇ°¶Ë
+		--è¿”å›ç™»å½•è¯·æ±‚çš„userinfoä¿¡æ¯ç»™å‰ç«¯
 		local ret_msg = {stype=stype_module.AuthSerser,ctype=ctype,utag=0,body=t_body}
-		utils.print_table(t_body)
+		utils.print_table(ret_msg)
+	
 		session_wrapper.send_msg(client_session,ret_msg)
 		return
 	end
 
 	
 	
-	--ÔÚµÇÂ¼³É¹¦ÒÔºó£¬Ğ­ÒéÍ·µÄutag¾ÍÊÇÓÃ»§µÄuid
+	--åœ¨ç™»å½•æˆåŠŸä»¥åï¼Œåè®®å¤´çš„utagå°±æ˜¯ç”¨æˆ·çš„uid
 	client_session = client_session_uid[utag]
 	if client_session ~= nil then
-	   --×ª·¢Êı¾İ¸ø¿Í»§¶Ë
-	   --°ÑĞ­ÒéÀïµÄutagÖØÖÃÎª0 ,±ÜÃâ±©Â¶uid¸ø¿Í»§¶Ë
+	   --è½¬å‘æ•°æ®ç»™å®¢æˆ·ç«¯
+	   --æŠŠåè®®é‡Œçš„utagé‡ç½®ä¸º0 ,é¿å…æš´éœ²uidç»™å®¢æˆ·ç«¯
 	   proto_mgr_wrapper.set_raw_utag(raw_data,0)
 	   session_wrapper.send_raw_msg(client_session,raw_data)
 
-	   --ÅĞ¶ÏÊÇ·ñÎªÍË³öÓÎÏ·Ğ­Òé£¬ÊÇµÄ»°Òª°Ñclient_session_uid¶ÔÓ¦µÄ¿Í»§¶ËsessionÇåÀíµô
+	   --åˆ¤æ–­æ˜¯å¦ä¸ºé€€å‡ºæ¸¸æˆåè®®ï¼Œæ˜¯çš„è¯è¦æŠŠclient_session_uidå¯¹åº”çš„å®¢æˆ·ç«¯sessionæ¸…ç†æ‰
 	   if ctype == cmd_module.LoginOutRes then
 	      session_wrapper.set_uid(client_session,0)
 	      client_session_uid[utag] = nil
 
-		  --ÓÃ»§ÍË³öºó£¬ĞèÒª¸øÆäËû·şÎñ·¢ËÍÓÃ»§ÍË³öµÄÏûÏ¢£¬ÔÚÕâÀï´¦Àí
+		  --ç”¨æˆ·é€€å‡ºåï¼Œéœ€è¦ç»™å…¶ä»–æœåŠ¡å‘é€ç”¨æˆ·é€€å‡ºçš„æ¶ˆæ¯ï¼Œåœ¨è¿™é‡Œå¤„ç†
 
 	   end
 	else
@@ -207,30 +236,30 @@ function send_to_client(server_session,raw_data)
 	end
 end
 
--- raw_dataÊÇÓÉC++µ×²ãÍÆËÍµÄÍêÕûÔ­Ê¼Êı¾İ°ü
---Íø¹Ø¿ÉÄÜÊÕµ½2ÖĞsessionÀàĞÍÊı¾İ
---À´×Ô¿Í»§¶Ë£¬ĞèÒª¸ù¾İstype×ª·¢¸ø¶ÔÓ¦µÄsession
---À´×Ô·şÎñÆ÷£¬¸ù¾İutag»òÕßuid×ª·¢¸ø¿Í»§¶Ë¶ÔÓ¦µÄsession
+-- raw_dataæ˜¯ç”±C++åº•å±‚æ¨é€çš„å®Œæ•´åŸå§‹æ•°æ®åŒ…
+--ç½‘å…³å¯èƒ½æ”¶åˆ°2ä¸­sessionç±»å‹æ•°æ®
+--æ¥è‡ªå®¢æˆ·ç«¯ï¼Œéœ€è¦æ ¹æ®stypeè½¬å‘ç»™å¯¹åº”çš„session
+--æ¥è‡ªæœåŠ¡å™¨ï¼Œæ ¹æ®utagæˆ–è€…uidè½¬å‘ç»™å®¢æˆ·ç«¯å¯¹åº”çš„session
 function on_gw_recv_raw_cmd(s, raw_data)
 	--print("on_gw_recv_raw_cmd")
-	--ÏÈÅĞ¶ÏsessionÀàĞÍ
+	--å…ˆåˆ¤æ–­sessionç±»å‹
 	is_client_session = session_wrapper.is_client_session(s)
 	if is_client_session==0 then 
-	   --À´×Ô¿Í»§¶ËÊı¾İ£¬¸ù¾İĞ­ÒéÀïµÄstypeÀ´×ª·¢
+	   --æ¥è‡ªå®¢æˆ·ç«¯æ•°æ®ï¼Œæ ¹æ®åè®®é‡Œçš„stypeæ¥è½¬å‘
 	   --print("send_to_server")
 	   send_to_server(s,raw_data)
 	else
-	   --À´×Ô·şÎñÆ÷µÄÏûÏ¢£¬×ªµ½µ½¿Í»§¶Ë,¸ù¾İĞ­ÒéÀïµÄutag/uidÀ´×ª·¢
+	   --æ¥è‡ªæœåŠ¡å™¨çš„æ¶ˆæ¯ï¼Œè½¬åˆ°åˆ°å®¢æˆ·ç«¯,æ ¹æ®åè®®é‡Œçš„utag/uidæ¥è½¬å‘
 	  --print("send_to_client")
 	   send_to_client(s,raw_data)
 	end
 end
 
---session¶Ï¿ª»Øµ÷º¯Êı
+--sessionæ–­å¼€å›è°ƒå‡½æ•°
 function on_gw_session_disconnect(s,service_stype) 
-    --Õâ¸öÊÇÍø¹ØÁ¬½ÓÆäËû·şÎñÆ÷µÄsession
+    --è¿™ä¸ªæ˜¯ç½‘å…³è¿æ¥å…¶ä»–æœåŠ¡å™¨çš„session
 	if session_wrapper.is_client_session(s)==1 then
-	--Íø¹ØÁ¬½ÓµÄsession¶Ï¿ª»Øµ÷º¯Êı
+	--ç½‘å…³è¿æ¥çš„sessionæ–­å¼€å›è°ƒå‡½æ•°
 		--print(s)
 		for k,v in pairs(session_map) do
 			--print(v)
@@ -244,47 +273,47 @@ function on_gw_session_disconnect(s,service_stype)
 		return
 	end
 	--print("on_gw_session_disconnect BBB!!")
-	--¿Í»§¶ËÁ¬½Óµ½Íø¹ØµÄsession,ÕâÀïÊÇµÇÂ¼Ç°
+	--å®¢æˆ·ç«¯è¿æ¥åˆ°ç½‘å…³çš„session,è¿™é‡Œæ˜¯ç™»å½•å‰
 	local utag = session_wrapper.get_utag(s)
 	--print("on_gw_session_disconnect BBB!!"..utag)
 	if client_session_utag[utag] ~= nil  and client_session_utag[utag] == s then
 	   print("client_session_utag[utag] remove!!")
-	   client_session_utag[utag] = nil --Õâ¾ä»°ÄÜ±£Ö¤utag¶ÔÓ¦µÄÊı¾İ±»É¾³ı£¬²»ÔÚÊ¹ÓÃremove
+	   client_session_utag[utag] = nil --è¿™å¥è¯èƒ½ä¿è¯utagå¯¹åº”çš„æ•°æ®è¢«åˆ é™¤ï¼Œä¸åœ¨ä½¿ç”¨remove
 	   session_wrapper.set_utag(s,0)
 	end
 
-	--¿Í»§¶ËÁ¬½Óµ½Íø¹Ø£¬ÒÑ¾­ÊÇµÇÂ¼ºó
+	--å®¢æˆ·ç«¯è¿æ¥åˆ°ç½‘å…³ï¼Œå·²ç»æ˜¯ç™»å½•å
 	local uid = session_wrapper.get_uid(s)
 	if client_session_uid[uid] ~= nil and client_session_uid[uid] == s then
 	   print("client_session_uid[uid] remove!! uid"..uid)
 	   client_session_uid[uid] = nil
 	end
 
-	--¿Í»§¶Ë¶ÏÏß£¬Íø¹Ø¸ºÔğÍ¨Öª¸øÆäËû·şÎñÆ÷
+	--å®¢æˆ·ç«¯æ–­çº¿ï¼Œç½‘å…³è´Ÿè´£é€šçŸ¥ç»™å…¶ä»–æœåŠ¡å™¨
 	local server_session = session_map[service_stype]
 	if server_session == nil then
 		return
 	end
 	
 	if uid~=0 then
-	  --UserLostConnĞ­ÒéÊÇÓÃ»§·ÇÖ÷¶¯ÍË³öºÍÍø¹Ø·şÎñÍøÂçÒì³£¶Ï¿ª
-	  --ÓÉÍø¹Ø¹ã²¥¸øÆäËûÁ¬½ÓµÄ·şÎñ£¬Í¨ÖªÓĞÓÃ»§ÍøÂçÒì³£ÊÂ¼şÍ¨Öª
-	  --¹ã²¥ÓÃ»§¶ÏÏßµÄÏûÏ¢¸ø£¬ËùÓĞÁ¬½ÓµÄÍø¹Ø
+	  --UserLostConnåè®®æ˜¯ç”¨æˆ·éä¸»åŠ¨é€€å‡ºå’Œç½‘å…³æœåŠ¡ç½‘ç»œå¼‚å¸¸æ–­å¼€
+	  --ç”±ç½‘å…³å¹¿æ’­ç»™å…¶ä»–è¿æ¥çš„æœåŠ¡ï¼Œé€šçŸ¥æœ‰ç”¨æˆ·ç½‘ç»œå¼‚å¸¸äº‹ä»¶é€šçŸ¥
+	  --å¹¿æ’­ç”¨æˆ·æ–­çº¿çš„æ¶ˆæ¯ç»™ï¼Œæ‰€æœ‰è¿æ¥çš„ç½‘å…³
 	  local ret_msg = {stype=service_stype,ctype=cmd_module.UserLostConn,utag=uid,body=nil}
 	  session_wrapper.send_msg(server_session,ret_msg)
 	end
 end
 
---µ¼³öº¯Êı
+--å¯¼å‡ºå‡½æ•°
 local gw_service = {
-    --µ×²ãÊÕµ½Êı¾İºóµ÷ÓÃÕâ¸ö×¢²áº¯Êı
+    --åº•å±‚æ”¶åˆ°æ•°æ®åè°ƒç”¨è¿™ä¸ªæ³¨å†Œå‡½æ•°
 	on_session_recv_raw_cmd = on_gw_recv_raw_cmd,
-	--session¶ÏÏßµ×²ãµ÷ÓÃ(¿Í»§¶ËsessionºÍserverµÄsession¶¼»á±»µ÷ÓÃ)
+	--sessionæ–­çº¿åº•å±‚è°ƒç”¨(å®¢æˆ·ç«¯sessionå’Œserverçš„sessionéƒ½ä¼šè¢«è°ƒç”¨)
 	on_session_disconnect = on_gw_session_disconnect,
 
 }
 
---Ä£¿é±»¼ÓÔØºó£¬º¯Êı»á±»µ÷ÓÃ
+--æ¨¡å—è¢«åŠ è½½åï¼Œå‡½æ•°ä¼šè¢«è°ƒç”¨
 server_session_init()
 
 return gw_service

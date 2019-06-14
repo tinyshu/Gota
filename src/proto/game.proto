@@ -174,3 +174,8 @@ message UserExitRoomNotify{
 message GameStartNotify {
 	repeated int32 heroes = 1; 
 }
+
+message LoginLogicReq {
+	string udp_ip = 1;
+	int32  udp_port = 2;
+}
