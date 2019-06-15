@@ -305,7 +305,7 @@ static void send_udp_msg(const char* udp_ip,int udp_port,recv_msg* msg) {
 }
 
 static int lua_udp_send_msg(lua_State* tolua_s) {
-	const char* udp_ip = (char*)tolua_tostring(tolua_s, 1, NULL);
+	const char* udp_ip = (const char*)tolua_tostring(tolua_s, 1, NULL);
 	if (udp_ip==NULL) {
 		return 0;
 	}
@@ -314,43 +314,40 @@ static int lua_udp_send_msg(lua_State* tolua_s) {
 	if (udp_port == 0) {
 		return 0;
 	}
-
+	
 	//解析数据，是一个table类型
 	if (!lua_istable(tolua_s, 3)) {
 		return 0;
 	}
-
-	lua_getfield(tolua_s, 2, "stype");
-	lua_getfield(tolua_s, 2, "ctype");
-	lua_getfield(tolua_s, 2, "utag");
-	lua_getfield(tolua_s, 2, "body");
+	//把 t[k] 值压入堆栈， 这里的 t 是指有效索引 index 指向的值
+	lua_getfield(tolua_s, 3, "stype");
+	lua_getfield(tolua_s, 3, "ctype");
+	lua_getfield(tolua_s, 3, "utag");
+	lua_getfield(tolua_s, 3, "body");
 
 	struct recv_msg msg;
-	msg.head.stype = (int)lua_tointeger(tolua_s, 3);
-	msg.head.ctype = (int)lua_tointeger(tolua_s, 4);
-	msg.head.utag = (int)lua_tointeger(tolua_s, 5);
+	msg.head.stype = (int)lua_tointeger(tolua_s, 4);
+	msg.head.ctype = (int)lua_tointeger(tolua_s, 5);
+	msg.head.utag = (int)lua_tointeger(tolua_s, 6);
 	if (get_proto_type() == JSON_PROTOCAL) {
-		//json数据之君子而获取string然后发送
-		msg.body = (void*)lua_tostring(tolua_s, 6);
-		//s->send_msg(&msg);
+		msg.body = (void*)lua_tostring(tolua_s, 7);
 		send_udp_msg(udp_ip, udp_port, &msg);
 	}
 	else {
-		if (!lua_istable(tolua_s, 6)) {
+		if (!lua_istable(tolua_s, 7)) {
 			//没有数据
 			msg.body = NULL;
-			//s->send_msg(&msg);
 			send_udp_msg(udp_ip, udp_port, &msg);
 		}
 		else {
 			string type_name = protoManager::get_cmmand_protoname(msg.head.ctype);
 			if (type_name.empty()) {
 				msg.body = NULL;
-				//s->send_msg(&msg);
+				
 				send_udp_msg(udp_ip, udp_port, &msg);
 			}
 
-			Message* pb_msg = create_message_from_lua_table(tolua_s, 6, type_name);
+			Message* pb_msg = create_message_from_lua_table(tolua_s, 7, type_name);
 			if (pb_msg == NULL) {
 				//error log
 				log_error("create_message_from_lua_table field error %s\n", type_name.c_str());
@@ -358,7 +355,7 @@ static int lua_udp_send_msg(lua_State* tolua_s) {
 			}
 
 			msg.body = (void*)pb_msg;
-			//s->send_msg(&msg);
+		
 			send_udp_msg(udp_ip, udp_port, &msg);
 			delete pb_msg;
 			pb_msg = NULL;

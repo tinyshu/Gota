@@ -37,7 +37,7 @@ function player:init(uid, s, ret_handler)
 	--是否为机器人玩家
 	self.is_robot = false
 	self.client_udp_ip = nil
-	self.client_upd_port = 0
+	self.client_udp_port = 0
 	-- 数据库理面读取玩家的基本信息;
 	mysql_game.get_ugame_info(uid, function (err, ugame_info)
 		if err then
@@ -61,7 +61,7 @@ function player:init(uid, s, ret_handler)
 		   return
 		end
 
-		print("play read redis unick:"..user_uinfo.unick.." uface:"..user_uinfo.uface)
+		--print("play read redis unick:"..user_uinfo.unick.." uface:"..user_uinfo.uface)
 		self.uinfo = user_uinfo
 		if ret_handler then
 		   ret_handler(res_module.OK)
@@ -73,11 +73,13 @@ end
 
 function player:set_udp_addr(ip,port)
 	if ip == nil or port<=0 then
+	   print("set_udp_addr invalid parament")
 	   return
 	end
 
 	self.client_udp_ip = ip
-	self.client_upd_port = port
+	self.client_udp_port = port
+	--print("------------player:set_udp_addr ip:"..self.client_udp_ip.." port:"..self.client_udp_port)
 end
 
 function player:set_session(s)
@@ -90,7 +92,7 @@ function player:send_cmd(sstype, cctype, cbody)
 	end
 
 	local ret_msg = {stype = sstype,ctype = cctype,utag = self.uid, body=cbody}
-	utils.print_table(ret_msg)
+	--utils.print_table(ret_msg)
     session_wrapper.send_msg(self.session,ret_msg)
 end
 
@@ -99,11 +101,13 @@ function player:udp_send_cmd(sstype, cctype, cbody)
 		return
 	end
 
-	if self.client_udp_ip == nil or self.client_upd_port == 0 then
+	if self.client_udp_ip == nil or self.client_udp_port == 0 then
+	    --print("client_udp_ip nil or client_udp_port==0")
 	    return
 	end
 	local ret_msg = {stype = sstype,ctype = cctype,utag = self.uid, body=cbody}
-	session_wrapper.udp_send_msg(self.client_udp_ip,elf.client_upd_port,ret_msg)
+	--utils.print_table(ret_msg)
+	session_wrapper.udp_send_msg(self.client_udp_ip,self.client_udp_port,ret_msg)
 end
 
 --这里返回给房间里用户信息，需要什么在这里添加

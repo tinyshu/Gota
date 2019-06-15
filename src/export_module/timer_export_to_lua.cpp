@@ -30,8 +30,8 @@ static void on_lua_time(void* udata) {
 	timer_handle* handle = (timer_handle*)udata;
 	int ret = lua_wrapper::execute_lua_script_by_handle(handle->ref, 0);
 	if (ret!=0) {
-		int a = 10;
-		//lua_wrapper::remove_lua_script_by_handle(handle->ref);
+	    lua_wrapper::remove_lua_script_by_handle(handle->ref);
+		return;
 	}
 
 	if (handle->repeat_count == -1) {

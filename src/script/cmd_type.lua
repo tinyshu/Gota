@@ -31,6 +31,8 @@ local Cmd = {
 	ExitRoomRes = 28,
     UserExitRoomNotify = 29,
 	GameStartNotify = 30,
+	UdpTest = 31,
+	LogicFrame = 32,
 }
      
 return Cmd

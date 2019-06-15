@@ -21,6 +21,8 @@ local servers = config.servers
 --开启网络服务
 print("start logic service success ip:".. servers[stype.LogicServer].ip,"port:"..servers[stype.LogicServer].port)
 netbus_wrapper.tcp_listen(servers[stype.LogicServer].ip,servers[stype.LogicServer].port)
+print("start logic udp ip:"..config.logic_upd.host.." port:"..config.logic_upd.port)
+netbus_wrapper.udp_listen(config.logic_upd.host,config.logic_upd.port)
 
 local logic_service = require("logic_server/logic_service")
 --注册auth服务services模块

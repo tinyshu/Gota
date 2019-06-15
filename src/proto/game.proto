@@ -59,6 +59,9 @@ enum Cmd {
 	eUserExitRoomNotify = 29;
 	//通知开始一句对战游戏
 	eGameStartNotify = 30;
+	//
+	eUdpTest = 31;
+	eLogicFrame = 32;
 }
 
 message GuestLoginReq{
@@ -179,3 +182,8 @@ message LoginLogicReq {
 	string udp_ip = 1;
 	int32  udp_port = 2;
 }
+
+message LogicFrame{
+    int32 frameid = 1;
+}
+

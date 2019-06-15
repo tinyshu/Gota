@@ -41,7 +41,7 @@ function get_ugame_info(uid, ret_handler)
 	
 	local sql = "select uchip, uchip2, uchip3, uvip, uvip_endtime, udata1, udata2, udata3, uexp, ustatus from ugame where uid = %d limit 1"
 	local sql_cmd = string.format(sql, uid)	
-	print(sql_cmd)
+	--print(sql_cmd)
 
 	mysql_wrapper.query(mysql_conn, sql_cmd, function(err, ret)
 	    

@@ -106,6 +106,10 @@ class LoginLogicReqDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<LoginLogicReq> _instance;
 } _LoginLogicReq_default_instance_;
+class LogicFrameDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<LogicFrame> _instance;
+} _LogicFrame_default_instance_;
 static void InitDefaultsGuestLoginReq_game_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -417,6 +421,20 @@ static void InitDefaultsLoginLogicReq_game_2eproto() {
 ::google::protobuf::internal::SCCInfo<0> scc_info_LoginLogicReq_game_2eproto =
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsLoginLogicReq_game_2eproto}, {}};
 
+static void InitDefaultsLogicFrame_game_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_LogicFrame_default_instance_;
+    new (ptr) ::LogicFrame();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::LogicFrame::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<0> scc_info_LogicFrame_game_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsLogicFrame_game_2eproto}, {}};
+
 void InitDefaults_game_2eproto() {
   ::google::protobuf::internal::InitSCC(&scc_info_GuestLoginReq_game_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_UserCenterInfo_game_2eproto.base);
@@ -440,9 +458,10 @@ void InitDefaults_game_2eproto() {
   ::google::protobuf::internal::InitSCC(&scc_info_UserExitRoomNotify_game_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_GameStartNotify_game_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_LoginLogicReq_game_2eproto.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_LogicFrame_game_2eproto.base);
 }
 
-::google::protobuf::Metadata file_level_metadata_game_2eproto[22];
+::google::protobuf::Metadata file_level_metadata_game_2eproto[23];
 const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors_game_2eproto[2];
 constexpr ::google::protobuf::ServiceDescriptor const** file_level_service_descriptors_game_2eproto = nullptr;
 
@@ -608,6 +627,12 @@ const ::google::protobuf::uint32 TableStruct_game_2eproto::offsets[] PROTOBUF_SE
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::LoginLogicReq, udp_ip_),
   PROTOBUF_FIELD_OFFSET(::LoginLogicReq, udp_port_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::LogicFrame, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::LogicFrame, frameid_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::GuestLoginReq)},
@@ -632,6 +657,7 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SE
   { 142, -1, sizeof(::UserExitRoomNotify)},
   { 148, -1, sizeof(::GameStartNotify)},
   { 154, -1, sizeof(::LoginLogicReq)},
+  { 161, -1, sizeof(::LogicFrame)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -657,12 +683,13 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::_UserExitRoomNotify_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::_GameStartNotify_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::_LoginLogicReq_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::_LogicFrame_default_instance_),
 };
 
 ::google::protobuf::internal::AssignDescriptorsTable assign_descriptors_table_game_2eproto = {
   {}, AddDescriptors_game_2eproto, "game.proto", schemas,
   file_default_instances, TableStruct_game_2eproto::offsets,
-  file_level_metadata_game_2eproto, 22, file_level_enum_descriptors_game_2eproto, file_level_service_descriptors_game_2eproto,
+  file_level_metadata_game_2eproto, 23, file_level_enum_descriptors_game_2eproto, file_level_service_descriptors_game_2eproto,
 };
 
 const char descriptor_table_protodef_game_2eproto[] =
@@ -697,31 +724,32 @@ const char descriptor_table_protodef_game_2eproto[] =
   "\016\n\006status\030\001 \001(\005\"$\n\022UserExitRoomNotify\022\016\n"
   "\006seatid\030\001 \001(\005\"!\n\017GameStartNotify\022\016\n\006hero"
   "es\030\001 \003(\005\"1\n\rLoginLogicReq\022\016\n\006udp_ip\030\001 \001("
-  "\t\022\020\n\010udp_port\030\002 \001(\005*N\n\005Stype\022\022\n\016INVALIDI"
-  "_STYPE\020\000\022\016\n\nAUTH_STYPE\020\001\022\020\n\014SYSTEM_STYPE"
-  "\020\002\022\017\n\013LOGIC_STYPE\020\003*\221\005\n\003Cmd\022\017\n\013INVALID_C"
-  "MD\020\000\022\022\n\016eGuestLoginReq\020\001\022\022\n\016eGuestLoginR"
-  "es\020\002\022\017\n\013eReLoginRes\020\003\022\021\n\reUserLostConn\020\004"
-  "\022\023\n\017eEditProfileReq\020\005\022\023\n\017eEditProfileRes"
-  "\020\006\022\026\n\022eAccountUpgradeReq\020\007\022\026\n\022eAccountUp"
-  "gradeRes\020\010\022\022\n\016eUnameLoginReq\020\t\022\022\n\016eUname"
-  "LoginRes\020\n\022\020\n\014eLoginOutReq\020\013\022\020\n\014eLoginOu"
-  "tRes\020\014\022\024\n\020eGetUgameInfoReq\020\r\022\024\n\020eGetUgam"
-  "eInfoRes\020\016\022\027\n\023eRecvLoginBonuesReq\020\017\022\027\n\023e"
-  "RecvLoginBonuesRes\020\020\022\031\n\025eGetWorldRankUch"
-  "ipReq\020\021\022\031\n\025eGetWorldRankUchipRes\020\022\022\021\n\reG"
-  "etSysMsgReq\020\023\022\021\n\reGetSysMsgRes\020\024\022\022\n\016eLog"
-  "inLogicReq\020\025\022\022\n\016eLoginLogicRes\020\026\022\021\n\reEnt"
-  "erZoneReq\020\027\022\021\n\reEnterZoneRes\020\030\022\024\n\020eEnter"
-  "PlayNotify\020\031\022\026\n\022eEnterArriveNotify\020\032\022\020\n\014"
-  "eExitRoomReq\020\033\022\020\n\014eExitRoomRes\020\034\022\027\n\023eUse"
-  "rExitRoomNotify\020\035\022\024\n\020eGameStartNotify\020\036b"
-  "\006proto3"
+  "\t\022\020\n\010udp_port\030\002 \001(\005\"\035\n\nLogicFrame\022\017\n\007fra"
+  "meid\030\001 \001(\005*N\n\005Stype\022\022\n\016INVALIDI_STYPE\020\000\022"
+  "\016\n\nAUTH_STYPE\020\001\022\020\n\014SYSTEM_STYPE\020\002\022\017\n\013LOG"
+  "IC_STYPE\020\003*\260\005\n\003Cmd\022\017\n\013INVALID_CMD\020\000\022\022\n\016e"
+  "GuestLoginReq\020\001\022\022\n\016eGuestLoginRes\020\002\022\017\n\013e"
+  "ReLoginRes\020\003\022\021\n\reUserLostConn\020\004\022\023\n\017eEdit"
+  "ProfileReq\020\005\022\023\n\017eEditProfileRes\020\006\022\026\n\022eAc"
+  "countUpgradeReq\020\007\022\026\n\022eAccountUpgradeRes\020"
+  "\010\022\022\n\016eUnameLoginReq\020\t\022\022\n\016eUnameLoginRes\020"
+  "\n\022\020\n\014eLoginOutReq\020\013\022\020\n\014eLoginOutRes\020\014\022\024\n"
+  "\020eGetUgameInfoReq\020\r\022\024\n\020eGetUgameInfoRes\020"
+  "\016\022\027\n\023eRecvLoginBonuesReq\020\017\022\027\n\023eRecvLogin"
+  "BonuesRes\020\020\022\031\n\025eGetWorldRankUchipReq\020\021\022\031"
+  "\n\025eGetWorldRankUchipRes\020\022\022\021\n\reGetSysMsgR"
+  "eq\020\023\022\021\n\reGetSysMsgRes\020\024\022\022\n\016eLoginLogicRe"
+  "q\020\025\022\022\n\016eLoginLogicRes\020\026\022\021\n\reEnterZoneReq"
+  "\020\027\022\021\n\reEnterZoneRes\020\030\022\024\n\020eEnterPlayNotif"
+  "y\020\031\022\026\n\022eEnterArriveNotify\020\032\022\020\n\014eExitRoom"
+  "Req\020\033\022\020\n\014eExitRoomRes\020\034\022\027\n\023eUserExitRoom"
+  "Notify\020\035\022\024\n\020eGameStartNotify\020\036\022\014\n\010eUdpTe"
+  "st\020\037\022\017\n\013eLogicFrame\020 b\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_game_2eproto = {
   false, InitDefaults_game_2eproto, 
   descriptor_table_protodef_game_2eproto,
-  "game.proto", &assign_descriptors_table_game_2eproto, 2007,
+  "game.proto", &assign_descriptors_table_game_2eproto, 2069,
 };
 
 void AddDescriptors_game_2eproto() {
@@ -786,6 +814,8 @@ bool Cmd_IsValid(int value) {
     case 28:
     case 29:
     case 30:
+    case 31:
+    case 32:
       return true;
     default:
       return false;
@@ -8490,6 +8520,277 @@ void LoginLogicReq::InternalSwap(LoginLogicReq* other) {
 }
 
 
+// ===================================================================
+
+void LogicFrame::InitAsDefaultInstance() {
+}
+class LogicFrame::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int LogicFrame::kFrameidFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+LogicFrame::LogicFrame()
+  : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:LogicFrame)
+}
+LogicFrame::LogicFrame(const LogicFrame& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  frameid_ = from.frameid_;
+  // @@protoc_insertion_point(copy_constructor:LogicFrame)
+}
+
+void LogicFrame::SharedCtor() {
+  frameid_ = 0;
+}
+
+LogicFrame::~LogicFrame() {
+  // @@protoc_insertion_point(destructor:LogicFrame)
+  SharedDtor();
+}
+
+void LogicFrame::SharedDtor() {
+}
+
+void LogicFrame::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const LogicFrame& LogicFrame::default_instance() {
+  ::google::protobuf::internal::InitSCC(&::scc_info_LogicFrame_game_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void LogicFrame::Clear() {
+// @@protoc_insertion_point(message_clear_start:LogicFrame)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  frameid_ = 0;
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* LogicFrame::_InternalParse(const char* begin, const char* end, void* object,
+                  ::google::protobuf::internal::ParseContext* ctx) {
+  auto msg = static_cast<LogicFrame*>(object);
+  ::google::protobuf::uint32 size; (void)size;
+  int depth; (void)depth;
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::ParseFunc parser_till_end; (void)parser_till_end;
+  auto ptr = begin;
+  while (ptr < end) {
+    ptr = Varint::Parse32Inline(ptr, &tag);
+    GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+    switch (tag >> 3) {
+      // int32 frameid = 1;
+      case 1: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 8) goto handle_unusual;
+        ::google::protobuf::uint64 val;
+        ptr = Varint::Parse64(ptr, &val);
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        ::google::protobuf::int32 value = val;
+        msg->set_frameid(value);
+        break;
+      }
+      default: {
+      handle_unusual: (void)&&handle_unusual;
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->EndGroup(tag);
+          return ptr;
+        }
+        auto res = UnknownFieldParse(tag, {_InternalParse, msg},
+          ptr, end, msg->_internal_metadata_.mutable_unknown_fields(), ctx);
+        ptr = res.first;
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr != nullptr);
+        if (res.second) return ptr;
+      }
+    }  // switch
+  }  // while
+  return ptr;
+len_delim_till_end: (void)&&len_delim_till_end;
+  return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
+                                 {parser_till_end, object}, size);
+group_continues: (void)&&group_continues;
+  GOOGLE_DCHECK(ptr >= end);
+  GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->StoreGroup({_InternalParse, msg}, {parser_till_end, object}, depth, tag));
+  return ptr;
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool LogicFrame::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:LogicFrame)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int32 frameid = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (8 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &frameid_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:LogicFrame)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:LogicFrame)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void LogicFrame::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:LogicFrame)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 frameid = 1;
+  if (this->frameid() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->frameid(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:LogicFrame)
+}
+
+::google::protobuf::uint8* LogicFrame::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:LogicFrame)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 frameid = 1;
+  if (this->frameid() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->frameid(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:LogicFrame)
+  return target;
+}
+
+size_t LogicFrame::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:LogicFrame)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 frameid = 1;
+  if (this->frameid() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->frameid());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void LogicFrame::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:LogicFrame)
+  GOOGLE_DCHECK_NE(&from, this);
+  const LogicFrame* source =
+      ::google::protobuf::DynamicCastToGenerated<LogicFrame>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:LogicFrame)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:LogicFrame)
+    MergeFrom(*source);
+  }
+}
+
+void LogicFrame::MergeFrom(const LogicFrame& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:LogicFrame)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.frameid() != 0) {
+    set_frameid(from.frameid());
+  }
+}
+
+void LogicFrame::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:LogicFrame)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void LogicFrame::CopyFrom(const LogicFrame& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:LogicFrame)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool LogicFrame::IsInitialized() const {
+  return true;
+}
+
+void LogicFrame::Swap(LogicFrame* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void LogicFrame::InternalSwap(LogicFrame* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(frameid_, other->frameid_);
+}
+
+::google::protobuf::Metadata LogicFrame::GetMetadata() const {
+  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_game_2eproto);
+  return ::file_level_metadata_game_2eproto[kIndexInFileMessages];
+}
+
+
 // @@protoc_insertion_point(namespace_scope)
 namespace google {
 namespace protobuf {
@@ -8558,6 +8859,9 @@ template<> PROTOBUF_NOINLINE ::GameStartNotify* Arena::CreateMaybeMessage< ::Gam
 }
 template<> PROTOBUF_NOINLINE ::LoginLogicReq* Arena::CreateMaybeMessage< ::LoginLogicReq >(Arena* arena) {
   return Arena::CreateInternal< ::LoginLogicReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::LogicFrame* Arena::CreateMaybeMessage< ::LogicFrame >(Arena* arena) {
+  return Arena::CreateInternal< ::LogicFrame >(arena);
 }
 }  // namespace protobuf
 }  // namespace google

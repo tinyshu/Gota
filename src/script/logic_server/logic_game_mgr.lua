@@ -263,6 +263,8 @@ function login_server_enter(s,msg)
   
    local uid = msg[3]
    local body = msg[4] 
+   print("login_server_enter bodyis:")
+   utils.print_table(body)
    --[[
    	 logic作为对战地图服务器按照这样来划分
 	 1.一个logic服务是一个完整的对战服务器，可以支持N个不同的地图和N种不同的玩法
@@ -270,13 +272,13 @@ function login_server_enter(s,msg)
    ]]
    --客户端进入的stype
    local stype = msg[1] 
-   print("login_server_enter uid:"..uid.."stype"..stype)
+   --print("login_server_enter uid:"..uid.."stype"..stype)
    
    local play = online_player_map[uid]
    if play ~= nil then
       --更新session,这里的session是客户端和gateway的连接对象
       play:set_session(s)
-	  play:set_udp_addr(body.upd_ip,body.udp_port)
+	  play:set_udp_addr(body.udp_ip,body.udp_port)
 	  send_logic_enter_status(s,uid,stype,res_module.OK)
 	  return
    end
@@ -300,7 +302,7 @@ function login_server_enter(s,msg)
 		send_logic_enter_status(s,uid,stype,status)
    end)
    
-   play:set_udp_addr(body.upd_ip,body.udp_port)
+   play:set_udp_addr(body.udp_ip,body.udp_port)
 end
 
 --网关广播过来的用户断线消息
@@ -410,7 +412,7 @@ function logic_enter_zone(s,msg)
 	--添加play对象到匹配列表
 	play.zid = zid
 	zone_wait_list[zid][uid] = play
-	print("zone_wait_list[zid][uid] zid:"..zid.." uid:"..uid)
+	--print("zone_wait_list[zid][uid] zid:"..zid.." uid:"..uid)
 	local ret_msg = {
 			       stype=stype,ctype=cmd_module.EnterZoneRes,utag=uid,
 				   body={
@@ -464,7 +466,7 @@ function ExitRoomReq(s,msg)
 	 --获取用户所在的房间对象
 	 local croom = room_list[play.zid][play.roomid]
 	 if croom == nil or croom.room_state ~= room_status.InView then
-	     print("ExitRoomReq 444")
+	     --print("ExitRoomReq 444")
 	     local ret_msg = {
 			       stype=stype,ctype=cmd_module.ExitRoomRes,utag=uid,
 				   body={

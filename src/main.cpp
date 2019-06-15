@@ -18,10 +18,10 @@ int main(int argc, char** argv) {
 	if (argc!=3) {
 		std::string search_path = "./script/";
 		lua_wrapper::add_search_path(search_path.c_str());
-		const std::string& lua_file = search_path + "gateway_server/main.lua";
+		//const std::string& lua_file = search_path + "gateway_server/main.lua";
 		//const std::string& lua_file = search_path + "auth_server/main.lua"; 
 		//const std::string& lua_file = search_path + "system_server/main.lua";
-		//const std::string& lua_file = search_path + "logic_server/main.lua";
+		const std::string& lua_file = search_path + "logic_server/main.lua";
 		int ret = lua_wrapper::exce_lua_file(lua_file.c_str());
 		if (ret != 0) {
 			exit(0);

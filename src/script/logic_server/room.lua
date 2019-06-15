@@ -31,7 +31,7 @@ function room:init(zid)
 	self.room_id = g_room_id
 	roomid = g_room_id + 1
 	self.room_state = status.InView
-	 
+	self.frameid = 0
 	self.inview_players = {}  -- 旁观玩家的列表
 	self.lhs_players = {}     -- 左右两边的玩家
 	self.rhs_players = {}     -- 左右两边的玩家
@@ -96,7 +96,7 @@ function room:enter_room(p)
 
 		   --给用户随机一个heroid
 		   p.heroid = math. floor(math.random()*5 + 1)
-		   print("random heroid:"..p.heroid.." uid:"..p.uid)
+		   --print("random heroid:"..p.heroid.." uid:"..p.uid)
 		   break
 		end 
 	end
@@ -137,18 +137,24 @@ function room:enter_room(p)
 	if #self.inview_players >= PLAYER_NUM_3v3 * 2 then 
 	    print("room is read!!!")
 	    self.room_state = status.Ready
-	   	local k,v
-		for k,v in pairs(self.inview_players) do 
-		    if v ~= nil then
-			   v.state = status.Ready
-			end
-		end
+		--更新玩家状态
+	    self:update_play_status(status.Ready)
 
 		--全部都read状态后，发送开始游戏通知给房间内用户
 		self:game_start()
 	end
 	--print("room:enter_room end")
 	return true
+end
+
+function room:update_play_status(status)
+	local k,v
+	for k,v in pairs(self.inview_players) do 
+		if v ~= nil then
+		   v.status = status
+	    end
+	end
+
 end
 
 --全部都read状态后，发送开始游戏通知给房间内用户
@@ -166,6 +172,32 @@ function room:game_start()
 	}
 	
 	self:broadcast_cmd_inview_players(stype_module.LogicServer, cmd_module.GameStartNotify, msgbody, nil)
+	--通知游戏开始后，状态设置为Start
+	self.room_state = status.Start
+	self:update_play_status(status.Start)
+
+	self.frameid = 0
+	--客户端在收到GameStartNotify消息后会开始loading加载资源
+	--等待5s后，开始帧同步，20fps,每次间隔就是50ms(启动一个间隔50ms定时执行的定时器)
+	--注意这里create_timer需要碘绑定一个匿名函数，在匿名函数里面在调用类成员函数 
+	self.frame_time = timer_wrapper.create_timer(function()
+           self:do_logic_frame_sync()
+		   end,-1,5000,1000)
+
+end
+
+function room:do_logic_frame_sync()
+   
+	local k,p
+	for k,p in pairs(self.inview_players) do 
+		if p then
+		   local body = {frameid = self.frameid}
+		   p:udp_send_cmd(stype_module.LogicServer, cmd_module.LogicFrame,body)   
+		end
+	end
+
+	self.frameid = self.frameid + 1
+	print("do_logic_frame_sync self.frameid: "..self.frameid)
 end
 
 function room:broadcast_cmd_inview_players(cstype, cctype, cbody, not_to_player)

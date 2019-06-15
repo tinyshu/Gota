@@ -33,6 +33,8 @@ local cmd_name_map = {
 	"ExitRoomRes",
 	"UserExitRoomNotify",
 	"GameStartNotify",
+	"UdpTest",
+	"LogicFrame",
 
 }
 
