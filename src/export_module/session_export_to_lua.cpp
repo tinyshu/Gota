@@ -178,8 +178,8 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 					}
 					Message* msg = reflection->AddMessage(message, filedes);
 					msg->CopyFrom(*value);
-					delete msg;
-					msg = NULL;
+					delete value;
+					value = NULL;
 				}
 				break;
 				default:
@@ -285,6 +285,7 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 			} //switch
 
 		}
+		lua_pop(tolua_s, 1);
 	}
 	return message;
 }
