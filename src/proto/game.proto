@@ -62,6 +62,7 @@ enum Cmd {
 	//
 	eUdpTest = 31;
 	eLogicFrame = 32;
+	eNextFrameOpts = 33;
 }
 
 message GuestLoginReq{
@@ -174,8 +175,15 @@ message UserExitRoomNotify{
      int32 seatid =1;
 }
 
+
+message PlayerMatchInfo {
+	int32 heroid = 1;
+	int32 seatid = 2;
+	int32 side = 3;
+}
+
 message GameStartNotify {
-	repeated int32 heroes = 1; 
+	repeated PlayerMatchInfo players_match_info = 1; 
 }
 
 message LoginLogicReq {
@@ -183,7 +191,34 @@ message LoginLogicReq {
 	int32  udp_port = 2;
 }
 
-message LogicFrame{
-    int32 frameid = 1;
+//帧时间数据
+message OptionEvent {
+	int32 seatid = 1;
+	int32 opt_type = 2; //玩家操作枚举
+	int32 x = 3;        //x,y可以存放操作的任何需要存储的数据
+	int32 y = 4;  	
 }
+
+//每一个帧间隔全部的操作都存储在这个结构
+message FrameOpts {
+	int32 frameid = 1;  //当前帧id
+	repeated OptionEvent opts = 2;   //当前frameid这一帧全部操作数据
+}
+
+//服务器同步给客户端未同步完成的帧(服务器发送到客户端)
+message LogicFrame {
+	int32 frameid = 1;                     //当前开始帧
+	repeated FrameOpts unsync_frames = 2;  //未同步的帧
+}
+
+//下一帧全部操作(由客户端同步给服务器)
+message NextFrameOpts {
+	int32 frameid = 1;    //下一帧的id
+	int32 zid = 2;
+	int32 matchid = 3;
+	int32 seatid = 4;
+	repeated OptionEvent opts = 5;  //下一帧的全部操作
+}
+
+
 

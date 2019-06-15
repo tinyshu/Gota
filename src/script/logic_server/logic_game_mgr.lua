@@ -482,6 +482,28 @@ function ExitRoomReq(s,msg)
 	 croom:exit_room(play);
 end
 
+--接受玩家下一帧
+function on_next_fream_recv(s,msg)
+	local stype =  msg[1]
+	local ctype = msg[2]
+	local uid = msg[3]
+	local bodymsg = msg[4]
+
+	local room = room_list[bodymsg.zip][bodymsg.matchid]
+	if room == nil then
+	   print("on_next_fream_recv get room is nil zip:"..bodymsg.zip.." roomid:"..bodymsg.matchid)
+	   return
+	end
+
+	if room.room_state ~= room_status.Playing then
+	    print("on_next_fream_recv get room status is error :"..room.room_state)
+	   return
+	end
+
+    room:push_next_frame(bodymsg)
+
+end 
+
 local game_mgr = {
 	login_server_enter = login_server_enter,
 	on_player_disconnect = on_player_disconnect,
@@ -489,6 +511,7 @@ local game_mgr = {
 	on_gateway_connect = on_gateway_connect,
 	logic_enter_zone = logic_enter_zone,
 	ExitRoomReq = ExitRoomReq,
+	on_next_fream_recv = on_next_fream_recv,
 }
 
 return game_mgr

@@ -38,6 +38,8 @@ function player:init(uid, s, ret_handler)
 	self.is_robot = false
 	self.client_udp_ip = nil
 	self.client_udp_port = 0
+	--当前同步到哪一帧
+	self.cur_sync_frame_id = 0   --当前同步到那一帧
 	-- 数据库理面读取玩家的基本信息;
 	mysql_game.get_ugame_info(uid, function (err, ugame_info)
 		if err then
@@ -92,7 +94,7 @@ function player:send_cmd(sstype, cctype, cbody)
 	end
 
 	local ret_msg = {stype = sstype,ctype = cctype,utag = self.uid, body=cbody}
-	--utils.print_table(ret_msg)
+	utils.print_table(ret_msg)
     session_wrapper.send_msg(self.session,ret_msg)
 end
 

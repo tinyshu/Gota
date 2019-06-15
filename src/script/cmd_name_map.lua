@@ -35,6 +35,7 @@ local cmd_name_map = {
 	"GameStartNotify",
 	"UdpTest",
 	"LogicFrame",
+	"NextFrameOpts",
 
 }
 

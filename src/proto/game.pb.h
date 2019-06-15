@@ -42,7 +42,7 @@ struct TableStruct_game_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::google::protobuf::internal::ParseTable schema[23]
+  static const ::google::protobuf::internal::ParseTable schema[27]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
@@ -76,6 +76,9 @@ extern EnterZoneResDefaultTypeInternal _EnterZoneRes_default_instance_;
 class ExitRoomRes;
 class ExitRoomResDefaultTypeInternal;
 extern ExitRoomResDefaultTypeInternal _ExitRoomRes_default_instance_;
+class FrameOpts;
+class FrameOptsDefaultTypeInternal;
+extern FrameOptsDefaultTypeInternal _FrameOpts_default_instance_;
 class GameStartNotify;
 class GameStartNotifyDefaultTypeInternal;
 extern GameStartNotifyDefaultTypeInternal _GameStartNotify_default_instance_;
@@ -100,6 +103,15 @@ extern LoginLogicResDefaultTypeInternal _LoginLogicRes_default_instance_;
 class LoginOutRes;
 class LoginOutResDefaultTypeInternal;
 extern LoginOutResDefaultTypeInternal _LoginOutRes_default_instance_;
+class NextFrameOpts;
+class NextFrameOptsDefaultTypeInternal;
+extern NextFrameOptsDefaultTypeInternal _NextFrameOpts_default_instance_;
+class OptionEvent;
+class OptionEventDefaultTypeInternal;
+extern OptionEventDefaultTypeInternal _OptionEvent_default_instance_;
+class PlayerMatchInfo;
+class PlayerMatchInfoDefaultTypeInternal;
+extern PlayerMatchInfoDefaultTypeInternal _PlayerMatchInfo_default_instance_;
 class RecvLoginBonuesRes;
 class RecvLoginBonuesResDefaultTypeInternal;
 extern RecvLoginBonuesResDefaultTypeInternal _RecvLoginBonuesRes_default_instance_;
@@ -129,6 +141,7 @@ template<> ::EnterPlayNotify* Arena::CreateMaybeMessage<::EnterPlayNotify>(Arena
 template<> ::EnterZoneReq* Arena::CreateMaybeMessage<::EnterZoneReq>(Arena*);
 template<> ::EnterZoneRes* Arena::CreateMaybeMessage<::EnterZoneRes>(Arena*);
 template<> ::ExitRoomRes* Arena::CreateMaybeMessage<::ExitRoomRes>(Arena*);
+template<> ::FrameOpts* Arena::CreateMaybeMessage<::FrameOpts>(Arena*);
 template<> ::GameStartNotify* Arena::CreateMaybeMessage<::GameStartNotify>(Arena*);
 template<> ::GetUgameInfoRes* Arena::CreateMaybeMessage<::GetUgameInfoRes>(Arena*);
 template<> ::GuestLoginReq* Arena::CreateMaybeMessage<::GuestLoginReq>(Arena*);
@@ -137,6 +150,9 @@ template<> ::LogicFrame* Arena::CreateMaybeMessage<::LogicFrame>(Arena*);
 template<> ::LoginLogicReq* Arena::CreateMaybeMessage<::LoginLogicReq>(Arena*);
 template<> ::LoginLogicRes* Arena::CreateMaybeMessage<::LoginLogicRes>(Arena*);
 template<> ::LoginOutRes* Arena::CreateMaybeMessage<::LoginOutRes>(Arena*);
+template<> ::NextFrameOpts* Arena::CreateMaybeMessage<::NextFrameOpts>(Arena*);
+template<> ::OptionEvent* Arena::CreateMaybeMessage<::OptionEvent>(Arena*);
+template<> ::PlayerMatchInfo* Arena::CreateMaybeMessage<::PlayerMatchInfo>(Arena*);
 template<> ::RecvLoginBonuesRes* Arena::CreateMaybeMessage<::RecvLoginBonuesRes>(Arena*);
 template<> ::UnameLoginReq* Arena::CreateMaybeMessage<::UnameLoginReq>(Arena*);
 template<> ::UnameLoginRes* Arena::CreateMaybeMessage<::UnameLoginRes>(Arena*);
@@ -203,12 +219,13 @@ enum Cmd {
   eGameStartNotify = 30,
   eUdpTest = 31,
   eLogicFrame = 32,
+  eNextFrameOpts = 33,
   Cmd_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   Cmd_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool Cmd_IsValid(int value);
 const Cmd Cmd_MIN = INVALID_CMD;
-const Cmd Cmd_MAX = eLogicFrame;
+const Cmd Cmd_MAX = eNextFrameOpts;
 const int Cmd_ARRAYSIZE = Cmd_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* Cmd_descriptor();
@@ -2712,6 +2729,131 @@ class UserExitRoomNotify : public ::google::protobuf::Message /* @@protoc_insert
 };
 // -------------------------------------------------------------------
 
+class PlayerMatchInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:PlayerMatchInfo) */ {
+ public:
+  PlayerMatchInfo();
+  virtual ~PlayerMatchInfo();
+
+  PlayerMatchInfo(const PlayerMatchInfo& from);
+
+  inline PlayerMatchInfo& operator=(const PlayerMatchInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  PlayerMatchInfo(PlayerMatchInfo&& from) noexcept
+    : PlayerMatchInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline PlayerMatchInfo& operator=(PlayerMatchInfo&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const PlayerMatchInfo& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const PlayerMatchInfo* internal_default_instance() {
+    return reinterpret_cast<const PlayerMatchInfo*>(
+               &_PlayerMatchInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    20;
+
+  void Swap(PlayerMatchInfo* other);
+  friend void swap(PlayerMatchInfo& a, PlayerMatchInfo& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline PlayerMatchInfo* New() const final {
+    return CreateMaybeMessage<PlayerMatchInfo>(nullptr);
+  }
+
+  PlayerMatchInfo* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<PlayerMatchInfo>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const PlayerMatchInfo& from);
+  void MergeFrom(const PlayerMatchInfo& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PlayerMatchInfo* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 heroid = 1;
+  void clear_heroid();
+  static const int kHeroidFieldNumber = 1;
+  ::google::protobuf::int32 heroid() const;
+  void set_heroid(::google::protobuf::int32 value);
+
+  // int32 seatid = 2;
+  void clear_seatid();
+  static const int kSeatidFieldNumber = 2;
+  ::google::protobuf::int32 seatid() const;
+  void set_seatid(::google::protobuf::int32 value);
+
+  // int32 side = 3;
+  void clear_side();
+  static const int kSideFieldNumber = 3;
+  ::google::protobuf::int32 side() const;
+  void set_side(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:PlayerMatchInfo)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::int32 heroid_;
+  ::google::protobuf::int32 seatid_;
+  ::google::protobuf::int32 side_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
+// -------------------------------------------------------------------
+
 class GameStartNotify : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameStartNotify) */ {
  public:
   GameStartNotify();
@@ -2749,7 +2891,7 @@ class GameStartNotify : public ::google::protobuf::Message /* @@protoc_insertion
                &_GameStartNotify_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    21;
 
   void Swap(GameStartNotify* other);
   friend void swap(GameStartNotify& a, GameStartNotify& b) {
@@ -2806,25 +2948,24 @@ class GameStartNotify : public ::google::protobuf::Message /* @@protoc_insertion
 
   // accessors -------------------------------------------------------
 
-  // repeated int32 heroes = 1;
-  int heroes_size() const;
-  void clear_heroes();
-  static const int kHeroesFieldNumber = 1;
-  ::google::protobuf::int32 heroes(int index) const;
-  void set_heroes(int index, ::google::protobuf::int32 value);
-  void add_heroes(::google::protobuf::int32 value);
-  const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
-      heroes() const;
-  ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
-      mutable_heroes();
+  // repeated .PlayerMatchInfo players_match_info = 1;
+  int players_match_info_size() const;
+  void clear_players_match_info();
+  static const int kPlayersMatchInfoFieldNumber = 1;
+  ::PlayerMatchInfo* mutable_players_match_info(int index);
+  ::google::protobuf::RepeatedPtrField< ::PlayerMatchInfo >*
+      mutable_players_match_info();
+  const ::PlayerMatchInfo& players_match_info(int index) const;
+  ::PlayerMatchInfo* add_players_match_info();
+  const ::google::protobuf::RepeatedPtrField< ::PlayerMatchInfo >&
+      players_match_info() const;
 
   // @@protoc_insertion_point(class_scope:GameStartNotify)
  private:
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::int32 > heroes_;
-  mutable std::atomic<int> _heroes_cached_byte_size_;
+  ::google::protobuf::RepeatedPtrField< ::PlayerMatchInfo > players_match_info_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_game_2eproto;
 };
@@ -2867,7 +3008,7 @@ class LoginLogicReq : public ::google::protobuf::Message /* @@protoc_insertion_p
                &_LoginLogicReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    22;
 
   void Swap(LoginLogicReq* other);
   friend void swap(LoginLogicReq& a, LoginLogicReq& b) {
@@ -2956,6 +3097,262 @@ class LoginLogicReq : public ::google::protobuf::Message /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
+class OptionEvent : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:OptionEvent) */ {
+ public:
+  OptionEvent();
+  virtual ~OptionEvent();
+
+  OptionEvent(const OptionEvent& from);
+
+  inline OptionEvent& operator=(const OptionEvent& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  OptionEvent(OptionEvent&& from) noexcept
+    : OptionEvent() {
+    *this = ::std::move(from);
+  }
+
+  inline OptionEvent& operator=(OptionEvent&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const OptionEvent& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const OptionEvent* internal_default_instance() {
+    return reinterpret_cast<const OptionEvent*>(
+               &_OptionEvent_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    23;
+
+  void Swap(OptionEvent* other);
+  friend void swap(OptionEvent& a, OptionEvent& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline OptionEvent* New() const final {
+    return CreateMaybeMessage<OptionEvent>(nullptr);
+  }
+
+  OptionEvent* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<OptionEvent>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const OptionEvent& from);
+  void MergeFrom(const OptionEvent& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(OptionEvent* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 seatid = 1;
+  void clear_seatid();
+  static const int kSeatidFieldNumber = 1;
+  ::google::protobuf::int32 seatid() const;
+  void set_seatid(::google::protobuf::int32 value);
+
+  // int32 opt_type = 2;
+  void clear_opt_type();
+  static const int kOptTypeFieldNumber = 2;
+  ::google::protobuf::int32 opt_type() const;
+  void set_opt_type(::google::protobuf::int32 value);
+
+  // int32 x = 3;
+  void clear_x();
+  static const int kXFieldNumber = 3;
+  ::google::protobuf::int32 x() const;
+  void set_x(::google::protobuf::int32 value);
+
+  // int32 y = 4;
+  void clear_y();
+  static const int kYFieldNumber = 4;
+  ::google::protobuf::int32 y() const;
+  void set_y(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:OptionEvent)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::int32 seatid_;
+  ::google::protobuf::int32 opt_type_;
+  ::google::protobuf::int32 x_;
+  ::google::protobuf::int32 y_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
+// -------------------------------------------------------------------
+
+class FrameOpts : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:FrameOpts) */ {
+ public:
+  FrameOpts();
+  virtual ~FrameOpts();
+
+  FrameOpts(const FrameOpts& from);
+
+  inline FrameOpts& operator=(const FrameOpts& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  FrameOpts(FrameOpts&& from) noexcept
+    : FrameOpts() {
+    *this = ::std::move(from);
+  }
+
+  inline FrameOpts& operator=(FrameOpts&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const FrameOpts& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const FrameOpts* internal_default_instance() {
+    return reinterpret_cast<const FrameOpts*>(
+               &_FrameOpts_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    24;
+
+  void Swap(FrameOpts* other);
+  friend void swap(FrameOpts& a, FrameOpts& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline FrameOpts* New() const final {
+    return CreateMaybeMessage<FrameOpts>(nullptr);
+  }
+
+  FrameOpts* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<FrameOpts>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const FrameOpts& from);
+  void MergeFrom(const FrameOpts& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(FrameOpts* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .OptionEvent opts = 2;
+  int opts_size() const;
+  void clear_opts();
+  static const int kOptsFieldNumber = 2;
+  ::OptionEvent* mutable_opts(int index);
+  ::google::protobuf::RepeatedPtrField< ::OptionEvent >*
+      mutable_opts();
+  const ::OptionEvent& opts(int index) const;
+  ::OptionEvent* add_opts();
+  const ::google::protobuf::RepeatedPtrField< ::OptionEvent >&
+      opts() const;
+
+  // int32 frameid = 1;
+  void clear_frameid();
+  static const int kFrameidFieldNumber = 1;
+  ::google::protobuf::int32 frameid() const;
+  void set_frameid(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:FrameOpts)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::OptionEvent > opts_;
+  ::google::protobuf::int32 frameid_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
+// -------------------------------------------------------------------
+
 class LogicFrame : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:LogicFrame) */ {
  public:
   LogicFrame();
@@ -2993,7 +3390,7 @@ class LogicFrame : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_LogicFrame_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    25;
 
   void Swap(LogicFrame* other);
   friend void swap(LogicFrame& a, LogicFrame& b) {
@@ -3050,6 +3447,18 @@ class LogicFrame : public ::google::protobuf::Message /* @@protoc_insertion_poin
 
   // accessors -------------------------------------------------------
 
+  // repeated .FrameOpts unsync_frames = 2;
+  int unsync_frames_size() const;
+  void clear_unsync_frames();
+  static const int kUnsyncFramesFieldNumber = 2;
+  ::FrameOpts* mutable_unsync_frames(int index);
+  ::google::protobuf::RepeatedPtrField< ::FrameOpts >*
+      mutable_unsync_frames();
+  const ::FrameOpts& unsync_frames(int index) const;
+  ::FrameOpts* add_unsync_frames();
+  const ::google::protobuf::RepeatedPtrField< ::FrameOpts >&
+      unsync_frames() const;
+
   // int32 frameid = 1;
   void clear_frameid();
   static const int kFrameidFieldNumber = 1;
@@ -3061,7 +3470,153 @@ class LogicFrame : public ::google::protobuf::Message /* @@protoc_insertion_poin
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::FrameOpts > unsync_frames_;
   ::google::protobuf::int32 frameid_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_game_2eproto;
+};
+// -------------------------------------------------------------------
+
+class NextFrameOpts : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:NextFrameOpts) */ {
+ public:
+  NextFrameOpts();
+  virtual ~NextFrameOpts();
+
+  NextFrameOpts(const NextFrameOpts& from);
+
+  inline NextFrameOpts& operator=(const NextFrameOpts& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  NextFrameOpts(NextFrameOpts&& from) noexcept
+    : NextFrameOpts() {
+    *this = ::std::move(from);
+  }
+
+  inline NextFrameOpts& operator=(NextFrameOpts&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const NextFrameOpts& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const NextFrameOpts* internal_default_instance() {
+    return reinterpret_cast<const NextFrameOpts*>(
+               &_NextFrameOpts_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    26;
+
+  void Swap(NextFrameOpts* other);
+  friend void swap(NextFrameOpts& a, NextFrameOpts& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline NextFrameOpts* New() const final {
+    return CreateMaybeMessage<NextFrameOpts>(nullptr);
+  }
+
+  NextFrameOpts* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<NextFrameOpts>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const NextFrameOpts& from);
+  void MergeFrom(const NextFrameOpts& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(NextFrameOpts* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .OptionEvent opts = 5;
+  int opts_size() const;
+  void clear_opts();
+  static const int kOptsFieldNumber = 5;
+  ::OptionEvent* mutable_opts(int index);
+  ::google::protobuf::RepeatedPtrField< ::OptionEvent >*
+      mutable_opts();
+  const ::OptionEvent& opts(int index) const;
+  ::OptionEvent* add_opts();
+  const ::google::protobuf::RepeatedPtrField< ::OptionEvent >&
+      opts() const;
+
+  // int32 frameid = 1;
+  void clear_frameid();
+  static const int kFrameidFieldNumber = 1;
+  ::google::protobuf::int32 frameid() const;
+  void set_frameid(::google::protobuf::int32 value);
+
+  // int32 zid = 2;
+  void clear_zid();
+  static const int kZidFieldNumber = 2;
+  ::google::protobuf::int32 zid() const;
+  void set_zid(::google::protobuf::int32 value);
+
+  // int32 matchid = 3;
+  void clear_matchid();
+  static const int kMatchidFieldNumber = 3;
+  ::google::protobuf::int32 matchid() const;
+  void set_matchid(::google::protobuf::int32 value);
+
+  // int32 seatid = 4;
+  void clear_seatid();
+  static const int kSeatidFieldNumber = 4;
+  ::google::protobuf::int32 seatid() const;
+  void set_seatid(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:NextFrameOpts)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::OptionEvent > opts_;
+  ::google::protobuf::int32 frameid_;
+  ::google::protobuf::int32 zid_;
+  ::google::protobuf::int32 matchid_;
+  ::google::protobuf::int32 seatid_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_game_2eproto;
 };
@@ -4249,36 +4804,82 @@ inline void UserExitRoomNotify::set_seatid(::google::protobuf::int32 value) {
 
 // -------------------------------------------------------------------
 
+// PlayerMatchInfo
+
+// int32 heroid = 1;
+inline void PlayerMatchInfo::clear_heroid() {
+  heroid_ = 0;
+}
+inline ::google::protobuf::int32 PlayerMatchInfo::heroid() const {
+  // @@protoc_insertion_point(field_get:PlayerMatchInfo.heroid)
+  return heroid_;
+}
+inline void PlayerMatchInfo::set_heroid(::google::protobuf::int32 value) {
+  
+  heroid_ = value;
+  // @@protoc_insertion_point(field_set:PlayerMatchInfo.heroid)
+}
+
+// int32 seatid = 2;
+inline void PlayerMatchInfo::clear_seatid() {
+  seatid_ = 0;
+}
+inline ::google::protobuf::int32 PlayerMatchInfo::seatid() const {
+  // @@protoc_insertion_point(field_get:PlayerMatchInfo.seatid)
+  return seatid_;
+}
+inline void PlayerMatchInfo::set_seatid(::google::protobuf::int32 value) {
+  
+  seatid_ = value;
+  // @@protoc_insertion_point(field_set:PlayerMatchInfo.seatid)
+}
+
+// int32 side = 3;
+inline void PlayerMatchInfo::clear_side() {
+  side_ = 0;
+}
+inline ::google::protobuf::int32 PlayerMatchInfo::side() const {
+  // @@protoc_insertion_point(field_get:PlayerMatchInfo.side)
+  return side_;
+}
+inline void PlayerMatchInfo::set_side(::google::protobuf::int32 value) {
+  
+  side_ = value;
+  // @@protoc_insertion_point(field_set:PlayerMatchInfo.side)
+}
+
+// -------------------------------------------------------------------
+
 // GameStartNotify
 
-// repeated int32 heroes = 1;
-inline int GameStartNotify::heroes_size() const {
-  return heroes_.size();
+// repeated .PlayerMatchInfo players_match_info = 1;
+inline int GameStartNotify::players_match_info_size() const {
+  return players_match_info_.size();
 }
-inline void GameStartNotify::clear_heroes() {
-  heroes_.Clear();
+inline void GameStartNotify::clear_players_match_info() {
+  players_match_info_.Clear();
 }
-inline ::google::protobuf::int32 GameStartNotify::heroes(int index) const {
-  // @@protoc_insertion_point(field_get:GameStartNotify.heroes)
-  return heroes_.Get(index);
+inline ::PlayerMatchInfo* GameStartNotify::mutable_players_match_info(int index) {
+  // @@protoc_insertion_point(field_mutable:GameStartNotify.players_match_info)
+  return players_match_info_.Mutable(index);
 }
-inline void GameStartNotify::set_heroes(int index, ::google::protobuf::int32 value) {
-  heroes_.Set(index, value);
-  // @@protoc_insertion_point(field_set:GameStartNotify.heroes)
+inline ::google::protobuf::RepeatedPtrField< ::PlayerMatchInfo >*
+GameStartNotify::mutable_players_match_info() {
+  // @@protoc_insertion_point(field_mutable_list:GameStartNotify.players_match_info)
+  return &players_match_info_;
 }
-inline void GameStartNotify::add_heroes(::google::protobuf::int32 value) {
-  heroes_.Add(value);
-  // @@protoc_insertion_point(field_add:GameStartNotify.heroes)
+inline const ::PlayerMatchInfo& GameStartNotify::players_match_info(int index) const {
+  // @@protoc_insertion_point(field_get:GameStartNotify.players_match_info)
+  return players_match_info_.Get(index);
 }
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
-GameStartNotify::heroes() const {
-  // @@protoc_insertion_point(field_list:GameStartNotify.heroes)
-  return heroes_;
+inline ::PlayerMatchInfo* GameStartNotify::add_players_match_info() {
+  // @@protoc_insertion_point(field_add:GameStartNotify.players_match_info)
+  return players_match_info_.Add();
 }
-inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
-GameStartNotify::mutable_heroes() {
-  // @@protoc_insertion_point(field_mutable_list:GameStartNotify.heroes)
-  return &heroes_;
+inline const ::google::protobuf::RepeatedPtrField< ::PlayerMatchInfo >&
+GameStartNotify::players_match_info() const {
+  // @@protoc_insertion_point(field_list:GameStartNotify.players_match_info)
+  return players_match_info_;
 }
 
 // -------------------------------------------------------------------
@@ -4354,6 +4955,114 @@ inline void LoginLogicReq::set_udp_port(::google::protobuf::int32 value) {
 
 // -------------------------------------------------------------------
 
+// OptionEvent
+
+// int32 seatid = 1;
+inline void OptionEvent::clear_seatid() {
+  seatid_ = 0;
+}
+inline ::google::protobuf::int32 OptionEvent::seatid() const {
+  // @@protoc_insertion_point(field_get:OptionEvent.seatid)
+  return seatid_;
+}
+inline void OptionEvent::set_seatid(::google::protobuf::int32 value) {
+  
+  seatid_ = value;
+  // @@protoc_insertion_point(field_set:OptionEvent.seatid)
+}
+
+// int32 opt_type = 2;
+inline void OptionEvent::clear_opt_type() {
+  opt_type_ = 0;
+}
+inline ::google::protobuf::int32 OptionEvent::opt_type() const {
+  // @@protoc_insertion_point(field_get:OptionEvent.opt_type)
+  return opt_type_;
+}
+inline void OptionEvent::set_opt_type(::google::protobuf::int32 value) {
+  
+  opt_type_ = value;
+  // @@protoc_insertion_point(field_set:OptionEvent.opt_type)
+}
+
+// int32 x = 3;
+inline void OptionEvent::clear_x() {
+  x_ = 0;
+}
+inline ::google::protobuf::int32 OptionEvent::x() const {
+  // @@protoc_insertion_point(field_get:OptionEvent.x)
+  return x_;
+}
+inline void OptionEvent::set_x(::google::protobuf::int32 value) {
+  
+  x_ = value;
+  // @@protoc_insertion_point(field_set:OptionEvent.x)
+}
+
+// int32 y = 4;
+inline void OptionEvent::clear_y() {
+  y_ = 0;
+}
+inline ::google::protobuf::int32 OptionEvent::y() const {
+  // @@protoc_insertion_point(field_get:OptionEvent.y)
+  return y_;
+}
+inline void OptionEvent::set_y(::google::protobuf::int32 value) {
+  
+  y_ = value;
+  // @@protoc_insertion_point(field_set:OptionEvent.y)
+}
+
+// -------------------------------------------------------------------
+
+// FrameOpts
+
+// int32 frameid = 1;
+inline void FrameOpts::clear_frameid() {
+  frameid_ = 0;
+}
+inline ::google::protobuf::int32 FrameOpts::frameid() const {
+  // @@protoc_insertion_point(field_get:FrameOpts.frameid)
+  return frameid_;
+}
+inline void FrameOpts::set_frameid(::google::protobuf::int32 value) {
+  
+  frameid_ = value;
+  // @@protoc_insertion_point(field_set:FrameOpts.frameid)
+}
+
+// repeated .OptionEvent opts = 2;
+inline int FrameOpts::opts_size() const {
+  return opts_.size();
+}
+inline void FrameOpts::clear_opts() {
+  opts_.Clear();
+}
+inline ::OptionEvent* FrameOpts::mutable_opts(int index) {
+  // @@protoc_insertion_point(field_mutable:FrameOpts.opts)
+  return opts_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::OptionEvent >*
+FrameOpts::mutable_opts() {
+  // @@protoc_insertion_point(field_mutable_list:FrameOpts.opts)
+  return &opts_;
+}
+inline const ::OptionEvent& FrameOpts::opts(int index) const {
+  // @@protoc_insertion_point(field_get:FrameOpts.opts)
+  return opts_.Get(index);
+}
+inline ::OptionEvent* FrameOpts::add_opts() {
+  // @@protoc_insertion_point(field_add:FrameOpts.opts)
+  return opts_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::OptionEvent >&
+FrameOpts::opts() const {
+  // @@protoc_insertion_point(field_list:FrameOpts.opts)
+  return opts_;
+}
+
+// -------------------------------------------------------------------
+
 // LogicFrame
 
 // int32 frameid = 1;
@@ -4370,9 +5079,137 @@ inline void LogicFrame::set_frameid(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:LogicFrame.frameid)
 }
 
+// repeated .FrameOpts unsync_frames = 2;
+inline int LogicFrame::unsync_frames_size() const {
+  return unsync_frames_.size();
+}
+inline void LogicFrame::clear_unsync_frames() {
+  unsync_frames_.Clear();
+}
+inline ::FrameOpts* LogicFrame::mutable_unsync_frames(int index) {
+  // @@protoc_insertion_point(field_mutable:LogicFrame.unsync_frames)
+  return unsync_frames_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::FrameOpts >*
+LogicFrame::mutable_unsync_frames() {
+  // @@protoc_insertion_point(field_mutable_list:LogicFrame.unsync_frames)
+  return &unsync_frames_;
+}
+inline const ::FrameOpts& LogicFrame::unsync_frames(int index) const {
+  // @@protoc_insertion_point(field_get:LogicFrame.unsync_frames)
+  return unsync_frames_.Get(index);
+}
+inline ::FrameOpts* LogicFrame::add_unsync_frames() {
+  // @@protoc_insertion_point(field_add:LogicFrame.unsync_frames)
+  return unsync_frames_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::FrameOpts >&
+LogicFrame::unsync_frames() const {
+  // @@protoc_insertion_point(field_list:LogicFrame.unsync_frames)
+  return unsync_frames_;
+}
+
+// -------------------------------------------------------------------
+
+// NextFrameOpts
+
+// int32 frameid = 1;
+inline void NextFrameOpts::clear_frameid() {
+  frameid_ = 0;
+}
+inline ::google::protobuf::int32 NextFrameOpts::frameid() const {
+  // @@protoc_insertion_point(field_get:NextFrameOpts.frameid)
+  return frameid_;
+}
+inline void NextFrameOpts::set_frameid(::google::protobuf::int32 value) {
+  
+  frameid_ = value;
+  // @@protoc_insertion_point(field_set:NextFrameOpts.frameid)
+}
+
+// int32 zid = 2;
+inline void NextFrameOpts::clear_zid() {
+  zid_ = 0;
+}
+inline ::google::protobuf::int32 NextFrameOpts::zid() const {
+  // @@protoc_insertion_point(field_get:NextFrameOpts.zid)
+  return zid_;
+}
+inline void NextFrameOpts::set_zid(::google::protobuf::int32 value) {
+  
+  zid_ = value;
+  // @@protoc_insertion_point(field_set:NextFrameOpts.zid)
+}
+
+// int32 matchid = 3;
+inline void NextFrameOpts::clear_matchid() {
+  matchid_ = 0;
+}
+inline ::google::protobuf::int32 NextFrameOpts::matchid() const {
+  // @@protoc_insertion_point(field_get:NextFrameOpts.matchid)
+  return matchid_;
+}
+inline void NextFrameOpts::set_matchid(::google::protobuf::int32 value) {
+  
+  matchid_ = value;
+  // @@protoc_insertion_point(field_set:NextFrameOpts.matchid)
+}
+
+// int32 seatid = 4;
+inline void NextFrameOpts::clear_seatid() {
+  seatid_ = 0;
+}
+inline ::google::protobuf::int32 NextFrameOpts::seatid() const {
+  // @@protoc_insertion_point(field_get:NextFrameOpts.seatid)
+  return seatid_;
+}
+inline void NextFrameOpts::set_seatid(::google::protobuf::int32 value) {
+  
+  seatid_ = value;
+  // @@protoc_insertion_point(field_set:NextFrameOpts.seatid)
+}
+
+// repeated .OptionEvent opts = 5;
+inline int NextFrameOpts::opts_size() const {
+  return opts_.size();
+}
+inline void NextFrameOpts::clear_opts() {
+  opts_.Clear();
+}
+inline ::OptionEvent* NextFrameOpts::mutable_opts(int index) {
+  // @@protoc_insertion_point(field_mutable:NextFrameOpts.opts)
+  return opts_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::OptionEvent >*
+NextFrameOpts::mutable_opts() {
+  // @@protoc_insertion_point(field_mutable_list:NextFrameOpts.opts)
+  return &opts_;
+}
+inline const ::OptionEvent& NextFrameOpts::opts(int index) const {
+  // @@protoc_insertion_point(field_get:NextFrameOpts.opts)
+  return opts_.Get(index);
+}
+inline ::OptionEvent* NextFrameOpts::add_opts() {
+  // @@protoc_insertion_point(field_add:NextFrameOpts.opts)
+  return opts_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::OptionEvent >&
+NextFrameOpts::opts() const {
+  // @@protoc_insertion_point(field_list:NextFrameOpts.opts)
+  return opts_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

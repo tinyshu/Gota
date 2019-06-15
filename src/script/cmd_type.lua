@@ -33,6 +33,7 @@ local Cmd = {
 	GameStartNotify = 30,
 	UdpTest = 31,
 	LogicFrame = 32,
+	NextFrameOpts = 33,
 }
      
 return Cmd

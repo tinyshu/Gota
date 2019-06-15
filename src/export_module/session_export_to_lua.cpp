@@ -91,17 +91,20 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 			}
 			else {
 				//在lua层数组是以table的方式传入C++层,所以这里先判断类型是否正确
-				if (!lua_istable(tolua_s, -1)) {
+				bool isTable = lua_istable(tolua_s, -1);
+				
+				if (!isTable) {
 					log_error("cant find repeated field %s\n", file_name.c_str());
 					delete message;
 					message = NULL;
 					return NULL;
 				}
 			}
-			lua_pushnil(tolua_s);
+			
 			//lua_next会先弹出栈顶元素，所以要先放一个nil
 			//然后把key,value放入 key放在-2 value放在-1的位置
-
+		    
+			lua_pushnil(tolua_s);
 			for (; lua_next(tolua_s, -2) != 0;) {
 				FieldDescriptor::CppType cpptype = filedes->cpp_type();
 				switch (cpptype) {
