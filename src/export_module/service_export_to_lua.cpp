@@ -1,9 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include <sstream>
-#include "google\protobuf\message.h"
 #include "service_export_to_lua.h"
-#include "../utils/conver.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -12,19 +9,17 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
 #include "../moduel/net/proto_type.h"
+#include <google/protobuf/message.h>
 #include "../moduel/netbus/service_interface.h"
 #include "../utils/logger.h"
 #include "../lua_wrapper/lua_wrapper.h"
-#include "hiredis.h"
-#include "../moduel/net/net_uv.h"
 #include "../3rd/tolua/tolua_fix.h"
-#include "../database/redis_warpper.h"
-#include "../database/query_callback.h"
-#include "../moduel/netbus/netbus.h"
 #include "../moduel/netbus/service_manger.h"
 #include "../moduel/session/tcp_session.h"
 #include "../moduel/netbus/recv_msg.h"
+#include "../utils/conver.h"
 
 const char * service_moduel_name = "service_wrapper";
 static unsigned service_s_function_ref_id = 0;
@@ -88,39 +83,39 @@ static void push_pb_message_tolua(const Message* pb_msg) {
 				//基本类型，或者是内嵌的message
 				switch (filedes->cpp_type()) {
 				case FieldDescriptor::CPPTYPE_DOUBLE: {
-					lua_pushnumber(lua_status, refletion->GetDouble(*pb_msg, filedes));
+					lua_pushnumber(lua_status, refletion->GetRepeatedDouble(*pb_msg, filedes, i));
 				}break;
 				case FieldDescriptor::CPPTYPE_FLOAT: {
-					lua_pushnumber(lua_status, refletion->GetFloat(*pb_msg, filedes));
+					lua_pushnumber(lua_status, (double)refletion->GetRepeatedFloat(*pb_msg, filedes, i));
 				}break;
 				case FieldDescriptor::CPPTYPE_INT64: {
-					std::string ss = convert<int64, std::string>(refletion->GetInt64(*pb_msg, filedes));
+					std::string ss = convert<int64, std::string>((long long)refletion->GetRepeatedInt64(*pb_msg, filedes, i));
 					lua_pushstring(lua_status, ss.c_str());
 
 				}break;
 				case FieldDescriptor::CPPTYPE_UINT64: {
-					std::string ss = convert<int64, std::string>(refletion->GetUInt64(*pb_msg, filedes));
+					std::string ss = convert<uint64, std::string>((unsigned long long)refletion->GetRepeatedInt64(*pb_msg, filedes, i));
 					lua_pushstring(lua_status, ss.c_str());
 				}break;
 				case FieldDescriptor::CPPTYPE_ENUM: {
-					lua_pushinteger(lua_status, refletion->GetEnumValue(*pb_msg, filedes));
+					lua_pushinteger(lua_status, refletion->GetRepeatedEnum(*pb_msg, filedes, i)->number());
 				}break;
 				case FieldDescriptor::CPPTYPE_INT32: {
-					lua_pushinteger(lua_status, refletion->GetInt32(*pb_msg, filedes));
+					lua_pushinteger(lua_status, refletion->GetRepeatedInt32(*pb_msg, filedes, i));
 				}break;
 				case FieldDescriptor::CPPTYPE_UINT32: {
-					lua_pushinteger(lua_status, refletion->GetUInt32(*pb_msg, filedes));
+					lua_pushinteger(lua_status, refletion->GetRepeatedUInt32(*pb_msg, filedes, i));
 				}break;
 				case FieldDescriptor::CPPTYPE_STRING: {
-					std::string ss = refletion->GetString(*pb_msg, filedes);
-					lua_pushstring(lua_status, ss.c_str());
+					std::string value = refletion->GetRepeatedString(*pb_msg, filedes, i);
+					lua_pushlstring(lua_status, value.c_str(), value.size());
 				}break;
 				case FieldDescriptor::CPPTYPE_BOOL: {
-					lua_pushboolean(lua_status, refletion->GetBool(*pb_msg, filedes));
+					lua_pushboolean(lua_status, refletion->GetRepeatedBool(*pb_msg, filedes, i));
 				}break;
 				case FieldDescriptor::CPPTYPE_MESSAGE: {
 					//又是内嵌的Message,需要递归在此调用push_pb_message_tolua
-					push_pb_message_tolua(pb_msg);
+					push_pb_message_tolua(&(refletion->GetRepeatedMessage(*pb_msg, filedes, i)));
 				}break;
 				default: {
 
@@ -167,7 +162,8 @@ static void push_pb_message_tolua(const Message* pb_msg) {
 			}break;
 			case FieldDescriptor::CPPTYPE_MESSAGE: {
 				//又是内嵌的Message,需要递归在此调用push_pb_message_tolua
-				push_pb_message_tolua(pb_msg);
+				push_pb_message_tolua(&(refletion->GetMessage(*pb_msg, filedes)));
+				
 			}break;
 			default: {
 

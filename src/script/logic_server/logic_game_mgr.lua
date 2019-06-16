@@ -488,7 +488,7 @@ function on_next_fream_recv(s,msg)
 	local ctype = msg[2]
 	local uid = msg[3]
 	local bodymsg = msg[4]
-
+	print("on_next_fream_recv")
 	local room = room_list[bodymsg.zip][bodymsg.matchid]
 	if room == nil then
 	   print("on_next_fream_recv get room is nil zip:"..bodymsg.zip.." roomid:"..bodymsg.matchid)

@@ -234,19 +234,25 @@ function room:send_unsync_frame(p)
      if p == nil then
 	    return 
 	 end
-
+	
+	 if #self.all_frame_list == 0 then
+	    return
+	 end
 	 --给玩家同步帧(只同步未同步的帧集合)
 	 local unsync_opt_frame = {}  --存储当前未同步的帧 
      local i
 	 --从play的当前帧到room的最后帧同步给玩家
-	 for i = p.cur_sync_frame_id + 1,#all_frame_list do
+	 for i = (p.cur_sync_frame_id + 1),#self.all_frame_list do
 	      table.insert(unsync_opt_frame, self.all_frame_list[i])
 	 end
 	 --更新用户帧frameid??
 	 --
 	 --p.cur_sync_frame_id = self.frameid
-     local body = {frameid = self.frameid,unsync_frames = unsync_opt_frame}
-     p:udp_send_cmd(stype_module.LogicServer, cmd_module.LogicFrame,body)   
+	 if #unsync_opt_frame > 0 then
+	     local body = {frameid = self.frameid,unsync_frames = unsync_opt_frame}
+         p:udp_send_cmd(stype_module.LogicServer, cmd_module.LogicFrame,body)      
+	 end
+    
 end
 
 function room:do_logic_frame_sync()
