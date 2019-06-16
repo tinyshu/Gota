@@ -94,7 +94,7 @@ function player:send_cmd(sstype, cctype, cbody)
 	end
 
 	local ret_msg = {stype = sstype,ctype = cctype,utag = self.uid, body=cbody}
-	utils.print_table(ret_msg)
+	--utils.print_table(ret_msg)
     session_wrapper.send_msg(self.session,ret_msg)
 end
 

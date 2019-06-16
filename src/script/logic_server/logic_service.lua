@@ -15,8 +15,8 @@ logic_service_handles[Cmd.NextFrameOpts] = logic_game_mgr.on_next_fream_recv
 -- {stype, ctype, utag, body}
 function on_logic_recv_cmd(s, msg)
 	--解析数据做响应的逻辑
-	  print("on_logic_recv_cmd ctype:"..msg[2])
-      utils.print_table(msg)
+	  --print("on_logic_recv_cmd ctype:"..msg[2])
+      --utils.print_table(msg)
 	--判断cmdid是否有对应的处理函数
 	local ctype = msg[2] --协议id
 	if logic_service_handles[ctype] then

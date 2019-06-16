@@ -264,7 +264,7 @@ function login_server_enter(s,msg)
    local uid = msg[3]
    local body = msg[4] 
    print("login_server_enter bodyis:")
-   utils.print_table(body)
+   --utils.print_table(body)
    --[[
    	 logic作为对战地图服务器按照这样来划分
 	 1.一个logic服务是一个完整的对战服务器，可以支持N个不同的地图和N种不同的玩法
@@ -488,10 +488,10 @@ function on_next_fream_recv(s,msg)
 	local ctype = msg[2]
 	local uid = msg[3]
 	local bodymsg = msg[4]
-	print("on_next_fream_recv")
-	local room = room_list[bodymsg.zip][bodymsg.matchid]
+
+	local room = room_list[bodymsg.zid][bodymsg.matchid]
 	if room == nil then
-	   print("on_next_fream_recv get room is nil zip:"..bodymsg.zip.." roomid:"..bodymsg.matchid)
+	   print("on_next_fream_recv get room is nil zip:"..bodymsg.zid.." roomid:"..bodymsg.matchid)
 	   return
 	end
 
