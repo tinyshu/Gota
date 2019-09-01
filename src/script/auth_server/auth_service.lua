@@ -1,5 +1,10 @@
 local stype = require("service_type")
 local Cmd = require("cmd_type")
+local guest = require("auth_server/guest")
+local edit_profile_modduel = require("auth_server/edit_profile")
+local account_upgrade_moduel = require("auth_server/account_upgrade")
+local uname_login_moduel = require("auth_server/uname_login")
+local login_out_moduel = require("auth_server/login_out")
 
 function print_r ( t )  
     local print_r_cache={}
@@ -35,26 +40,36 @@ function print_r ( t )
     print()
 end
 
+--瀹氫箟璁よ瘉鏈嶅姟鍣ㄥ崗璁拰鍑芥暟鏄犲皠
+--鍦ㄨ繖閲屾敞鍐宎uth鏈嶅姟澶勭悊鐨勫崗璁拰瀵瑰簲寰椾汉澶勭悊鍑芥暟
+local auth_service_handles = {}
+auth_service_handles[Cmd.GuestLoginReq] = guest.login
+auth_service_handles[Cmd.EditProfileReq] = edit_profile_modduel.edit
+auth_service_handles[Cmd.AccountUpgradeReq] = account_upgrade_moduel.account_upgrade_process
+auth_service_handles[Cmd.UnameLoginReq] = uname_login_moduel.uname_login_process
+auth_service_handles[Cmd.LoginOutReq] = login_out_moduel.login_out_process
+
+-----------------------------------------------
+
 -- {stype, ctype, utag, body}
 function on_auth_recv_cmd(s, msg)
-	--解析数据做响应的逻辑
-	--print(msg[1],msg[2],msg[3],msg[4])
-	print_r(msg[4])
-	--print_r(msg)
-	--直接返回msg[3]就是网关生成的utag
-	--pb格式数据返回
-	--local ret_msg = {stype=stype.AuthSerser,ctype=2,utag=msg[3],body={status=200}}
-	--json回数据包 msg[4]直接返回请求的json,正常逻辑需要自己需要响应的json的数据包
-	--local ret_msg = {stype=stype.AuthSerser, ctype=Cmd.eLoginRes , utag=msg[3], body=msg[4]}
-	--session_wrapper.send_msg(s,ret_msg)
+	--瑙ｆ瀽鏁版嵁鍋氬搷搴旂殑閫昏緫
+	
+	print(msg[1],msg[2],msg[3],msg[4])
+	--print("on_auth_recv_cmd"..msg[4])
+	--鍒ゆ柇cmdid鏄惁鏈夊搴旂殑澶勭悊鍑芥暟
+	local ctype = msg[2] --鍗忚id
+	if auth_service_handles[ctype] then
+	   auth_service_handles[ctype](s,msg)
+	end
 end
 
-function on_auth_session_disconnect(s) 
+function on_auth_session_disconnect(s,ctype) 
 end
 
 local auth_service = {
-	on_session_recv_cmd = on_auth_recv_cmd,
-	on_session_disconnect = on_auth_session_disconnect,
+      on_session_recv_cmd = on_auth_recv_cmd,
+      on_session_disconnect = on_auth_session_disconnect,
 }
 
 return auth_service

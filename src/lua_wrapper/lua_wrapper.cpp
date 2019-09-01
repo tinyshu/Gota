@@ -11,6 +11,7 @@
 #include "../export_module/timer_export_to_lua.h"
 #include "../export_module/netbus_export_to_lua.h"
 #include "../export_module/proto_mgr_export_to_lua.h"
+#include "../export_module/utils_export_to_lua.h"
 
 lua_State* g_lua_state = NULL;
 
@@ -21,15 +22,15 @@ lua_State* lua_wrapper::get_luastatus() {
 static void do_log_message(void(*log)(const char* file_name, int line_num, const char* msg), 	const char* msg) {	lua_Debug info;	int depth = 0;	while (lua_getstack(g_lua_state, depth, &info)) {		lua_getinfo(g_lua_state, "S", &info);		lua_getinfo(g_lua_state, "n", &info);		lua_getinfo(g_lua_state, "l", &info);		if (info.source[0] == '@') {			log(&info.source[1], info.currentline, msg);			return;		}		++depth;	}	if (depth == 0) {		log("trunk", 0, msg);	}}
 //获取lua的调用信息
 static void print_error(const char* filename,int line_num,const char* msg) {
-	logger::log(filename, line_num,ERROR,msg);
+	logger::log(filename, line_num,LOG_ERROR,msg);
 }
 
 static void print_waring(const char* filename, int line_num, const char* msg) {
-	logger::log(filename, line_num, WARNING, msg);
+	logger::log(filename, line_num, LOG_WARNING, msg);
 }
 
 static void print_debug(const char* filename, int line_num, const char* msg) {
-	logger::log(filename, line_num, DEBUG, msg);
+	logger::log(filename, line_num, LOG_DEBUG, msg);
 }
 
 
@@ -237,18 +238,15 @@ void lua_wrapper::init_lua() {
 	register_timer_export_tolua(g_lua_state);
 	register_betbus_export_tolua(g_lua_state);
 	register_proto_export_tolua(g_lua_state);
+	register_timer_export_tolua(g_lua_state);
+	register_utils_export_tolua(g_lua_state);
 	/////////////////////////////////////////////////
 
-	//导出框架接口
+	//导出log接口
 	reg_func2lua("LOGDEBUG", lua_logdebug);
 	reg_func2lua("LOGWARNING", lua_logwarning);
 	reg_func2lua("LOGERROR", lua_logerror);
 	
-	//test
-	//reg_func2lua("Add", add);
-	//reg_func2lua("print_array", print_array);
-	//reg_func2lua("print_table", print_table);
-	//reg_func2lua("re_table", re_table);
 }
 
 void lua_wrapper::exit_lua() {
@@ -274,7 +272,7 @@ void lua_wrapper::reg_func2lua(const char* func_name, int(*cfunction)(lua_State*
 int lua_wrapper::push_function_by_handle(int handle_id) {
 	toluafix_get_function_by_refid(g_lua_state, handle_id);
 	if (!lua_isfunction(g_lua_state,-1)) {
-		log_error("push_function_by_handle error %d", handle_id);
+		//log_error("push_function_by_handle error %d", handle_id);
 		lua_pop(g_lua_state, 1);
 		return -1;
 	}

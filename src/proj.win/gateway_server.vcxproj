@@ -112,6 +112,7 @@
     <ClCompile Include="..\export_module\service_export_to_lua.cpp" />
     <ClCompile Include="..\export_module\session_export_to_lua.cpp" />
     <ClCompile Include="..\export_module\timer_export_to_lua.cpp" />
+    <ClCompile Include="..\export_module\utils_export_to_lua.cpp" />
     <ClCompile Include="..\game_server\src\game_config.c" />
     <ClCompile Include="..\gateway_server\src\from_client.cpp" />
     <ClCompile Include="..\gateway_server\src\gw_config.cpp" />
@@ -137,6 +138,7 @@
     <ClCompile Include="..\utils\mem_manger.cpp" />
     <ClCompile Include="..\utils\timer_list.c" />
     <ClCompile Include="..\utils\timer_uv_list.cpp" />
+    <ClCompile Include="..\utils\timestamp.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\crypt\base64_encoder.h" />
@@ -218,6 +220,7 @@
     <ClInclude Include="..\export_module\service_export_to_lua.h" />
     <ClInclude Include="..\export_module\session_export_to_lua.h" />
     <ClInclude Include="..\export_module\timer_export_to_lua.h" />
+    <ClInclude Include="..\export_module\utils_export_to_lua.h" />
     <ClInclude Include="..\game_server\src\game_config.h" />
     <ClInclude Include="..\gateway_server\src\from_client.h" />
     <ClInclude Include="..\gateway_server\src\gw_config.h" />
@@ -230,6 +233,7 @@
     <ClInclude Include="..\moduel\netbus\service_manger.h" />
     <ClInclude Include="..\moduel\netbus\session_key_mgr.h" />
     <ClInclude Include="..\moduel\net\net_uv.h" />
+    <ClInclude Include="..\moduel\net\proto_type.h" />
     <ClInclude Include="..\moduel\session\session_base.h" />
     <ClInclude Include="..\moduel\session\tcp_session.h" />
     <ClInclude Include="..\moduel\session\udp_session.h" />
@@ -249,21 +253,46 @@
     <ClInclude Include="..\utils\timer.h" />
     <ClInclude Include="..\utils\timer_list.h" />
     <ClInclude Include="..\utils\timer_uv_list.h" />
+    <ClInclude Include="..\utils\timestamp.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\proto\game.proto" />
     <None Include="..\proto\message.proto" />
+    <None Include="..\script\auth_server\account_upgrade.lua" />
     <None Include="..\script\auth_server\auth_service.lua" />
+    <None Include="..\script\auth_server\edit_profile.lua" />
+    <None Include="..\script\auth_server\guest.lua" />
+    <None Include="..\script\auth_server\login_out.lua" />
     <None Include="..\script\auth_server\main.lua" />
+    <None Include="..\script\auth_server\uname_login.lua" />
     <None Include="..\script\cmd_name_map.lua" />
     <None Include="..\script\cmd_type.lua" />
     <None Include="..\script\conf.lua" />
     <None Include="..\script\database\mysql_auth_center.lua" />
+    <None Include="..\script\database\mysql_system_ugame.lua" />
+    <None Include="..\script\database\redis_auth_center.lua" />
+    <None Include="..\script\database\redis_game.lua" />
     <None Include="..\script\gateway_server\gateway_service.lua" />
     <None Include="..\script\gateway_server\main.lua" />
+    <None Include="..\script\logic_server\logic_game_mgr.lua" />
+    <None Include="..\script\logic_server\logic_player.lua" />
+    <None Include="..\script\logic_server\logic_service.lua" />
+    <None Include="..\script\logic_server\main.lua" />
+    <None Include="..\script\logic_server\robot.lua" />
+    <None Include="..\script\logic_server\room.lua" />
+    <None Include="..\script\logic_server\room_status.lua" />
+    <None Include="..\script\logic_server\Zone.lua" />
     <None Include="..\script\main.lua" />
     <None Include="..\script\main_test.lua" />
+    <None Include="..\script\respones.lua" />
     <None Include="..\script\service_type.lua" />
+    <None Include="..\script\socket_proto_type.lua" />
+    <None Include="..\script\system_server\login_bonues.lua" />
+    <None Include="..\script\system_server\system_service.lua" />
+    <None Include="..\script\system_server\main.lua" />
+    <None Include="..\script\system_server\user_game_info.lua" />
+    <None Include="..\script\user_game_config.lua" />
+    <None Include="..\script\utils.lua" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6096B2BF-BA7E-46EE-B56A-E286DB892614}</ProjectGuid>
@@ -339,7 +368,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;USE_LIBUV;GAME_DEVLOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../3rd/mysql/win/include/;../3rd/libuv/include;../3rd/lua;../3rd/hiredis/win/include/;../3rd/protobuf/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../3rd/protobuf/;../3rd/mysql/win/include/;../3rd/libuv/include;../3rd/lua;../3rd/hiredis/win/include/</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>

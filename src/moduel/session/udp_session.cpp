@@ -51,6 +51,11 @@ void udp_session::send_raw_msg(raw_cmd* raw_data) {
 	send_data(raw_data->raw_data, raw_data->raw_len);
 }
 
+const char* udp_session::get_address(int* client_port) {
+	*client_port = this->port;
+	return this->address;
+}
+
 static void udp_uv_alloc_buf(uv_handle_t* handle,
 	size_t suggested_size,
 	uv_buf_t* buf) {
@@ -92,7 +97,7 @@ static void after_uv_udp_recv(uv_udp_t* handle,
 	}
 
 	udp_session session;
-	session.udp_handle = handle;
+	session.udp_handle = handle; //收发数据的句柄
 	session.sock_addr = (const sockaddr_in*)addr;
 	uv_ip4_name((const sockaddr_in*)session.sock_addr, session.address,sizeof(session.address));
 	session.port = ntohs(session.sock_addr->sin_port);
@@ -100,7 +105,8 @@ static void after_uv_udp_recv(uv_udp_t* handle,
 	on_bin_protocal_recv_entry(&session, (unsigned char*)buf->base, nread);
 }
 
-void udp_session::start_udp_server(const char* ip,int port) {
+uv_udp_t* udp_session::start_udp_server(const char* ip,int port) {
+	//upd收发数据使用udp_server
 	uv_udp_t* udp_server = (uv_udp_t*)malloc(sizeof(uv_udp_t));
 	memset(udp_server, 0, sizeof(uv_udp_t));
 
@@ -114,4 +120,5 @@ void udp_session::start_udp_server(const char* ip,int port) {
 	udp_server->data = (void*)&_recv_buf;
 	//在监听recv事件
 	uv_udp_recv_start(udp_server, udp_uv_alloc_buf, after_uv_udp_recv);
+	return udp_server;
 }

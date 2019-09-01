@@ -5,9 +5,9 @@
 #include "center_db_conf.h"
 
 struct center_db_config CENTER_DB_CONFIG = {
-	"123.206.46.126",
+	"cdb-c4iby7gu.bj.tencentcdb.com",
 	"root",
-	3306,
-	"123321",
-	"user_center",
+	10129,
+	"tiny550122ABC",
+	"auth_center",
 };

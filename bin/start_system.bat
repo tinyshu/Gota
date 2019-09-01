@@ -1,0 +1,1 @@
+ServerEngin.exe ../src/script/ system_server/main.lua

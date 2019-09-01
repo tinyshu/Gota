@@ -12,7 +12,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
+#include "../moduel/net/proto_type.h"
 #include "../utils/logger.h"
 #include "../lua_wrapper/lua_wrapper.h"
 #include "../moduel/net/net_uv.h"
@@ -22,6 +22,7 @@ extern "C" {
 #include "../moduel/session/tcp_session.h"
 #include "../moduel/netbus/recv_msg.h"
 #include "../proto/proto_manage.h"
+#include "../utils/mem_manger.h"
 
 const char * session_moduel_name = "session_wrapper";
 static unsigned s_function_ref_id = 0;
@@ -39,6 +40,8 @@ int lua_close_session(lua_State* tolua_s) {
 	return 0;
 }
 
+
+//把protocol的message对象转换成lua的表形式
 static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,const string& type_name) {
 	if (type_name.empty() || !lua_istable(tolua_s,table_idx)) {
 		return NULL;
@@ -63,6 +66,8 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 		const FieldDescriptor* filedes = descriptor->field(i);
 		const string& file_name = filedes->name();
 		if (file_name.empty()) {
+			delete message;
+			message = NULL;
 			return NULL;
 		}
 
@@ -72,6 +77,8 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 		//把字段数据放到栈顶
 		lua_pushstring(tolua_s, file_name.c_str());
 		//table[栈顶strnig]的值放入栈顶,并弹出string
+		//把 t[k] 值压入堆栈， 这里的 t 是指有效索引 index 指向的值， 而 k 则是栈顶放的值
+		//相当于线获取栈顶string元素值，也就是file_name在传入的table里获取值，在放入栈顶。
 		lua_rawget(tolua_s, table_idx);
 
 		//栈顶元素是否有值
@@ -82,99 +89,106 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 				lua_pop(tolua_s, 1);
 				continue;
 			}
-
-			if (!lua_istable(tolua_s,-1)) {
-				log_error("cant find repeated field %s\n", file_name.c_str());
-				delete message;
-				message = NULL;
-				return NULL;
-			}
 			else {
-				lua_pushnil(tolua_s);
-				//lua_next会先弹出栈顶元素，所以要先放一个nil
-				//然后把key,value放入 key放在-2 value放在-1的位置
-				while (lua_next(tolua_s, -1) != 0) {
-					switch (filedes->cpp_type()) {
-					case FieldDescriptor::CPPTYPE_DOUBLE:
-					{
-						double value = luaL_checknumber(tolua_s, -1);
-						reflection->SetDouble(message, filedes, value);
-
-					}break;
-					case FieldDescriptor::CPPTYPE_FLOAT:
-					{
-						float value = luaL_checknumber(tolua_s, -1);
-						reflection->SetFloat(message, filedes, value);
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_INT64:
-					{
-						int64_t value = luaL_checknumber(tolua_s, -1);
-						reflection->SetInt64(message, filedes, value);
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_UINT64:
-					{
-						uint64_t value = luaL_checknumber(tolua_s, -1);
-						reflection->SetUInt64(message, filedes, value);
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_ENUM: // 与int32一样处理
-					{
-						int32_t value = luaL_checknumber(tolua_s, -1);
-						const EnumDescriptor* enumDescriptor = filedes->enum_type();
-						const EnumValueDescriptor* valueDescriptor = enumDescriptor->FindValueByNumber(value);
-						reflection->SetEnum(message, filedes, valueDescriptor);
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_INT32:
-					{
-						int32_t value = luaL_checknumber(tolua_s, -1);
-						reflection->SetInt32(message, filedes, value);
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_UINT32:
-					{
-						uint32_t value = luaL_checknumber(tolua_s, -1);
-						reflection->SetUInt32(message, filedes, value);
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_STRING:
-					{
-						size_t size = 0;
-						const char* value = luaL_checklstring(tolua_s, -1, &size);
-						reflection->SetString(message, filedes, std::string(value, size));
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_BOOL:
-					{
-						bool value = lua_toboolean(tolua_s, -1);
-						reflection->SetBool(message, filedes, value);
-					}
-					break;
-					case FieldDescriptor::CPPTYPE_MESSAGE:
-					{
-						//递归调用
-						Message* value = create_message_from_lua_table(tolua_s, lua_gettop(tolua_s), filedes->message_type()->name().c_str());
-						if (!value) {
-							log_error("convert to message %s failed whith value %s \n", filedes->message_type()->name().c_str(), file_name.c_str());
-							delete message;
-							message = NULL;
-							return NULL;
-						}
-						Message* msg = reflection->MutableMessage(message, filedes);
-						msg->CopyFrom(*value);
-						delete msg;
-						msg = NULL;
-					}
-					break;
-					default:
-						break;
-					} //switch
-
-					lua_pop(tolua_s, 1);
+				//在lua层数组是以table的方式传入C++层,所以这里先判断类型是否正确
+				bool isTable = lua_istable(tolua_s, -1);
+				
+				if (!isTable) {
+					log_error("cant find repeated field %s\n", file_name.c_str());
+					delete message;
+					message = NULL;
+					return NULL;
 				}
 			}
+			
+			//lua_next会先弹出栈顶元素，所以要先放一个nil
+			//然后把key,value放入 key放在-2 value放在-1的位置
+		    
+			lua_pushnil(tolua_s);
+			for (; lua_next(tolua_s, -2) != 0;) {
+				FieldDescriptor::CppType cpptype = filedes->cpp_type();
+				switch (cpptype) {
+				case FieldDescriptor::CPPTYPE_DOUBLE:
+				{
+					double value = luaL_checknumber(tolua_s, -1);
+					reflection->AddDouble(message, filedes, value);
+
+				}break;
+				case FieldDescriptor::CPPTYPE_FLOAT:
+				{
+					float value = luaL_checknumber(tolua_s, -1);
+					reflection->AddFloat(message, filedes, value);
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_INT64:
+				{
+					int64_t value = luaL_checknumber(tolua_s, -1);
+					reflection->AddInt64(message, filedes, value);
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_UINT64:
+				{
+					uint64_t value = luaL_checknumber(tolua_s, -1);
+					reflection->AddUInt64(message, filedes, value);
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_ENUM: // 与int32一样处理
+				{
+					int32_t value = luaL_checknumber(tolua_s, -1);
+					const EnumDescriptor* enumDescriptor = filedes->enum_type();
+					const EnumValueDescriptor* valueDescriptor = enumDescriptor->FindValueByNumber(value);
+					reflection->AddEnum(message, filedes, valueDescriptor);
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_INT32:
+				{
+					int32_t value = luaL_checknumber(tolua_s, -1);
+					reflection->AddInt32(message, filedes, value);
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_UINT32:
+				{
+					uint32_t value = luaL_checknumber(tolua_s, -1);
+					reflection->AddUInt32(message, filedes, value);
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_STRING:
+				{
+					size_t size = 0;
+					const char* value = luaL_checklstring(tolua_s, -1, &size);
+					reflection->AddString(message, filedes, std::string(value, size));
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_BOOL:
+				{
+					bool value = lua_toboolean(tolua_s, -1);
+					reflection->AddBool(message, filedes, value);
+
+				}
+				break;
+				case FieldDescriptor::CPPTYPE_MESSAGE:
+				{
+					//递归调用
+					Message* value = create_message_from_lua_table(tolua_s, lua_gettop(tolua_s), filedes->message_type()->name().c_str());
+					if (!value) {
+						log_error("convert to message %s failed whith value %s \n", filedes->message_type()->name().c_str(), file_name.c_str());
+						delete message;
+						message = NULL;
+						return NULL;
+					}
+					Message* msg = reflection->AddMessage(message, filedes);
+					msg->CopyFrom(*value);
+					delete value;
+					value = NULL;
+				}
+				break;
+				default:
+					break;
+				} //switch
+
+				lua_pop(tolua_s, 1);
+			}
+
 		}
 		else {
 			//基础类型或者嵌套类型
@@ -262,8 +276,8 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 				}
 				Message* msg = reflection->MutableMessage(message, filedes);
 				msg->CopyFrom(*value);
-				delete msg;
-				msg = NULL;
+				delete value;
+				value = NULL;
 			}
 			break;
 			default:
@@ -271,8 +285,87 @@ static Message* create_message_from_lua_table(lua_State* tolua_s,int table_idx,c
 			} //switch
 
 		}
+		lua_pop(tolua_s, 1);
 	}
 	return message;
+}
+
+static void send_udp_msg(const char* udp_ip,int udp_port,recv_msg* msg) {
+	int pkg_len = 0;
+	unsigned char* pkg = protoManager::encode_cmd_msg(msg, &pkg_len);
+	if (pkg == NULL || pkg_len == 0) {
+		//log
+		if (pkg!=NULL) {
+			memory_mgr::get_instance().free_memory(pkg);
+		}
+		return;
+	}
+	netbus::get_instance().udp_send_msg(udp_ip, udp_port, pkg, pkg_len);
+	//session_send(this, pkg, pkg_len);
+	if (pkg != NULL) {
+		memory_mgr::get_instance().free_memory(pkg);
+	}
+
+}
+
+static int lua_udp_send_msg(lua_State* tolua_s) {
+	const char* udp_ip = (const char*)tolua_tostring(tolua_s, 1, NULL);
+	if (udp_ip==NULL) {
+		return 0;
+	}
+	
+	int udp_port = tolua_tonumber(tolua_s, 2, 0);
+	if (udp_port == 0) {
+		return 0;
+	}
+	
+	//解析数据，是一个table类型
+	if (!lua_istable(tolua_s, 3)) {
+		return 0;
+	}
+	//把 t[k] 值压入堆栈， 这里的 t 是指有效索引 index 指向的值
+	lua_getfield(tolua_s, 3, "stype");
+	lua_getfield(tolua_s, 3, "ctype");
+	lua_getfield(tolua_s, 3, "utag");
+	lua_getfield(tolua_s, 3, "body");
+
+	struct recv_msg msg;
+	msg.head.stype = (int)lua_tointeger(tolua_s, 4);
+	msg.head.ctype = (int)lua_tointeger(tolua_s, 5);
+	msg.head.utag = (int)lua_tointeger(tolua_s, 6);
+	if (get_proto_type() == JSON_PROTOCAL) {
+		msg.body = (void*)lua_tostring(tolua_s, 7);
+		send_udp_msg(udp_ip, udp_port, &msg);
+	}
+	else {
+		if (!lua_istable(tolua_s, 7)) {
+			//没有数据
+			msg.body = NULL;
+			send_udp_msg(udp_ip, udp_port, &msg);
+		}
+		else {
+			string type_name = protoManager::get_cmmand_protoname(msg.head.ctype);
+			if (type_name.empty()) {
+				msg.body = NULL;
+				
+				send_udp_msg(udp_ip, udp_port, &msg);
+			}
+
+			Message* pb_msg = create_message_from_lua_table(tolua_s, 7, type_name);
+			if (pb_msg == NULL) {
+				//error log
+				log_error("create_message_from_lua_table field error %s\n", type_name.c_str());
+				return 0;
+			}
+
+			msg.body = (void*)pb_msg;
+		
+			send_udp_msg(udp_ip, udp_port, &msg);
+			delete pb_msg;
+			pb_msg = NULL;
+		}
+	}
+	return 0;
 }
 
 // {1: stype, 2: ctype, 3: utag, 4 body}
@@ -280,7 +373,7 @@ int lua_send_msg(lua_State* tolua_s) {
 	session_base* s = (session_base*)lua_touserdata(tolua_s, 1);
 	if (s == NULL) {
 		return 0;
-	}
+	} 
 
 	if (!lua_istable(tolua_s, 2)) {
 		return 0;
@@ -435,6 +528,25 @@ static int lua_is_client_session(lua_State* tolua_s) {
 	return 1;
 }
 
+static int lua_get_addr(lua_State* tolua_s) {
+
+	int argc = lua_gettop(tolua_s);
+	if (argc != 1) {
+		return 0;
+	}
+
+	session_base* session = (session_base*)lua_touserdata(tolua_s, 1);
+	if (session == NULL) {
+		return 0;
+	}
+
+	int client_port = 0;
+	const char* client_ip = session->get_address(&client_port);
+	lua_pushstring(tolua_s, client_ip);
+	lua_pushinteger(tolua_s, client_port);
+	return 2;
+}
+
 static int lua_send_raw_msg(lua_State* tolua_s) {
 	int argc = lua_gettop(tolua_s);
 	if (argc != 2) {
@@ -476,6 +588,8 @@ int register_session_export_tolua(lua_State*tolua_s) {
 		tolua_function(tolua_s, "get_proto_type", lua_get_proto_type);
 		tolua_function(tolua_s, "set_socket_and_proto_type", lua_set_socket_and_proto_type);
 		tolua_function(tolua_s, "is_client_session", lua_is_client_session);
+		tolua_function(tolua_s, "get_address", lua_get_addr);
+		tolua_function(tolua_s, "udp_send_msg", lua_udp_send_msg);
 		tolua_endmodule(tolua_s);
 	}
 	lua_pop(tolua_s, 1);

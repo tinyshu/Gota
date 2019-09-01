@@ -61,6 +61,10 @@ void on_connect_work_cb(uv_work_t* req) {
 	}
 
 	MYSQL*pConn = mysql_init(NULL);
+	if (pConn == NULL) {
+		return;
+	}
+
 	if (NULL==mysql_real_connect(pConn, conn_req->ip, conn_req->uname,
 		conn_req->upasswd, conn_req->db_name, conn_req->port, NULL, 0)){
 		log_debug("connect error!!! \n %s\n", mysql_error(pConn));
@@ -71,6 +75,25 @@ void on_connect_work_cb(uv_work_t* req) {
 		
 	}
 	else {
+		//设置mysql连接超时时间
+		int ret = -1;
+		int time_out = 3600 * 8;
+		ret = mysql_options(pConn, MYSQL_OPT_CONNECT_TIMEOUT, &time_out);
+		if (ret!=0) {
+			log_debug("mysql_options MYSQL_OPT_CONNECT_TIMEOUT error!!! \n %s\n", mysql_error(pConn));
+		}
+
+		int read_time_out = 60;
+		ret = mysql_options(pConn, MYSQL_OPT_READ_TIMEOUT, &read_time_out);
+		if (ret != 0) {
+			log_debug("mysql_options MYSQL_OPT_READ_TIMEOUT error!!! \n %s\n", mysql_error(pConn));
+		}
+
+		int write_time_out = 60;
+		ret = mysql_options(pConn, MYSQL_OPT_WRITE_TIMEOUT, &write_time_out);
+		if (ret != 0) {
+			log_debug("mysql_options MYSQL_OPT_WRITE_TIMEOUT error!!! \n %s\n", mysql_error(pConn));
+		}
 		mysql_lock_context* pcontext = (mysql_lock_context*)my_malloc(sizeof(mysql_lock_context));
 		if (pcontext==NULL) {
 			exit(-2);
@@ -206,31 +229,33 @@ void on_query_work_cb(uv_work_t* req) {
 	}
 	//
 	//获取结果集
-	MYSQL_RES* res = mysql_store_result(mysql_handle);
-	if (res == NULL) {
-		q_req->err = strdup("get store is null");
-		q_req->f_query_cb(q_req->err, NULL,NULL);
-		uv_mutex_unlock(&(c->mutex));
-		return;
-	}
-	if (mysql_num_rows(res) == 0) {
-		q_req->err = strdup("get store num is zero!");
-		q_req->f_query_cb(q_req->err, NULL,NULL);
-		mysql_free_result(res);
-		uv_mutex_unlock(&(c->mutex));
-		return;
-	}
-	
-	int fields_num = mysql_field_count(mysql_handle);
-	if (fields_num<=0) {
-		q_req->f_query_cb(q_req->err, NULL,NULL);
-		mysql_free_result(res);
-		uv_mutex_unlock(&(c->mutex));
-		return;
-	}
-	
-	q_req->res = res;
+	q_req->res = mysql_store_result(mysql_handle);
 	uv_mutex_unlock(&(c->mutex));
+	//if (res == NULL) {
+	//	q_req->err = strdup("get store is null");
+	//	q_req->f_query_cb(q_req->err, NULL,NULL);
+	//	uv_mutex_unlock(&(c->mutex));
+	//	return;
+	//}
+	//if (mysql_num_rows(res) == 0) {
+	//	//没有查询到数据，err设置为 NULL
+	//	q_req->err = NULL;
+	//	q_req->f_query_cb(q_req->err, NULL,NULL);
+	//	mysql_free_result(res);
+	//	uv_mutex_unlock(&(c->mutex));
+	//	return;
+	//}
+	//
+	//int fields_num = mysql_field_count(mysql_handle);
+	//if (fields_num<=0) {
+	//	q_req->f_query_cb(q_req->err, NULL,NULL);
+	//	mysql_free_result(res);
+	//	uv_mutex_unlock(&(c->mutex));
+	//	return;
+	//}
+	//
+	
+	
 }
 
 void on_query_done_cb(uv_work_t* req,int status) {

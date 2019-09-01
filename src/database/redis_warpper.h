@@ -8,7 +8,7 @@
 
 class redis_wrapper {
 public:
-	static void rediseconnect(const char* ip, int port, int timeout, cb_connect_db connect_db, void* udata = NULL);
+	static void rediseconnect(const char* ip, int port, const char* pwd, int timeout, cb_connect_db connect_db, void* udata = NULL);
 
 	static void rediseclose(void* context, cb_close_db on_close);
 

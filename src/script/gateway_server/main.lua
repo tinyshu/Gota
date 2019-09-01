@@ -1,28 +1,22 @@
 --初始化日志模块
 Logger_wrapper.init("logger/gateway/", "gateway", true)
 
-local socket_type = {
-	TCP_SOCKET = 0,  --tcp
-	WEB_SOCKET = 1,  --websocket
-}
+--加载配置
+local config = require("conf")
+local socket_proto_type = require("socket_proto_type")
 
-local proto_type = {
-    PROTO_BUF = 0,
-	PROTO_JSON = 1,
-}
-
-session_wrapper.set_socket_and_proto_type(socket_type.TCP_SOCKET,proto_type.PROTO_BUF)
+--session_wrapper.set_socket_and_proto_type(socket_type.TCP_SOCKET,proto_type.PROTO_BUF)
+session_wrapper.set_socket_and_proto_type(socket_proto_type.socket_type.TCP_SOCKET,socket_proto_type.proto_type.PROTO_BUF)
 --session_wrapper.set_socket_and_proto_type(socket_type.WEB_SOCKET,proto_type.PROTO_JSON)
 --protobuf协议，注册cmd
-if session_wrapper.get_proto_type() == proto_type.PROTO_BUF then
+if session_wrapper.get_proto_type() == socket_proto_type.proto_type.PROTO_BUF then
    local cmd_name_map = require("cmd_name_map")
    if cmd_name_map then
 	proto_mgr_wrapper.register_protobuf_cmd(cmd_name_map)
    end
 end
 
---加载配置
-local config = require("conf")
+
 --开启网络服务
 --tcp模式
 netbus_wrapper.tcp_listen(config.gateway_tcp_ip,config.gateway_tcp_port)

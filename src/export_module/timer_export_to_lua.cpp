@@ -28,7 +28,16 @@ const char * timer_moduel_name = "timer_wrapper";
 
 static void on_lua_time(void* udata) {
 	timer_handle* handle = (timer_handle*)udata;
-	lua_wrapper::execute_lua_script_by_handle(handle->ref, 0);
+	int ret = lua_wrapper::execute_lua_script_by_handle(handle->ref, 0);
+	if (ret!=0) {
+	    lua_wrapper::remove_lua_script_by_handle(handle->ref);
+		return;
+	}
+
+	if (handle->repeat_count == -1) {
+		return;
+	}
+
 	if (handle->repeat_count > 0) {
 		handle->repeat_count--;
 		if (handle->repeat_count==0) {
@@ -37,7 +46,7 @@ static void on_lua_time(void* udata) {
 	}
 }
 
-int lua_create_timer(lua_State* tolua_s) {
+static int lua_create_timer(lua_State* tolua_s) {
 	//定时器回调函数
 	int s_function_ref_id = toluafix_ref_function(tolua_s, 1, NULL);
 	
@@ -76,7 +85,7 @@ int lua_create_timer(lua_State* tolua_s) {
 	return 1;
 }
 
-int lua_create_timer_once(lua_State* tolua_s) {
+static int lua_create_timer_once(lua_State* tolua_s) {
 	int s_function_ref_id = toluafix_ref_function(tolua_s, 1, NULL);
 	if (s_function_ref_id <= 0) {
 		toluafix_remove_function_by_refid(tolua_s, s_function_ref_id);
@@ -101,7 +110,7 @@ int lua_create_timer_once(lua_State* tolua_s) {
 	return 1;
 }
 
-int lua_cancle_timer(lua_State* tolua_s) {
+static int lua_cancle_timer(lua_State* tolua_s) {
 	uv_timer* timer = (uv_timer*)tolua_touserdata(tolua_s,-1,NULL);
 	if (timer==NULL) {
 		return 0;

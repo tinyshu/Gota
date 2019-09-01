@@ -53,7 +53,7 @@ static int lua_udp_listen(lua_State* tolua_s) {
 
 	char* ip = (char*)lua_tostring(tolua_s, 1);
 	int port = lua_tonumber(tolua_s, 2);
-	udp_listen(ip, port);
+	netbus::get_instance().udp_listen(ip, port);
 	return 0;
 }
 
