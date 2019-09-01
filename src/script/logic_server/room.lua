@@ -219,7 +219,7 @@ function room:push_next_frame(next_frame_opts)
 	for i = 1, #next_frame_opts.opts do 
 		table.insert(self.next_frame_list.opts, next_frame_opts.opts[i])
 	end
-	--print("push_next_frame self.frameid"..self.frameid)
+	print("push_next_frame self.frameid"..self.frameid)
 end
 
 --发送为同步的帧
