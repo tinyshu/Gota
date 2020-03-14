@@ -209,35 +209,24 @@ static int lua_msg_read_body(lua_State*tolua_s) {
 	}
 	if (msg->body==NULL) {
 		lua_pushnil(tolua_s);
-	}
-	else if (get_proto_type() == BIN_PROTOCAL) {
+	}else if (get_proto_type() == BIN_PROTOCAL) {
 		push_proto_message_tolua((google::protobuf::Message*)msg->body);
-	}
-	else if (get_proto_type() == JSON_PROTOCAL) {
+	}else if (get_proto_type() == JSON_PROTOCAL) {
 		lua_pushstring(tolua_s,(const char*)msg->body);
 	}
 
 	if (msg!=NULL) {
+		if (get_proto_type() == BIN_PROTOCAL) {
+			if (msg->body!=NULL) {
+				delete (google::protobuf::Message*)msg->body;
+			}
+		}else if (get_proto_type() == JSON_PROTOCAL) {
+			memory_mgr::get_instance().free_memory(msg->body);
+		}
 		memory_mgr::get_instance().free_memory(msg);
 	}
 	return 1;
 }
-
-//static int lua_read_json_msg_head(lua_State*tolua_s) {
-//	int argc = lua_gettop(tolua_s);
-//	if (argc != 1) {
-//		return 0;
-//	}
-//	raw_cmd* raw_data = (raw_cmd*)lua_touserdata(tolua_s, -1);
-//	if (raw_data == NULL) {
-//		lua_pushinteger(tolua_s, 0);
-//		lua_pushinteger(tolua_s, 0);
-//		lua_pushinteger(tolua_s, 0);
-//		return 3;
-//	}
-//
-//
-//}
 
 static int lua_set_utag(lua_State*tolua_s) {
 	int argc = lua_gettop(tolua_s);
@@ -250,7 +239,7 @@ static int lua_set_utag(lua_State*tolua_s) {
 	}
 
 	int utag = luaL_checkinteger(tolua_s,2);
-	unsigned char* utag_ptr = raw_data->raw_data + 4; //指向utag内存
+	unsigned char* utag_ptr = raw_data->raw_data + sizeof(int); //指向utag内存
 	utag_ptr[0] = (utag & 0x000000FF);
 	utag_ptr[1] = ((utag & 0x0000FF00) >> 8);
 	utag_ptr[2] = ((utag & 0x00FF0000) >> 16);

@@ -21,10 +21,10 @@
 
 extern "C" {
 #include "../../utils/timer_list.h"
-#include "../../3rd/http_parser/http_parser.h"
-#include "../../3rd/crypt/sha1.h"
-#include "../../3rd/crypt/base64_encoder.h"
-#include "../../3rd/mjson/json.h"
+#include "../http_parser/http_parser.h"
+#include "../crypt/sha1.h"
+#include "../crypt/base64_encoder.h"
+#include "../mjson/json.h"
 }
 
 #include "../session/tcp_session.h"
@@ -41,27 +41,28 @@ extern "C" {
 static char ip_address[64];
 static int ip_port;
 
-//netbusæ¨¡å—æ¥å£
+//netbusÄ£¿é½Ó¿Ú
 extern void init_server_gateway();
 extern void exit_server_gateway();
 extern void on_bin_protocal_recv_entry(struct session_base* s, unsigned char* data, int len);
 extern void on_json_protocal_recv_entry(struct session* s, unsigned char* data, int len);
 
-static HANDLE g_iocp = 0;
+//static HANDLE g_iocp = 0;
+static void* g_iocp = 0;
  uv_loop_t* loop = NULL;
 static uv_connect_t* connect_req;
-//ç›‘å¬socketå¯¹è±¡
+//¼àÌısocket¶ÔÏó
 static uv_tcp_t l_server;
 
-//å­˜å‚¨httpæ¯æ¬¡è§£æçš„å¤´éƒ¨value
+//´æ´¢httpÃ¿´Î½âÎöµÄÍ·²¿value
 static char header_key[64];
 static char client_ws_key[128];
-//æ˜¯å¦è§£æåˆ°äº†websocketçš„Sec-WebSocket-Keyå­—æ®µ
+//ÊÇ·ñ½âÎöµ½ÁËwebsocketµÄSec-WebSocket-Key×Ö¶Î
 static int has_client_key = 0;
 
 struct io_package {
 	struct session_base* s;
-	int recved; // æ”¶åˆ°çš„å­—èŠ‚æ•°;
+	int recved; // ÊÕµ½µÄ×Ö½ÚÊı;
 	unsigned char* long_pkg;
 	int max_pkg_len;
 };
@@ -78,18 +79,18 @@ void init_uv() {
 uv_loop_t* get_uv_loop() {
 	return loop;
 }
-//æ¡†æ¶ä¼šä¼ å…¥uv_buf_tè®©è¯¥å‡½æ•°åˆ†é…å†…å­˜
-//handleè§¦å‘è¯»äº‹ä»¶çš„uv_tcp_tå¯¹è±¡
-//suggested_size æ¡†æ¶å»ºè®®æœ¬æ¬¡åˆ†é…çš„å†…å­˜buffå¤§å°
-//bufåˆ›å»ºçš„å†…å­˜æŒ‡é’ˆåœ°å€
+//¿ò¼Ü»á´«Èëuv_buf_tÈÃ¸Ãº¯Êı·ÖÅäÄÚ´æ
+//handle´¥·¢¶ÁÊÂ¼şµÄuv_tcp_t¶ÔÏó
+//suggested_size ¿ò¼Ü½¨Òé±¾´Î·ÖÅäµÄÄÚ´æbuff´óĞ¡
+//buf´´½¨µÄÄÚ´æÖ¸ÕëµØÖ·
 static void on_read_alloc_buff(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf) {
 	struct io_package* io_data = (struct io_package*)handle->data;
-	//è®¡ç®—éœ€è¦çš„ç©ºé—´
+	//¼ÆËãĞèÒªµÄ¿Õ¼ä
 	int alloc_len = (io_data->recved + suggested_size);
 	const int max_buffer_length = MAX_PKG_SIZE - 1;
 	alloc_len = (alloc_len > max_buffer_length) ? max_buffer_length : alloc_len;
 	if (alloc_len < MAX_RECV_SIZE) {
-		//æœ€å°å­˜å‚¨ç©ºé—´ç”³è¯·2048
+		//×îĞ¡´æ´¢¿Õ¼äÉêÇë2048
 		alloc_len = MAX_RECV_SIZE;
 	}
 
@@ -98,12 +99,12 @@ static void on_read_alloc_buff(uv_handle_t* handle, size_t suggested_size, uv_bu
 		io_data->max_pkg_len = alloc_len;
 	}
 
-	//è®¾ç½®è¯»å†™åœ°å€å’Œç©ºé—´
+	//ÉèÖÃ¶ÁĞ´µØÖ·ºÍ¿Õ¼ä
 	buf->base = (char*)(io_data->long_pkg + io_data->recved);
 	buf->len = suggested_size;
 }
 
-//è¿æ¥å…³é—­
+//Á¬½Ó¹Ø±Õ
 static void on_close_stream(uv_handle_t* peer) {
 	struct io_package* io_data = (struct io_package*)peer->data;
 	if (io_data->s != NULL) {
@@ -116,9 +117,10 @@ static void on_close_stream(uv_handle_t* peer) {
 		io_data->long_pkg = NULL;
 	}
 
-	if (peer->data != NULL) {
-		my_free(peer->data);
-		peer->data = NULL;
+	//peer->data
+	if (io_data != NULL) {
+		my_free(io_data);
+		io_data = NULL;
 	}
 
 	my_free(peer);
@@ -130,43 +132,43 @@ static void on_after_shutdown(uv_shutdown_t* req, int status) {
 }
 
 static int recv_header(unsigned char* pkg, int len, int* pkg_size) {
-	if (len <= 2) { // æ”¶åˆ°çš„æ•°æ®ä¸èƒ½å¤Ÿå°†æˆ‘ä»¬çš„åŒ…çš„å¤§å°è§£æå‡ºæ¥
+	if (len <= 2) { // ÊÕµ½µÄÊı¾İ²»ÄÜ¹»½«ÎÒÃÇµÄ°üµÄ´óĞ¡½âÎö³öÀ´
 		return -1;
 	}
-	//è¯»å–å‰2ä¸ªå­—èŠ‚,äºŒè¿›åˆ¶åŒ…æ ¼å¼ åŒ…æ€»é•¿åº¦(2byte)+recv_msgç»“æ„+body
+	//¶ÁÈ¡Ç°2¸ö×Ö½Ú,¶ş½øÖÆ°ü¸ñÊ½ °ü×Ü³¤¶È(2byte)+recv_msg½á¹¹+body
 	*pkg_size = (pkg[0]) | (pkg[1] << 8);
 	return 0;
 }
 
 static void on_bin_protocal_recved(struct session* s, struct io_package* io_data) {
-	// Step1: è§£ææ•°æ®çš„å¤´ï¼Œè·å–æˆ‘ä»¬æ¸¸æˆçš„åè®®åŒ…ä½“çš„å¤§å°;
+	// Step1: ½âÎöÊı¾İµÄÍ·£¬»ñÈ¡ÎÒÃÇÓÎÏ·µÄĞ­Òé°üÌåµÄ´óĞ¡;
 	while (io_data->recved > 0) {
-		//è·å–æ•°æ®åŒ…é•¿åº¦
+		//»ñÈ¡Êı¾İ°ü³¤¶È
 		int pkg_size = 0;
-		if (recv_header(io_data->long_pkg, io_data->recved, &pkg_size) != 0) { // ç»§ç»­æŠ•é€’recvè¯·æ±‚ï¼ŒçŸ¥é“èƒ½å¦æ¥æ”¶ä¸€ä¸ªæ•°æ®å¤´;
+		if (recv_header(io_data->long_pkg, io_data->recved, &pkg_size) != 0) { // ¼ÌĞøÍ¶µİrecvÇëÇó£¬ÖªµÀÄÜ·ñ½ÓÊÕÒ»¸öÊı¾İÍ·;
 			break;
 		}
 		
 		if (pkg_size < 2) {
-			//å°äº2çš„packè¯´æ˜sessionå¼‚å¸¸ï¼Œç›´æ¥å…³é—­session
+			//Ğ¡ÓÚ2µÄpackËµÃ÷sessionÒì³££¬Ö±½Ó¹Ø±Õsession
 			uv_close((uv_handle_t*)s->c_sock, on_close_stream);
 			break;
 		}
 
-		// Step2:åˆ¤æ–­æ•°æ®å¤§å°ï¼Œæ˜¯å¦ä¸ç¬¦åˆè§„å®šçš„æ ¼å¼
-		if (pkg_size >= MAX_PKG_SIZE) { // ,å¼‚å¸¸çš„æ•°æ®åŒ…ï¼Œç›´æ¥å…³é—­æ‰socket;
+		// Step2:ÅĞ¶ÏÊı¾İ´óĞ¡£¬ÊÇ·ñ²»·ûºÏ¹æ¶¨µÄ¸ñÊ½
+		if (pkg_size >= MAX_PKG_SIZE) { // ,Òì³£µÄÊı¾İ°ü£¬Ö±½Ó¹Ø±Õµôsocket;
 			uv_close((uv_handle_t*)s->c_sock, on_close_stream);
 			break;
 		}
 
-		// å¦‚æœæœ‰ä¸€ä¸ªå®Œæ•´çš„æ•°æ®åŒ…ï¼Œå°±è§£åŒ…åšé€»è¾‘å¤„ç†
-		if (io_data->recved >= pkg_size) { // è¡¨ç¤ºæˆ‘ä»¬å·²ç»æ”¶åˆ°è‡³å°‘è¶…è¿‡äº†ä¸€ä¸ªåŒ…çš„æ•°æ®ï¼›
+		// Èç¹ûÓĞÒ»¸öÍêÕûµÄÊı¾İ°ü£¬¾Í½â°ü×öÂß¼­´¦Àí
+		if (io_data->recved >= pkg_size) { // ±íÊ¾ÎÒÃÇÒÑ¾­ÊÕµ½ÖÁÉÙ³¬¹ıÁËÒ»¸ö°üµÄÊı¾İ£»
 			unsigned char* pkg_data = io_data->long_pkg;
 
-			//è§£åŒ…å‡½æ•°pkg_data + 2æ˜¯å»æ‰2å­—èŠ‚åŒ…é•¿åº¦
+			//½â°üº¯Êıpkg_data + 2ÊÇÈ¥µô2×Ö½Ú°ü³¤¶È
 			on_bin_protocal_recv_entry(s, pkg_data + 2, pkg_size - 2);
 
-			//io_data->recved > pkg_sizeç¼“å­˜åŒºé‡Œå¤§äºä¸€ä¸ªåŒ…æ•°æ®ï¼Œæ•°æ®ç§»åŠ¨å»æ‰å·²å¤„ç†çš„ç¼“å­˜åŒºçš„åŒ…
+			//io_data->recved > pkg_size»º´æÇøÀï´óÓÚÒ»¸ö°üÊı¾İ£¬Êı¾İÒÆ¶¯È¥µôÒÑ´¦ÀíµÄ»º´æÇøµÄ°ü
 			if (io_data->recved > pkg_size) {
 				memmove(io_data->long_pkg, io_data->long_pkg + pkg_size, io_data->recved - pkg_size);
 			}
@@ -179,7 +181,7 @@ static void on_bin_protocal_recved(struct session* s, struct io_package* io_data
 }
 
 int read_json_tail(unsigned char* pkg_data, int recvlen, int* pkg_size) {
-	//ä¸è¶³\r\n,ç›´æ¥è¿”å›é”™è¯¯
+	//²»×ã\r\n,Ö±½Ó·µ»Ø´íÎó
 	if (recvlen < 2) {
 		return -1;
 	}
@@ -192,7 +194,7 @@ int read_json_tail(unsigned char* pkg_data, int recvlen, int* pkg_size) {
 	const int len = recvlen - 1;
 	while (i < len) {
 		if (pkg_data[i] == '\r' && pkg_data[i + 1] == '\n') {
-			*pkg_size = (i + 2); //+2è¡¨ç¤ºè¦ç®—ä¸Š\r\n
+			*pkg_size = (i + 2); //+2±íÊ¾ÒªËãÉÏ\r\n
 			return 0;
 		}
 		i++;
@@ -205,36 +207,36 @@ static void on_json_protocal_recved(struct session* s, struct io_package* io_dat
 	if (s == NULL || io_data == NULL || io_data->long_pkg == NULL) {
 		return;
 	}
-	//io_data->recvedå½“å‰ç¼“å­˜åŒºæ•°æ®å¤§å°
+	//io_data->recvedµ±Ç°»º´æÇøÊı¾İ´óĞ¡
 	while (io_data->recved) {
-		//å½“å‰ä¸€ä¸ªjsonåŒ…å¤§å°ï¼Œä¸€ä¸ªå®Œæ•´çš„jsonåŒ…ç”¨\r\nåˆ†å‰²
+		//µ±Ç°Ò»¸öjson°ü´óĞ¡£¬Ò»¸öÍêÕûµÄjson°üÓÃ\r\n·Ö¸î
 		int pkg_size = 0;
-		//è·å–ç¼“å­˜åŒºæŒ‡é’ˆ
+		//»ñÈ¡»º´æÇøÖ¸Õë
 		unsigned char* pkg_data = io_data->long_pkg;
 		if (pkg_data == NULL) {
 			log_error("get io_data buffer error\n");
 			return;
 		}
 
-		//åˆ†å‰²ä¸€ä¸ªå®Œæ•´çš„åŒ…
+		//·Ö¸îÒ»¸öÍêÕûµÄ°ü
 		if (read_json_tail(pkg_data, io_data->recved, &pkg_size) != 0) {
-			//æ²¡æœ‰æ‰¾åˆ°\r\n,å¹¶ä¸”ç¼“å­˜åŒºå¼‚å¸¸ï¼Œå…³é—­sessionè¿æ¥
+			//Ã»ÓĞÕÒµ½\r\n,²¢ÇÒ»º´æÇøÒì³££¬¹Ø±ÕsessionÁ¬½Ó
 			if (io_data->recved > (MAX_PKG_SIZE-1)) {
 				uv_close((uv_handle_t*)s->c_sock, on_close_stream);
 				break;
 			}
 		}
 
-		//èµ°åˆ°è¿™é‡Œè¡¨ç¤ºè§£æåˆ°ä¸€ä¸ªå®Œæ•´çš„æ•°æ®åŒ…
-		//è°ƒç”¨ä¸Šå±‚å¤„ç†å‡½æ•°
+		//×ßµ½ÕâÀï±íÊ¾½âÎöµ½Ò»¸öÍêÕûµÄÊı¾İ°ü
+		//µ÷ÓÃÉÏ²ã´¦Àíº¯Êı
 		on_json_protocal_recv_entry(s, pkg_data, pkg_size);
-		//å¤„ç†å®Œè¿™ä¸ªåŒ…ï¼Œç¼“å­˜åŒºå‰ç§»pkg_size , 
-		//å¦‚æœio_data->recved == pkg_sizeè¡¨ç¤ºç¼“å­˜æ²¡æœ‰æ•°æ®ï¼Œä¸ç”¨åœ¨memmoveäº†
+		//´¦ÀíÍêÕâ¸ö°ü£¬»º´æÇøÇ°ÒÆpkg_size , 
+		//Èç¹ûio_data->recved == pkg_size±íÊ¾»º´æÃ»ÓĞÊı¾İ£¬²»ÓÃÔÚmemmoveÁË
 		if (io_data->recved > pkg_size) {
 			memmove(pkg_data, pkg_data + pkg_size, io_data->recved - pkg_size);
 		}
 		io_data->recved -= pkg_size;
-		//ç¼“å­˜åŒºæ²¡æœ‰æ•°æ®
+		//»º´æÇøÃ»ÓĞÊı¾İ
 		if (io_data->recved <=0 && io_data->long_pkg!=NULL) {
 			my_free(io_data->long_pkg);
 			io_data->long_pkg = NULL;
@@ -263,14 +265,12 @@ static int on_header_value(http_parser* p, const char *at,size_t length) {
 	return 0;
 }
 
-//æ•°æ®å‘é€æˆåŠŸåå›è°ƒ
+//Êı¾İ·¢ËÍ³É¹¦ºó»Øµ÷
 static void after_write(uv_write_t* req, int status) {
 	write_req_t* wr =(write_req_t*)req;
 	memory_mgr::get_instance().free_memory(wr->buf.base);
 	memory_mgr::get_instance().free_memory(wr);
-	//my_free(wr->buf.base);
-	//my_free(wr);
-
+	
 	if (status == 0){
 		return;
 	}
@@ -283,14 +283,12 @@ void uv_send_data(void* stream, char* pkg, unsigned int pkg_len) {
 		return;
 	}
 
-	//write_req_t* wr = (write_req_t*)my_malloc(sizeof(write_req_t));
 	write_req_t* wr = (write_req_t*)memory_mgr::get_instance().alloc_memory(sizeof(write_req_t));
 	if (wr == NULL) {
 		log_error("malloc faild in uv_send_data\n");
 		return;
 	}
 
-	//unsigned char* send_buf = (unsigned char*)my_malloc(pkg_len + 1);
 	unsigned char* send_buf = (unsigned char*)memory_mgr::get_instance().alloc_memory(pkg_len + 1);
 	if (send_buf == NULL) {
 		//my_free(wr);
@@ -301,24 +299,22 @@ void uv_send_data(void* stream, char* pkg, unsigned int pkg_len) {
 	memcpy(send_buf,pkg, pkg_len);
 	wr->buf = uv_buf_init((char*)send_buf, pkg_len);
 	if (uv_write(&wr->req, (uv_stream_t*)stream, &wr->buf, 1, after_write)) {
-		//my_free(send_buf);
-		//my_free(wr);
 		memory_mgr::get_instance().free_memory(send_buf);
 		memory_mgr::get_instance().free_memory(wr);
 		log_error("uv_write failed");
 	}
 }
-//è¯»å–ä¸€ä¸ªå®Œæ•´çš„å¸§
-//ws_sizeä¸€ä¸ªå®Œæ•´wsåŒ…é•¿åº¦
-//head_lenåŒ…é•¿åº¦
+//¶ÁÈ¡Ò»¸öÍêÕûµÄÖ¡
+//ws_sizeÒ»¸öÍêÕûws°ü³¤¶È
+//head_len°ü³¤¶È
 static int process_websocket_pack(unsigned char* pkg, int pkg_len, int* head_len, int* ws_size) {
 	unsigned char* mask = NULL;
 	unsigned char* rawdata = NULL;
 	int datalen = 0;
 	unsigned char chlen = pkg[1];
-	chlen = chlen & 0x7f; //å»æ‰æœ€é«˜ä½çš„1 0x7f = 0111ffff
+	chlen = chlen & 0x7f; //È¥µô×î¸ßÎ»µÄ1 0x7f = 0111ffff
 	if (chlen <= 125) {
-		//chlenå°±æ˜¯æ•°æ®é•¿åº¦
+		//chlen¾ÍÊÇÊı¾İ³¤¶È
 		if (pkg_len < 2 + 4) {
 			return -1;
 		}
@@ -327,21 +323,21 @@ static int process_websocket_pack(unsigned char* pkg, int pkg_len, int* head_len
 	}
 	else if (chlen == 126) {
 		//7+16
-		datalen = pkg[2] + (pkg[3] << 8); //è¿™é‡Œçš„data[3]ç›¸å½“äºäºŒè¿›åˆ¶çš„åä½
+		datalen = pkg[2] + (pkg[3] << 8); //ÕâÀïµÄdata[3]Ïàµ±ÓÚ¶ş½øÖÆµÄÊ®Î»
 		if (pkg_len < 4 + 4) {
 			return -1;
 		}
 		mask = (unsigned char*)&(pkg[4]);
 	}
 	else if (chlen == 127) {
-		//è¿™é‡Œ8ä¸ªå­—èŠ‚è¡¨ç¤ºé•¿åº¦ä¸€èˆ¬æ— å¯ç”¨ç”¨ä¸Šï¼Œè§£æå‰é¢32ä½å°±å¯ä»¥äº†'7+64
+		//ÕâÀï8¸ö×Ö½Ú±íÊ¾³¤¶ÈÒ»°ãÎŞ¿ÉÓÃÓÃÉÏ£¬½âÎöÇ°Ãæ32Î»¾Í¿ÉÒÔÁË'7+64
 		datalen = pkg[2] + (pkg[3] << 8) + (pkg[4] << 16) + (pkg[5] << 24);
 		if (pkg_len < 2 + 8 + 4) {
 			return -1;
 		}
 		mask = (unsigned char*)&(pkg[6]);
 	}
-	//æ•°æ®èµ·å§‹åœ°å€
+	//Êı¾İÆğÊ¼µØÖ·
 	rawdata = (unsigned char*)(mask + 4);
 	*head_len = (int)(rawdata - pkg);
 	*ws_size = *head_len + datalen;
@@ -353,7 +349,7 @@ static int parser_websocket_pack(struct session* s, unsigned char* body, int len
 		printf("parser_websocket_pack parament error\n");
 		return -1;
 	}
-	//ä½¿ç”¨maskè§£ç body,è§£ç ä¸ä¼šæ”¹å˜æ•°æ®é•¿åº¦
+	//Ê¹ÓÃmask½âÂëbody,½âÂë²»»á¸Ä±äÊı¾İ³¤¶È
 	for (int i = 0; i < len; ++i) {
 		int j = i % 4;
 		body[i] = body[i] ^ mask[j];
@@ -387,33 +383,33 @@ static int process_websocket_data(struct session* s, struct io_package* io_data,
 		int pkg_size = 0;
 		int header_size = 0;
 		//if (0x81 == pkg[0] || 0x82 == pkg[0]) {
-		//è¯»å–ä¸€ä¸ªå®Œæ•´çš„å¸§ï¼Œè¿”å›ä¸ç­‰äº0è¯´æ˜æ²¡æœ‰è¯»å–åˆ°ä¸€ä¸ªå®Œæ•´çš„å¸§ 
+		//¶ÁÈ¡Ò»¸öÍêÕûµÄÖ¡£¬·µ»Ø²»µÈÓÚ0ËµÃ÷Ã»ÓĞ¶ÁÈ¡µ½Ò»¸öÍêÕûµÄÖ¡ 
 		if (process_websocket_pack(pkg, io_data->recved, &header_size, &pkg_size) != 0) {
 			break;
 		}
 
-		//è§£æåˆ°ä¸€ä¸ªå®Œæ•´çš„å¸§ï¼Œåˆ¤æ–­å¸§åˆæ³•æ€§
+		//½âÎöµ½Ò»¸öÍêÕûµÄÖ¡£¬ÅĞ¶ÏÖ¡ºÏ·¨ĞÔ
 		if (pkg_size >= MAX_PKG_SIZE) {
 			uv_close((uv_handle_t*)s->c_sock, on_close_stream);
 			break;
 		}
-		//ç¼“å­˜åŒºé‡Œè‡³å°‘æœ‰ä¸€ä¸ªå®Œæ•´çš„å¸§
+		//»º´æÇøÀïÖÁÉÙÓĞÒ»¸öÍêÕûµÄÖ¡
 		if (pkg_size <= io_data->recved) {
 #if _DEBUG
 			printf("websocket pack: header_size:%d body_size:%d\n", header_size, pkg_size);
 #endif
-			//å¦‚æœç¬¬ä¸€ä¸ªå­—èŠ‚æ˜¯0x88 websocketå®¢æˆ·ç«¯è¯·æ±‚å…³é—­
+			//Èç¹ûµÚÒ»¸ö×Ö½ÚÊÇ0x88 websocket¿Í»§¶ËÇëÇó¹Ø±Õ
 			if (0x88 == pkg[0]) {
 				uv_close((uv_handle_t*)s->c_sock, on_close_stream);
 				break;
 			}
-			//å¤„ç†æ•°æ®åŒ…
+			//´¦ÀíÊı¾İ°ü
 			parser_websocket_pack(s, pkg + header_size, pkg_size - header_size, pkg + header_size - 4, protocal_type);
 
 			if (io_data->recved > pkg_size) {
 				memmove(pkg, pkg + pkg_size, io_data->recved - pkg_size);
 			}
-			//å¦‚æœæ•°æ®å¯ä»¥åœ¨å°ç¼“å†²åŒºå­˜å‚¨ï¼Œå°±copyåˆ°å°ç¼“å†²åŒº
+			//Èç¹ûÊı¾İ¿ÉÒÔÔÚĞ¡»º³åÇø´æ´¢£¬¾Ícopyµ½Ğ¡»º³åÇø
 			io_data->recved -= pkg_size;
 
 			if (io_data->recved == 0 && io_data->long_pkg != NULL) {
@@ -428,7 +424,7 @@ static int process_websocket_data(struct session* s, struct io_package* io_data,
 	return 0;
 }
 
-//å¤„ç†websocketæ¡æ‰‹åè®®
+//´¦ÀíwebsocketÎÕÊÖĞ­Òé
 static int process_websocket_connect(struct session* s, struct io_package* io_data, char* ip, int port) {
 	if (s == NULL || io_data == NULL) {
 		printf("process_websocket_connect parament error\n");
@@ -441,25 +437,25 @@ static int process_websocket_connect(struct session* s, struct io_package* io_da
 	struct http_parser_settings setting;
 	http_parser_settings_init(&setting);
 
-	//on_header_fieldæ¯è§£æåˆ°ä¸€ä¸ªhttpå¤´éƒ¨fieldå­—æ®µè¢«è°ƒç”¨
-	//on_header_valueæ¯æ¬¡è§£æåˆ°å¤´éƒ¨å­—æ®µè¢«è°ƒç”¨
+	//on_header_fieldÃ¿½âÎöµ½Ò»¸öhttpÍ·²¿field×Ö¶Î±»µ÷ÓÃ
+	//on_header_valueÃ¿´Î½âÎöµ½Í·²¿×Ö¶Î±»µ÷ÓÃ
 	setting.on_header_field = on_header_field;
 	setting.on_header_value = on_header_value;
 	unsigned char* pkg = io_data->long_pkg;
 
 	/*
-	è¿™é‡Œçš„é€»è¾‘æ˜¯:
-	åˆ¤æ–­has_client_key==0è¯´æ˜è¿˜æ²¡æœ‰è¯»å–åˆ°å¤´éƒ¨çš„Sec-WebSocket-Keyå­—æ®µï¼Œéœ€è¦åœ¨
-	æ¬¡æŠ•é€’è¯»è¯·æ±‚ï¼Œåˆ°on_header_valueè¯»å–åˆ°Sec-WebSocket-Keyå­—æ®µåï¼Œhas_client_key==1
-	è¯´æ˜Sec-WebSocket-Keyå·²ç»å­˜å‚¨åˆ°client_ws_key
+	ÕâÀïµÄÂß¼­ÊÇ:
+	ÅĞ¶Ïhas_client_key==0ËµÃ÷»¹Ã»ÓĞ¶ÁÈ¡µ½Í·²¿µÄSec-WebSocket-Key×Ö¶Î£¬ĞèÒªÔÚ
+	´ÎÍ¶µİ¶ÁÇëÇó£¬µ½on_header_value¶ÁÈ¡µ½Sec-WebSocket-Key×Ö¶Îºó£¬has_client_key==1
+	ËµÃ÷Sec-WebSocket-KeyÒÑ¾­´æ´¢µ½client_ws_key
 	*/
 	//s->has_client_key = 0;
-	//ç»‘å®šè‡ªå®šä¹‰çš„session,åœ¨on_header_valueå›è°ƒhas_client_keyè®¾ç½®ä¸º1
+	//°ó¶¨×Ô¶¨ÒåµÄsession,ÔÚon_header_value»Øµ÷has_client_keyÉèÖÃÎª1
 	has_client_key = 0;
 	http_parser_execute(&p, &setting, (const char*)pkg, io_data->recved);
 	if (0 == has_client_key) {
 		s->is_shake_hand = 0;
-		//websocketåœ¨æ¡æ‰‹é˜¶æ®µï¼Œå¦‚æœæ”¶åˆ°çš„packageå¤§äºMAX_RECV_SIZEè¡¨ç¤ºå‡ºé”™äº†
+		//websocketÔÚÎÕÊÖ½×¶Î£¬Èç¹ûÊÕµ½µÄpackage´óÓÚMAX_RECV_SIZE±íÊ¾³ö´íÁË
 		if (io_data->recved >= MAX_RECV_SIZE) {
 			uv_close((uv_handle_t*)s->c_sock, on_close_stream);
 			return -1;
@@ -508,7 +504,7 @@ static int process_websocket_connect(struct session* s, struct io_package* io_da
 	return 0;
 }
 
-//æ¥å—åˆ°æ•°æ®
+//libuv¶ÁÈ¡µ½Êı¾İ»Øµ÷º¯Êı
 static void on_after_read(uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf) {
 	if (nread < 0) {
 		uv_shutdown_t* sreq = NULL;
@@ -532,12 +528,12 @@ static void on_after_read(uv_stream_t* stream, ssize_t nread, const uv_buf_t* bu
 	struct session* s = (struct session*)io_data->s;
 	if (s->socket_type == TCP_SOCKET_IO) {
 		if (protocal_type == BIN_PROTOCAL) {
-			//tcp+äºŒè¿›åˆ¶åè®®
-			//åŒ…é•¿åº¦(2å­—èŠ‚) + åŒ…å¤´(8å­—èŠ‚) + body(protobuf)
+			//tcp+¶ş½øÖÆĞ­Òé
+			//°ü³¤¶È(2×Ö½Ú) + °üÍ·(8×Ö½Ú) + body(protobuf)
 			on_bin_protocal_recved(s, io_data);
 		}
 		else if (protocal_type == JSON_PROTOCAL) {
-			//tcp+jsonæ–‡æœ¬åè®®
+			//tcp+jsonÎÄ±¾Ğ­Òé
 			on_json_protocal_recved(s, io_data);
 		}
 	}
@@ -552,7 +548,7 @@ static void on_after_read(uv_stream_t* stream, ssize_t nread, const uv_buf_t* bu
 
 }
 
-//åœ¨æœ‰æ–°è¿æ¥æˆåŠŸè¢«è¿æ¥è¿›æ¥å,è°ƒç”¨è¿™ä¸ªå›è°ƒå‡½æ•°
+//ÔÚÓĞĞÂÁ¬½Ó³É¹¦±»Á¬½Ó½øÀ´ºó,µ÷ÓÃÕâ¸ö»Øµ÷º¯Êı
 static void on_connection(uv_stream_t* server, int status) {
 	if (status<0) {
 		return;
@@ -562,7 +558,7 @@ static void on_connection(uv_stream_t* server, int status) {
 		return;
 	}
 	memset(new_client, 0, sizeof(uv_tcp_t));
-	//æ·»åŠ æ–°è¿æ¥åˆ°eventloop
+	//Ìí¼ÓĞÂÁ¬½Óµ½eventloop
 	uv_tcp_init(loop, new_client);
 	int ret = uv_accept(server, (uv_stream_t*)new_client);
 	if (ret < 0){
@@ -570,7 +566,7 @@ static void on_connection(uv_stream_t* server, int status) {
 		new_client = NULL;
 		return;
 	}
-	//æ–°è¿æ¥éœ€è¦åš2ä¸ªäº‹æƒ… å…³è”è‡ªå®šä¹‰ä¸Šä¸‹æ–‡ æ·»åŠ ç›‘å¬çš„äº‹ä»¶
+	//ĞÂÁ¬½ÓĞèÒª×ö2¸öÊÂÇé ¹ØÁª×Ô¶¨ÒåÉÏÏÂÎÄ Ìí¼Ó¼àÌıµÄÊÂ¼ş
 	struct io_package* io_data;
 	io_data = (struct io_package*)my_malloc(sizeof(struct io_package));
 	if(io_data==NULL){
@@ -578,21 +574,27 @@ static void on_connection(uv_stream_t* server, int status) {
 		new_client = NULL;
 		return;
 	}
-	//ç»‘å®šè‡ªå·±çš„æ¥å—ç¼“å­˜ç»“æ„
+	//°ó¶¨×Ô¼ºµÄ½ÓÊÜ»º´æ½á¹¹
 	new_client->data = io_data;
 	memset(new_client->data, 0, sizeof(struct io_package));
 	io_data->max_pkg_len = MAX_RECV_SIZE;
 	struct session* s = save_session(new_client, "127.0.0.1", 100);
 	
-	//s->socket_type = get_socket_type();
+	/*
+	uv_tcp_t new_clientÊÇlibuv²ãµÄtcpÁ´½Ó¶ÔÏó
+	session s ÊÇ¿ò¼Ü±£´æ¿Í»§¶Ë»Ø»°¶ÔÏó,ÊÇ¿ò¼Ü±íÊ¾Ò»¸ö¿Í»§¶ËÁ´½Ó,ÉÏ²ãÊı¾İ·¢ËÍ¶¼ÊÇµ÷ÓÃ¸Ã¶ÔÏó½Ó¿Ú
+	io_package io_data µ±Ç°½ÓÊÜµ½µÄÊı¾İÒ»¸ö»º´æÇø
+	*/
 	s->socket_type = (int)(server->data);
 	io_data->s = s;
 	io_data->long_pkg = NULL;
-	//ç»™æ–°è¿æ¥ç»‘å®šå…³å¿ƒçš„äº‹ä»¶å’Œå›è°ƒ
-	//on_read_alloc_buff å½“æœ‰è¯»äº‹ä»¶è§¦å‘ï¼Œè¯¥å‡½æ•°ä¼šè¢«å›è°ƒ
+	//¸øĞÂÁ¬½Ó°ó¶¨¹ØĞÄµÄÊÂ¼şºÍ»Øµ÷
+	//on_read_alloc_buff µ±ÓĞ¶ÁÊÂ¼ş´¥·¢£¬¸Ãº¯Êı»á±»»Øµ÷
+	//on_read_alloc_buff ÓĞÊı¾İ½øÀ´£¬ÓÃÓÚ·ÖÅäÊı¾İ¶ÁÈ¡»º´æÇøÔÚ¸Ãº¯ÊıÊµÏÖ
+	//on_after_read ¶ÁÈ¡µ½Êı¾İºó±»µ÷ÓÃ
 	uv_read_start((uv_stream_t*)new_client, on_read_alloc_buff, on_after_read);
 
-	//é€šçŸ¥luaå±‚æœ‰æ–°è¿æ¥æˆåŠŸäº‹ä»¶
+	//Í¨Öªlua²ãÓĞĞÂÁ¬½Ó³É¹¦ÊÂ¼ş
 	server_manage::get_instance().on_session_connect(s);
 
 }
@@ -618,7 +620,7 @@ void start_server_ws(char* ip, int port) {
 }
 
 void start_server(char* ip, int port) {
-	//åˆ›å»ºä¸€ä¸ªäº‹ä»¶å¾ªç¯å¯¹è±¡
+	//´´½¨Ò»¸öÊÂ¼şÑ­»·¶ÔÏó
 	if (loop==NULL) {
 		loop = uv_default_loop();
 	}
@@ -628,18 +630,18 @@ void start_server(char* ip, int port) {
 	strncpy(ip_address,ip,strlen(ip));
 	ip_port = port;
 	uv_ip4_addr(ip, port, &addr);
-	//ç»‘å®štcpä¸Šç›‘å¬çš„ipå’Œport
+	//°ó¶¨tcpÉÏ¼àÌıµÄipºÍport
 	int ret = uv_tcp_bind(&l_server, (const struct sockaddr*)&addr, 0);
 	if (ret != 0) {
 		goto failed;
 	}
-	//è®¾ç½®ä¸€ä¸ªè¢«åŠ¨å¥—æ¥å­—ï¼Œåœ¨æœ‰æ–°è¿æ¥ï¼Œå›è°ƒon_connectionå‡½æ•°
+	//ÉèÖÃÒ»¸ö±»¶¯Ì×½Ó×Ö£¬ÔÚÓĞĞÂÁ¬½Ó£¬»Øµ÷on_connectionº¯Êı
 	ret = uv_listen((uv_stream_t*)&l_server, SOMAXCONN, on_connection);
 	if (ret != 0) {
 		goto failed;
 	}
 	l_server.data = (void*)TCP_SOCKET_IO;
-	//è¿›å…¥äº‹ä»¶å¾ªç¯
+	//½øÈëÊÂ¼şÑ­»·
 	//uv_run(loop, UV_RUN_DEFAULT);
 failed:
 
@@ -655,12 +657,12 @@ typedef struct connect_context {
 	void* udata;
 }connect_context;
 
-//è¿æ¥æˆåŠŸå›è°ƒå‡½æ•°
+//Á¬½Ó³É¹¦»Øµ÷º¯Êı
 static void on_after_connect(uv_connect_t* handle, int status) {
 	connect_context* context = (connect_context*)handle->data;
 	if (status) {
 		const char* uv_error = uv_strerror(status);
-		log_error("connect error",);
+		log_error("connect error");
 		if (context->on_connected != NULL) {
 			context->on_connected(uv_error, NULL, context->udata);
 		}

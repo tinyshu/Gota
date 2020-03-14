@@ -1,9 +1,15 @@
 #include <string.h>
+#include "google/protobuf/message.h"
+
 #include "service_manger.h"
 #include "service_interface.h"
 #include "recv_msg.h"
 #include "../../proto/proto_manage.h"
 #include "../../utils/mem_manger.h"
+#include "../../moduel/session/tcp_session.h"
+#include "../../moduel/net/proto_type.h"
+
+using namespace google::protobuf;
 server_manage::server_manage() {
 	memset(_services,0,sizeof(_services));
 }
@@ -56,6 +62,13 @@ bool server_manage::on_recv_raw_cmd(struct session_base* s, struct raw_cmd* raw)
 		if (true == protoManager::decode_cmd_msg(raw->raw_data, raw->raw_len,&msg)) {
 			if (msg) {
 				ret = server_manage::get_instance().on_session_recv_cmd(s, msg);
+
+				if (get_proto_type() == BIN_PROTOCAL) {
+					delete (Message*)msg->body;
+				}
+				else if (get_proto_type() == JSON_PROTOCAL) {
+					memory_mgr::get_instance().free_memory(msg->body);
+				}
 				memory_mgr::get_instance().free_memory(msg);
 			}
 		}

@@ -10,7 +10,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
+#include <string.h>
 #include "session_base.h"
 
 #define MAX_SEND_PKG 2048
