@@ -19,11 +19,11 @@ end
 
 --开启网络服务
 --tcp模式
-netbus_wrapper.tcp_listen(config.gateway_tcp_ip,config.gateway_tcp_port)
-print("start gateway tcp service success ip:".. config.gateway_tcp_ip,"port:"..config.gateway_tcp_port)
+--netbus_wrapper.tcp_listen(config.gateway_tcp_ip,config.gateway_tcp_port)
+--print("start gateway tcp service success ip:".. config.gateway_tcp_ip,"port:"..config.gateway_tcp_port)
 --websocket模式
---netbus_wrapper.websocket_listen(config.gateway_ws_ip,config.gateway_ws_port)
---print("start gateway websocket service success ip:".. config.gateway_ws_ip,"port:"..config.gateway_ws_port)
+netbus_wrapper.websocket_listen(config.gateway_ws_ip,config.gateway_ws_port)
+print("start gateway websocket service success ip:".. config.gateway_ws_ip,"port:"..config.gateway_ws_port)
 
 
 --注册网关转发模块

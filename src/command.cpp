@@ -1,8 +1,8 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "command.h"
-#include "types_service.h"
+#include "types_service.h" 
 #include "../../moduel/session/tcp_session.h"
 
 const int CENTER_TYPE = SYPTE_CENTER + TYPE_OFFSET;

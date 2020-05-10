@@ -72,7 +72,7 @@ message GuestLoginReq{
 message UserCenterInfo{
 	 string unick = 1;
 	 int32 uface = 2;
-	 int32 usex = 3;
+	 int32 usex = 3; 
 	 int32 uvip = 4;
 	 int32 uid = 5;
 }
