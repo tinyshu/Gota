@@ -538,10 +538,14 @@ static void on_after_read(uv_stream_t* stream, ssize_t nread, const uv_buf_t* bu
 		}
 	}
 	else if (s->socket_type == WEB_SOCKET_IO) {
+		//websocket协议，如果是ws协议不需要增加nginx
+		//如果是wss协议，需要在使用nginx转发
 		if (s->is_shake_hand == 0) {
+			//处理websokcet协议处理
 			process_websocket_connect(s, io_data, ip_address, ip_port);
 		}
 		else {
+			//处理websocket数据
 			process_websocket_data(s, io_data, protocal_type);
 		}
 	}
